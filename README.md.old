@@ -1,0 +1,159 @@
+## 1- What is NAPALM
+
+[NAPALM](https://napalm.readthedocs.io/en/latest/index.html#) (Network Automation and Programmability Abstraction Layer with Multivendor support) is a Python library that implements a set of functions to interact with different network device Operating Systems using a unified API. These set of features allows to replace, compare, discard, commit and rollback running-configurations in a network device, making it an extremely powerful tool.  
+
+## 2- SR Linux Driver Introduction
+
+Nokia Service Router Linux (SR Linux) is an open network operating system (NOS) that makes your data center switching infrastructure more scalable, more flexible and simpler to operate.
+
+A key component of our next-generation Data Center Switching Fabric solution, SR Linux uses an unmodified Linux kernel as the foundation for a suite of network applications. The Linux kernel increases reliability and portability and makes it easier to develop system applications as well as your own network applications, such as tools and agents.
+
+### 2.1- Supported NAPALM Methods
+
+| Method Name   | Description |
+| ----------- | ----------- |
+|get_arp_table|Returns a list of dictionaries.|
+|get_bgp_config|Returns a dictionary containing the BGP configuration. Can return the whole config, the config only for a group or neighbor.|
+|get_bgp_neighbors|Returns a dictionary of dictionaries. The keys for the first dictionary will be the vrf (global if no vrf). The inner dictionary will contain the following data for each vrf.|
+|get_bgp_neighbors_detail|Returns a detailed view of the BGP neighbors as a dictionary of lists.|
+|get_config|The object returned is a dictionary with a key for each configuration store.|
+|get_environment|Returns a dictionary.|
+|get_facts|Returns a dictionary containing the following information: Uptime, vendor, model, hostname, fqdn, os_version, serial_number, interface_list.|
+|get_interfaces|Returns a dictionary of dictionaries. The keys for the first dictionary will be the interfaces in the devices. The inner dictionary will containing the following data for each interface.|
+|get_interfaces_counters|Returns a dictionary of dictionaries where the first key is an interface name and the inner dictionary contains the following keys.|
+|get_interfaces_ip|Keys of the main dictionary represent the name of the interface. Values of the main dictionary represent are dictionaries that may consist of two keys ‘ipv4’ and ‘ipv6’ (one, both or none) which are themselves dictionaries with the IP addresses as keys.|
+|get_ipv6_neighbors_table|Return a list of dictionaries having the following set of keys: Interface, mac, ip, age, state.|
+|get_llpd_neighbors|Returns a dictionary where the keys are local ports and the value is a list of dictionaries.|
+|get_llpd_neighbors_detail|Returns a detailed view of the LLDP neighbors as a dictionary containing lists of dictionaries for each interface.Inner dictionaries contain fields.|
+|get_mac_address_table|Returns a lists of dictionaries. Each dictionary represents an entry in the MAC Address Table, having the following keys: Mac, interface, vlan, active, static, moves and last_move|
+|get_network_instances|Return a dictionary of network instances (VRFs) configured, including default/global.|
+|get_ntp_servers|Returns the NTP servers configuration as dictionary. The keys of the dictionary represent the IP Addresses of the peers.|
+|get_ntp_stats|Returns a list of NTP synchronization statistics.|
+|get_optics|Fetches the power usage on the various transceivers installed on the switch (in dbm), and returns a view that conforms with the openconfig model openconfig-platform-transceiver.yang. Returns a dictionary where the keys are as listed.|
+|get_router_to|Returns a dictionary of dictionaries containing details of all available routes to a destination.Each inner dictionary contains the following fields: Protocol, current_active, age, next_hop, outgoing_interface, selected_next_hope, preference, routing_table.|
+|get_snmp_information|Returns a dict of dicts containing SNMP configuration. Each inner dictionary contains these fields.|
+|get_users|Returns a dictionary with the configured users. The keys of the main dictionary represents the username. The values represent the details of the user, represented by the following keys: Level, password, sshkeys.|
+|get_vlans||
+|is_alive|Returns a flag with the connection state. Depends on the nature of API used by each driver. The state does not reflect only on the connection status (when SSH), it must also take into consideration other parameters, e.g.: NETCONF session might not be usable, althought the underlying SSH session is still open etc.|
+|ping|Executes ping on the device and returns a dictionary with the result.|
+|traceroute|Executes traceroute on the device and returns a dictionary with the result.|
+
+
+## 3- How to Install
+
+### 3.1 Installing NAPALM
+
+Step 1 - The command below installs NAPALM using pip:
+
+```python
+$ pip install napalm
+```
+That will install all the latest core drivers available.
+
+Step 2 - Clone the SRL repository to your local machine (A public repo will be released later).
+
+```python
+$ git clone https://gitlab.com/nokia-ce-americas/napalm-srl.git
+```
+
+Step 3 - Using the requirements file, we have to install some SRL dependent packages:
+
+```python
+$ pip install -r requirements.txt
+```
+
+### 3.2 - Configuration SR Linux box
+
+
+Step 1 - Configure TLS
+
+...
+
+Step 2 - Configure gNMI Server
+```python
+$ system gnmi-server
+ 
+# Output Example 
+--{ + candidate shared default }--[ system gnmi-server ]--
+```
+
+For more information:
+
+```python
+$ info
+
+# Output Example
+admin-state enable
+timeout 7200
+rate-limit 60
+session-limit 20
+network-instance mgmt {
+admin-state enable
+use-authentication true
+port 57400
+tls-profile tls-profile-1
+}
+```
+
+Step 3 - configure JSON-RPC
+
+```python
+$ system json-rpc-server
+
+# Output Example
+--{​​​​​ + candidate shared default }​​​​​--[ system json-rpc-server ]--
+```
+
+For more information:
+
+```python
+$ info
+
+#Output Example
+admin-state enable
+network-instance default {​​​​​
+http {​​​​​
+admin-state enable
+use-authentication true
+session-limit 1
+port 4000
+}​​​​​
+https {​​​​​
+admin-state enable
+use-authentication true
+session-limit 1
+port 443
+tls-profile tls-profile-1
+source-address [
+::
+]
+}​​​​​
+}​​​​​
+network-instance mgmt {​​​​​
+http {​​​​​
+admin-state enable
+use-authentication true
+}​​​​​
+}​​​​​
+```
+
+## 4- Summary of supported SRL NAPALM functions
+
+(Under construction...)
+
+Below you are going to find all the functions supported by the Nokia SR Linux Drivers.
+
+
+| Method Name   | Description | Expected Outputs | How to use |
+| ----------- | ----------- | ----------- | ----------- |
+| cli(commands)      | CLI commands provided as input to this method must be in Nokia SR OS MD-CLI format and will be executed on the target SR OS as written, and any response or errors will be returned.  | Command dependent| x|
+|commit_config(message=””)| This command executes a commit on the target SR OS in the context of which type of candidate config the user is changing. Any response or errors will be returned. || x |
+|compare_config(message=””)|  This command executes a compare on the target SR OS in the context of the candidate config is in, versus the running config. Any response or errors will be returned. |Config dependent|x|
+|discard_config(message=””)| This command executes a discard on the target SR OS in the context of the candidate config context of the session. Any response or errors will be returned.||x|
+|Load_merge_candidate(filename=None, config=None)| This method adds the provided configuration to the candidate config. This can be formatted as MD-CLI or XML. Any response or errors will be returned.||x|
+|Load_replace_candidate(filename=None, config=None)| This method adds the provided configuration to the candidate config. This can be formatted as MD-CLI or XML. Any response or errors will be returned.||x|
+|ping(destination, source=””, ttl=128, timeout=2,size=100, count=5, vrf=”” )| This method executes a ping command from the base routing or VPN context on the device via MD-CLI|"Sucess":{probes_sent - int, packet_loss - int, rtt_min - float, rtt_max - float, rtt_avg - float, rtt_stddev - float, result - list[ip_address - String, rtt - float]}; "error"| x |
+|rollback()| This method executes a rollback on the SR OS device via MD-CLI. It will rollback to the last configuration before the last “commit” was executed.||x|
+|traceroute(destination,source=””, ttl=255, timeout=10, vrf=””)| This method executes a traceroute command from the base routing or VPN context on the device via MD-CLI|"success":{rtt - float, ip_address - String, host_address - String}; "error"|x|
+|get_arp_table(vrf=””)| This method returns the arp table in the context of the vrf passed in the method. All parameters are retrieved for this method via the SR OS Yang models from the running config.| 
+

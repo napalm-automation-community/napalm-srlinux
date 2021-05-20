@@ -1,0 +1,1 @@
+{"srl_nokia-acl:acl": {"cpm-filter": {"ipv4-filter": "dummy"}}}

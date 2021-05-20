@@ -1,0 +1,7 @@
++   "network-instance": [
++     {
++       "name": "automated-demo2"
++       "type": "ip-vrf"
++       "admin-state": "enable"
++     }
++   ]

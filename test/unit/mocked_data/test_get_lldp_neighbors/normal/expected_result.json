@@ -1,0 +1,1 @@
+{"ethernet-1/1": [{"hostname": "spine", "port": "ethernet-1/1"}], "ethernet-1/2": [], "ethernet-1/3": [{"hostname": "leaf2", "port": "ethernet-1/3"}], "mgmt0": [{"hostname": "spine", "port": "mgmt0"}, {"hostname": "srl2", "port": "mgmt0"}, {"hostname": "leaf2", "port": "mgmt0"}]}

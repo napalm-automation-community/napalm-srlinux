@@ -1,0 +1,1 @@
+{"result": [{"text": "Using network instance default\ntraceroute to 11.1.1.2 (11.1.1.2), 255 hops max, 60 byte packets\n 1  11.1.1.2 (11.1.1.2)  2.530 ms  2.509 ms  2.491 ms\n"}], "id": 0, "jsonrpc": "2.0"}

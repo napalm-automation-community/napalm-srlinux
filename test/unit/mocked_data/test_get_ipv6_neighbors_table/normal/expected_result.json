@@ -1,0 +1,1 @@
+[{"interface": "ethernet-1/1.1", "mac": "02:B1:6F:FF:00:00", "ip": "2001:1::192:168:12:2", "age": 1621376933.793, "state": "stale"}, {"interface": "ethernet-1/1.1", "mac": "02:B1:6F:FF:00:00", "ip": "fe80::b1:6fff:feff:0", "age": 1621376935.996, "state": "stale"}]

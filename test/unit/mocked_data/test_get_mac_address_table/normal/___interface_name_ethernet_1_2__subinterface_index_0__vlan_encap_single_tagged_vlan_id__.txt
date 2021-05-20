@@ -1,0 +1,1 @@
+{"srl_nokia-interfaces:interface": [{"name": "ethernet-1/2", "subinterface": [{"index": "0", "srl_nokia-interfaces-vlans:vlan": {"encap": {"single-tagged": {"vlan-id": 1}}}}]}]}
