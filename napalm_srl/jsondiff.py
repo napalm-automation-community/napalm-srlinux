@@ -16,9 +16,9 @@ class jsondiff(object):
             newjson = json.load(f)
         with open(oldjsonfile, "r") as f:
             oldjson = json.load(f)
-        return self._cmp_dict(newjson, oldjson)
+        return self.cmp_dict(newjson, oldjson)
 
-    def _cmp_dict(self, new, old, parent=""):
+    def cmp_dict(self, new, old, parent=""):
         result=[]
         keydiff = self._get_dict_key_diff(new, old)
 
@@ -38,7 +38,7 @@ class jsondiff(object):
         #step3 modified
         for k in keydiff["common"]:
             if isinstance(old[k] ,dict) and isinstance(new[k] ,dict):
-                res = self._cmp_dict(new[k], old[k], parent ="{}[{}]".format(parent, k))
+                res = self.cmp_dict(new[k], old[k], parent ="{}[{}]".format(parent, k))
                 result.extend(res)
             elif isinstance(old[k], list) and isinstance(new[k] ,list):
                 res = self._cmp_list(new[k],old[k],parent ="{}[{}]".format(parent,k))
@@ -100,7 +100,7 @@ class jsondiff(object):
                     })
                     continue
                 elif len(old_dicts) == 1:
-                    res = self._cmp_dict(n,old_dicts[0],"{}[{}]".format(parent,index) )
+                    res = self.cmp_dict(n,old_dicts[0],"{}[{}]".format(parent,index) )
                     result.extend(res)
                     old.remove(old_dicts[0])
                     continue
@@ -122,7 +122,7 @@ class jsondiff(object):
                     else:
                         o_to_compare = o_to_compare[0]
                         old.remove(o_to_compare)
-                        res = self._cmp_dict(n, o_to_compare, "{}[{}]".format(parent, index))
+                        res = self.cmp_dict(n, o_to_compare, "{}[{}]".format(parent, index))
                         result.extend(res)
             elif isinstance(n, list):
                 if not old_has_list:
