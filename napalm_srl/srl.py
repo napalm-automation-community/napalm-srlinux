@@ -29,9 +29,10 @@ import datetime
 import inspect
 import grpc
 from google.protobuf import json_format
-
+import ast
 from napalm_srl import gnmi_pb2, jsondiff
 from ansible.errors import AnsibleConnectionFailure
+import tempfile
 
 from napalm.base import NetworkDriver
 from napalm.base.helpers import convert, ip, mac, as_number
@@ -69,6 +70,8 @@ class NokiaSRLDriver(NetworkDriver):
 
         self.device = SRLAPI(hostname, username, password, timeout=60, optional_args=optional_args)
 
+        self.pending_commit = False
+        self.cand_config_file_path = "/tmp/{}.json".format(hostname);
     def open(self):
         self.device.open()
 
@@ -2073,6 +2076,23 @@ class NokiaSRLDriver(NetworkDriver):
         return output
 
     def commit_config(self, message='', revert_in=None):
+        if not self.is_commit_pending():
+            return self.cli_commit(message, revert_in)
+        else:
+            output = self.replace_auto_commit(filename=self.cand_config_file_path)
+            clear_cand_output = self.clear_candidate()
+            if not clear_cand_output:
+                output = {"commit_output":output, "error":"Could not remove file {}. Delete it manually for Driver to work correctly next time.".format(self.cand_config_file_path)}
+            return json.dumps(output)
+
+    def clear_candidate(self):
+        try:
+            os.remove(self.cand_config_file_path)
+            return True
+        except Exception as e:
+            return False
+
+    def cli_commit(self, message='', revert_in=None):
         """
         Commits the changes requested by the method load_replace_candidate or load_merge_candidate.
         :return:
@@ -2087,6 +2107,17 @@ class NokiaSRLDriver(NetworkDriver):
         return output["result"] if "result" in output else output
 
     def compare_config(self):
+        if not self.is_commit_pending(): #means to do compare for merge operation i.e onbox -remote diff
+            return self.compare_config_on_box()
+        else: #means to do compare for replace operation i.e offbox -local diff
+            running_config = self.get_config()["running"]
+            running_config_dict = ast.literal_eval(running_config)
+            cand_config = None
+            with open(self.cand_config_file_path) as f:
+                cand_config = json.load(f)
+            return self._diff_json(cand_config, running_config_dict)
+
+    def compare_config_on_box(self):
         """
         A string showing the difference between the running configuration and the candidate configuration. The running_config is loaded automatically just before doing the comparison so there is no need for you to do it.
         :return:
@@ -2110,6 +2141,9 @@ class NokiaSRLDriver(NetworkDriver):
         Discards the configuration loaded into the candidate.
         :return:
         """
+        if self.is_commit_pending():
+            cand_clear_output = self.clear_candidate()
+            return "Candidate config is discarded" if cand_clear_output else "Could not remove file {}. Delete it manually for Driver to work correctly next time.".format(self.cand_config_file_path)
         cmds = [
             # "enter candidate private name {}".format(self.private_candidate_name),
             "enter candidate private ",
@@ -2121,6 +2155,8 @@ class NokiaSRLDriver(NetworkDriver):
 
     def load_merge_candidate(self, filename=None, config=None):
         try:
+            if self.is_commit_pending():
+                raise Exception("Candidate config is already loaded. Discard it to reload")
             if filename:
                 if os.path.isfile(filename):
                     with open(filename) as f:
@@ -2149,7 +2185,7 @@ class NokiaSRLDriver(NetworkDriver):
                 raise MergeConfigException("Error message from SRL : {}".format(output))
             raise MergeConfigException("result not found in output. Output : {}".format(output))
         except Exception as e:
-            raise MergeConfigException(e)
+            raise MergeConfigException("Error during merge operation") from e
 
     # def load_merge_candidate_gnmi(self, filename=None, config=None):
     #     try:
@@ -2218,8 +2254,39 @@ class NokiaSRLDriver(NetworkDriver):
     #         return ReplaceConfigException("result not found in output. Output : {}".format(output))
     #     except Exception as e:
     #         raise ReplaceConfigException(e)
+    def is_commit_pending(self):
+        return os.path.isfile(self.cand_config_file_path)
 
     def load_replace_candidate(self, filename=None, config=None):
+        try:
+            if self.is_commit_pending():
+                raise Exception("Candidate store is already loaded with config. Discard it to replace with new config")
+            else:
+                #Read filename or config
+                config_dict = {}
+                if filename:
+                    if os.path.isfile(filename):
+                        with open(filename) as f:
+                            config_dict = json.load(f)
+                    else:
+                        raise FileNotFoundError("config file {} not found".format(filename))
+                elif config:
+                    config_dict = json.loads(config)
+                if not config_dict:
+                    raise Exception("filename/config not found")
+
+                #read config and save to file
+                with open(self.cand_config_file_path, 'w') as f:
+                    json.dump(config_dict, f)
+
+                #running_config = self.get_config()["running"]
+                #running_config_dict = ast.literal_eval(running_config)
+                #return self._diff_json(self.cand_config_file_path, running_config_dict)
+                return {"result": "config is loaded into candidate datastore"}
+        except Exception as e:
+            raise ReplaceConfigException("Error while replacing config") from e
+
+    def replace_auto_commit(self, filename=None, config=None):
         try:
             config_dict = {}
             if filename:
@@ -2239,7 +2306,7 @@ class NokiaSRLDriver(NetworkDriver):
                 }
             ]
             self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
-            self.device.gnmi_replace(config_dict)
+            return self.device.gnmi_replace(config_dict)
         except Exception as e:
             raise ReplaceConfigException(e)
 
@@ -2309,6 +2376,10 @@ class NokiaSRLDriver(NetworkDriver):
         j = jsondiff.jsondiff()
         return j.compare(newjsonfile, oldjsonfile)
 
+    def _diff_json(self, newjson, oldjson):
+        j = jsondiff.jsondiff()
+        return j.cmp_dict(newjson, oldjson)
+        
 class SRLAPI(object):
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
         """Constructor."""
