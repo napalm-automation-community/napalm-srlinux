@@ -19,8 +19,6 @@ optional_args = {
 } 
 device = driver("172.20.20.2", "admin", "admin", 60, optional_args)
 device.open()
-#Below diff is a private function.
-#print(device._diff("/home/nuage/json_compare/srl2_2000_Ori_WithBGP.json","/home/nuage/json_compare/srl2_2000_Ori_WithBGP_v2.json"))
 #print(json.dumps(device.get_bgp_config(neighbor="", group=""))) #Done
 #print(json.dumps(device.get_bgp_config(neighbor="", group="ebgp"))) #Done
 #print(json.dumps(device.get_bgp_config(neighbor="10.1.1.2", group=""))) #Done
@@ -49,8 +47,7 @@ device.open()
 #print(json.dumps(device.ping(destination="11.1.1.2")))
 #print(json.dumps(device.ping(destination="11.1.1.2",source="10.1.1.1",ttl=2, timeout=2, size=64, count=2, vrf="default")))
 #print(json.dumps(device.traceroute(destination="11.1.1.2",vrf = "")))
-##print(json.dumps(device.traceroute(destination="21.1.1.2",ttl=5, vrf = "ip_vrf1")))
-######################################
+#print(json.dumps(device.traceroute(destination="21.1.1.2",ttl=5, vrf = "ip_vrf1")))
 #print(json.dumps(device.get_arp_table()))
 #print(json.dumps(device.get_arp_table("ip_vrf1")))
 #print(json.dumps(device.get_bgp_neighbors()))
@@ -66,7 +63,7 @@ device.open()
 #print(json.dumps(device.get_lldp_neighbors_detail()))
 #print(json.dumps(device.get_lldp_neighbors_detail("ethernet-1/3")))
 #print(json.dumps(device.get_network_instances()))
-#print(json.dumps(device.get_network_instances()))# -------name not coming taken from input
+#print(json.dumps(device.get_network_instances()))
 #print(json.dumps(device.get_users()))
 #print(json.dumps(device.test())) 
 
