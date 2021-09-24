@@ -3,19 +3,19 @@
 
 **Installation**
 
-1. Configurations at SR Linux Node 
+1. **Configurations at SR Linux Node**
 
 	- Create a TLS Server Profile
-	```
-	--{ running }--[ system tls ]--
-        A:srl# info
-            server-profile tls-profile-1 {
-                key "server_side key copy here"
-                certificate "server_side_certificate copy here"
-                authenticate-client true
-                trust-anchor "Signing CA copy here"
-            }
-	```
+        ```
+        --{ running }--[ system tls ]--
+            A:srl# info
+                server-profile tls-profile-1 {
+                    key "server_side key copy here"
+                    certificate "server_side_certificate copy here"
+                    authenticate-client true
+                    trust-anchor "Signing CA copy here"
+                }
+        ```
     - Create gNMI Server Configurations
         ```
         --{ running }--[ system gnmi-server ]--
@@ -57,44 +57,49 @@
         }
        ```   
 
-2. Configurations at computer/machine where the napalm-srlinux will be installed
+2. **Configurations at NAPALM computer where the napalm-srlinux driver will be running**
 
 	- Clone the napalm-srlinux repository on your local computer.
-   ```
-   git clone https://github.com/napalm-automation-community/napalm-srlinux.git
-   ``` 
-   
-	- Install requirements using command `pip install -r requirements.txt`.
-	- Install the drivers using the command `python setup.py install` (Make sure Python3 is running)
+        ```
+        git clone https://github.com/napalm-automation-community/napalm-srlinux.git
+        ```
+   	- Install the required packages
+    ```pip install -r requirements.txt```
+    <br/>
+	- Install the drivers using the command, (Make sure Python3 is running) 
+    ```python setup.py install``` 
 
 	
 **Verification**
 
-Run a script to get the results. Example Script given below
-    ```
-    from napalm import get_network_driver
-    import json
+Run the example script by pointing to correct certificates.
 
-    driver = get_network_driver("srl")
-    optional_args = {
-        "gnmi_port": 57400,
-        "jsonrpc_port": 80,
-        "target_name": "172.20.20.2",
-        "tls_ca":"/root/gnmic_certs/srl_certs/clientCert.crt",
-        "tls_cert": "/root/gnmic_certs/srl_certs/RootCA.crt",
-        "tls_key": "/root/gnmic_certs/srl_certs/clientKey.pem",
-        "skip_verify": True,
-        "insecure": True,
-        "encoding": "JSON_IETF"
-    }
-    device = driver("172.20.20.2", "admin", "admin", 60, optional_args)
-    device.open()
+```
+# Copyright 2020 Nokia
+# Licensed under the Apache License 2.0.
+# SPDX-License-Identifier: Apache-2.0
 
-    print(json.dumps(device.get_facts()))
+from napalm import get_network_driver
+import json
 
-    device.close()
-   ```
- 
+driver = get_network_driver("srl")
+optional_args = {
+    "gnmi_port": 57400,
+    "jsonrpc_port": 80,
+    "target_name": "172.20.20.2",
+    "tls_cert":"/root/gnmic_certs/srl_certs/clientCert.crt",
+    "tls_ca": "/root/gnmic_certs/srl_certs/RootCA.crt",
+    "tls_key": "/root/gnmic_certs/srl_certs/clientKey.pem",
+     #"skip_verify": True,
+     #"insecure": False
+    "encoding": "JSON_IETF"
+} 
+device = driver("172.20.20.2", "admin", "admin", 60, optional_args)
+device.open()
 
+print(json.dumps(device.get_facts())) 
+
+device.close()
+```
 We welcome suggestions and contributions. Please contact the Nokia owners of this repository for how to contribute.
 
