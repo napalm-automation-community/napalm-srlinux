@@ -1,9 +1,13 @@
 ## Installation Steps
+**Note**: Certificates are needed to establish successful connection with node. [Refer here for TLS Profiles at SR Linux](https://infocenter.nokia.com/public/SRLINUX200R6A/index.jsp?topic=%2Fcom.srlinux.configbasics%2Fhtml%2Fconfigb-config-mgmt.html)
 
-1) Configurations at SR Linux Node involves 3 steps, Follow the below steps:
-    - Create a TLS Server Profile
-        ```
-        --{ running }--[ system tls ]--
+**Installation**
+
+1. Configurations at SR Linux Node 
+
+	- Create a TLS Server Profile
+	```
+	--{ running }--[ system tls ]--
         A:srl# info
             server-profile tls-profile-1 {
                 key "server_side key copy here"
@@ -11,8 +15,7 @@
                 authenticate-client true
                 trust-anchor "Signing CA copy here"
             }
-        ```
-
+	```
     - Create gNMI Server Configurations
         ```
         --{ running }--[ system gnmi-server ]--
@@ -54,21 +57,28 @@
         }
        ```   
 
-2) From [NAPALM NOKIA REPO](https://github.com/napalm-automation-community/napalm-sros) clone the repository on your local computer
-    ```
-   git clone https://github.com/napalm-automation-community/napalm-sros
+2. Configurations at computer/machine where the napalm-srlinux will be installed
+
+	- Clone the napalm-srlinux repository on your local computer.
+   ```
+   git clone https://github.com/napalm-automation-community/napalm-srlinux.git
    ``` 
    
-3) Install requirements using command `pip install -r requirements.txt` 
-4) Run a script to get the results.
-   ##### Usage Example
+	- Install requirements using command `pip install -r requirements.txt`.
+	- Install the drivers using the command `python setup.py install` (Make sure Python3 is running)
+
+	
+**Verification**
+
+Run a script to get the results. Example Script given below
     ```
     from napalm import get_network_driver
     import json
 
     driver = get_network_driver("srl")
     optional_args = {
-        "port": 57400,
+        "gnmi_port": 57400,
+        "jsonrpc_port": 80,
         "target_name": "172.20.20.2",
         "tls_ca":"/root/gnmic_certs/srl_certs/clientCert.crt",
         "tls_cert": "/root/gnmic_certs/srl_certs/RootCA.crt",
@@ -80,7 +90,7 @@
     device = driver("172.20.20.2", "admin", "admin", 60, optional_args)
     device.open()
 
-    print(json.dumps(device.get_bgp_neighbors()))
+    print(json.dumps(device.get_facts()))
 
     device.close()
    ```

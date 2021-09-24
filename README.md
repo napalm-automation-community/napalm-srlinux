@@ -1,30 +1,44 @@
-## **NAPALM INTEGRATION WITH NOKIA SR LINUX**
+## **Nokia napalm-srlinux**
+Community NAPALM driver for the Nokia SR Linux OS. [https://www.nokia.com/networks/products/service-router-linux-NOS/](https://www.nokia.com/networks/products/service-router-linux-NOS/) 
+
 
 #### **NAPALM**
 NAPALM (Network Automation and Programmability Abstraction Layer with Multivendor support) is a Python library that implements a set of functions to interact with different router vendor devices using a unified API.
 
 NAPALM supports several methods to connect to the devices, to manipulate configurations or to retrieve data.
 
-#### **SRL OS**
-NAPALM integration is validated with a minimum of Nokia Service Router Linux Operating System (SRL OS) version 21.3.1. Releases beyond this have not been validated and should be by users before using the driver in labs and production on devices using different SRL OS versions. Please contact the Nokia owners of this repository for additional information with respect to additional release validation.
+#### **SR Linux OS**
+
+The driver leverages Nokia SRL YANG models for configuration and state trees for the SRL platform.
+NAPALM integration is validated with a minimum of Nokia Service Router Linux Operating System (SRL OS) version 21.3.1. 
+
+Releases beyond this have not been validated and should be by users before using the driver in labs and production on devices using different SRL OS versions. Please contact the Nokia owners of this repository for additional information with respect to additional release validation.
 
 
 #### **Documentation**
 1) Please read the installation instruction in [Install Document](Install.md)
-2) napalm_srl/srl.py: Overridden NAPALM methods to get the expected output from SRL OS
-4) Mapping of various parameters of NAPALM output to Nokia SRL can be found in this [Mapping Document](Summary_of_Methods.pdf)
-6) For testing, please refer to [Test Document](https://napalm.readthedocs.io/en/latest/development/testing_framework.html)
+2) Mapping of various parameters of NAPALM output to Nokia SRL can be found in this [Mapping Document](Summary_of_Methods.pdf)
+3) For testing, please refer to [Test Document](https://napalm.readthedocs.io/en/latest/development/testing_framework.html)
 
 #### **Components **
 1) Python - 3.6
 2) grpcio
 3) protobuf
 
-##### **Note**
-The SRL Network Drivers uses gNMI for Get Functions and JSON RPC for Load/SET Functions
-User prior should generate valid certificates along with  Signing CA in order to successfully use SRL Node with NAPALM.
-This version of the driver leverages Nokia’s defined SRL YANG models for configuration and state trees for the SRL platform.
-Load_Replace function has been developed using gNMI SET REPLACE option which has implicit commit.
+##### **Important Notes**
+
+1. **Ports**: The napalm-srlinux driver uses gNMI and JSON-RPC for various functions, Make sure to enable the ports at SR Linux Node (57400 and 80 respecticvely by default)
+2. **Certificates**: The napalm-srlinux driver establishes secure connection only with the node, Hence make sure the appropriate CA/Certificates and Keys are in place.
+3. **Compare_Config**: The `compare_commit` based on the previously called function performs the operation as below, Default is on-box difference
+
+	| Function | compare_config |
+	|----------|----------------|
+	|LOAD_MERGE| on-box difference|
+	|LOAD_REPLACE|out-box difference
+
+4. **Proxy Setting**: The driver establishes RPC connections with the nodes, Check proxy settings at local machine(where driver is running), Disable proxy if not needed when running locally.
+
 
 #### License
 This project is licensed under the Apache-2.0 license - see the [LICENSE](LICENSE) file. 
+
