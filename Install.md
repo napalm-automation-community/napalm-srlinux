@@ -64,13 +64,10 @@
         git clone https://github.com/napalm-automation-community/napalm-srlinux.git
         ```
 	- Install the required packages
-
 	```
 	pip install -r requirements.txt
 	```
-
 	- Install the drivers using the command, (Make sure Python3 is running)
-
 	```
 	python3 setup.py install
 	```
