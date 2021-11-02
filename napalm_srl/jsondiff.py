@@ -70,8 +70,77 @@ class jsondiff(object):
             return key
         #find key either string or int and present in all/many dict and is unique
 
-        print("{}\nType index key for above list:".format(old_dicts))
-        return str(input())
+        #print("{}\nType index key for above list:".format(old_dicts))
+        #return str(input())
+        #===========================
+        #find if there is a key ending with id/index/address/name and values unique
+        suffixes = ['id', 'index', 'address', 'name']
+        key = None
+        max_ct = 0
+        for s in suffixes:
+            ct = 0
+            vals = []
+            ct_key = None
+            for o in old_dicts:
+                for k,v in o.items():
+                    if str(k).lower().endswith(s):
+                        ct = ct + 1
+                        vals.append(v)
+                        ct_key = k
+                        continue
+            if ct > max_ct and self.are_values_unique(vals): #unique and maximum count
+                max_ct = ct
+                key = ct_key
+        if not max_ct == 0:
+            return key
+
+        #int and is unique
+        max_ct = 0
+        key = None
+        int_keys = [k for o in old_dicts for k,v in o.items() if isinstance(v,int)]
+        int_keys = list(set(int_keys))
+        for i in int_keys:
+            ct = 0
+            vals = []
+            for o in old_dicts:
+                for k, v in o.items():
+                    if k == i:
+                        ct = ct + 1
+                        vals.append(v)
+                        continue
+            if ct > max_ct and self.are_values_unique(vals): #unique and maximum count:
+                max_ct = ct
+                key = i
+        if not max_ct == 0:
+            return key
+
+
+        #string without space and is unique
+        max_ct = 0
+        key = None
+        str_keys = [k for o in old_dicts for k,v in o.items() if isinstance(v,str) and " " not in v]
+        str_keys = list(set(str_keys))
+        for i in str_keys:
+            ct = 0
+            vals = []
+            for o in old_dicts:
+                for k, v in o.items():
+                    if k == i:
+                        ct = ct + 1
+                        vals.append(v)
+                        continue
+            if ct > max_ct and self.are_values_unique(vals): #unique and maximum count::
+                max_ct = ct
+                key = i
+        if not max_ct == 0:
+            return key
+        return None
+
+
+
+
+    def are_values_unique(self, vals):
+        return len(set(vals)) == len(vals)
 
     def _cmp_list(self, new, old_in, parent=""):
         result = []
@@ -103,6 +172,28 @@ class jsondiff(object):
                     res = self.cmp_dict(n,old_dicts[0],"{}[{}]".format(parent,index) )
                     result.extend(res)
                     old.remove(old_dicts[0])
+                    continue
+                elif not ind_key:
+                    max_equal_flds = 0
+                    old_to_compare = None
+                    ct_available_old_dicts_for_comp = [o for o in old if isinstance(o, dict)]
+                    for o in ct_available_old_dicts_for_comp:
+                        equal_flds_ct = 0
+                        for k,v in n.items():
+                            if k in o and o[k] == v:
+                                equal_flds_ct = equal_flds_ct + 1
+                        if equal_flds_ct > max_equal_flds:
+                            max_equal_flds = equal_flds_ct
+                            old_to_compare = o
+                    if max_equal_flds == 0:
+                        result.append({
+                            "+++": "{}[{}]".format(parent, index),
+                            "value": n
+                        })
+                    else:
+                        res = self.cmp_dict(n, old_to_compare, "{}[{}]".format(parent, index))
+                        result.extend(res)
+                        old.remove(old_to_compare)
                     continue
                 elif not ind_key in n.keys():
                     result.append({
@@ -168,3 +259,4 @@ class jsondiff(object):
             "---": minus_ks,
             "common": [k for k in d1_keys if k not in plus_ks],
         }
+
