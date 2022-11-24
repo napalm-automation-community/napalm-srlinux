@@ -31,7 +31,6 @@ import grpc
 from google.protobuf import json_format
 import ast
 from napalm_srl import gnmi_pb2, jsondiff
-from ansible.errors import AnsibleConnectionFailure
 import tempfile
 
 from napalm.base import NetworkDriver
@@ -2549,11 +2548,9 @@ class SRLAPI(object):
         Returns:
             File content
         Raises:
-            AnsibleConnectionFailure: file does not exist or read excpetions
+            ConnectionException: file does not exist or read excpetions
         """
-        path = "/tmp"
-        if not path:
-            path = "/etc/ssl:/etc/ssl/certs:/etc/ca-certificates"
+        path = "/etc/ssl:/etc/ssl/certs:/etc/ca-certificates"
 
         if filename:
             if filename.startswith("~"):
@@ -2568,11 +2565,11 @@ class SRLAPI(object):
                     with open(filename, "rb") as f:
                         return f.read()
                 except Exception as exc:
-                    raise AnsibleConnectionFailure(
+                    raise ConnectionException(
                         "Failed to read cert/keys file %s: %s" % (filename, exc)
                     )
             else:
-                raise AnsibleConnectionFailure(
+                raise ConnectionException(
                     "Cert/keys file %s does not exist" % filename
                 )
         return None
