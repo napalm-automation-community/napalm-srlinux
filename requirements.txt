@@ -11,4 +11,4 @@ ncclient>=0.6.7
 xmltodict>=0.12.0
 dictdiffer>=0.8.1
 grpcio
-protobuf
+protobuf==3.20.3
