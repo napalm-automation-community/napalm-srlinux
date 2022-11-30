@@ -6,12 +6,18 @@
 from builtins import super
 
 import pytest
+import os
 from napalm.base.test import conftest as parent_conftest
 
 from napalm.base.test.double import BaseTestDouble
 
 from napalm_srl import srl
 import json
+
+@pytest.fixture(scope="session", autouse=True)
+def setenv():
+    # Set timezone such that timestamps are generated/parsed correctly
+    os.environ["TZ"] = "GMT"
 
 @pytest.fixture(scope='class')
 def set_device_parameters(request):
@@ -79,4 +85,3 @@ class FakesrlDevice(BaseTestDouble):
         with open(full_path) as f:
             output = json.load(f)
         return output
-
