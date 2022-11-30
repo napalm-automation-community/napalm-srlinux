@@ -901,7 +901,7 @@ class NokiaSRLDriver(NetworkDriver):
                 "model": chassis_type,
                 "serial_number": serial_number,
                 "os_version": version,
-                "uptime": convert(int, uptime, default=-1),
+                "uptime": convert(float, uptime, default=-1.0),
                 "interface_list": interface_list,
             }
         except Exception as e:
@@ -916,7 +916,7 @@ class NokiaSRLDriver(NetworkDriver):
                is_enabled (True/False)
                description (string)
                last_flapped (float in seconds)
-               speed (int in Mbit)
+               speed (float in Mbit)
                MTU (in Bytes)
                mac_address (string)
         """
@@ -935,7 +935,7 @@ class NokiaSRLDriver(NetworkDriver):
                         last_flapped = datetime.datetime.strptime(
                             last_flapped, "%Y-%m-%dT%H:%M:%S.%fZ"
                         ).timestamp()
-                    speed = -1
+                    speed = -1.0
                     mac_address = ""
                     for key, value in interface.items():
                         if "ethernet" in key:
@@ -943,7 +943,7 @@ class NokiaSRLDriver(NetworkDriver):
                             if speed:
                                 regex = re.compile(r"(\d+|\s+)")
                                 speed = regex.split(speed)
-                                speed = convert(int, speed[1], default=-1)
+                                speed = convert(float, speed[1], default=-1.0)
                             mac_address = self._find_txt(
                                 value, "hw-mac-address", default=""
                             )
@@ -961,7 +961,7 @@ class NokiaSRLDriver(NetworkDriver):
                                 "mtu": convert(
                                     int, self._find_txt(interface, "mtu"), default=-1
                                 ),
-                                "speed": convert(int, speed, default=-1),
+                                "speed": convert(float, speed, default=-1.0),
                                 "mac_address": mac(mac_address) if mac_address else "",
                             }
                         }
@@ -2127,7 +2127,13 @@ class NokiaSRLDriver(NetworkDriver):
         except Exception as e:
             print("Error occurred : {}".format(e))
 
-    def cli(self, commands):
+    def cli(self, commands, encoding="text"):
+        """
+        Will execute a list of commands and return the output in a dictionary format.
+        """
+        if encoding not in ("text",):
+            raise NotImplementedError("%s is not a supported encoding" % encoding)
+
         try:
             output = {}
             jsonrpc_output = self.device._jsonrpcRunCli(commands)
@@ -2157,7 +2163,7 @@ class NokiaSRLDriver(NetworkDriver):
         try:
             os.remove(self.cand_config_file_path)
             return True
-        except Exception as e:
+        except Exception:
             return False
 
     def _cli_commit(self, message='', revert_in=None):
@@ -2411,7 +2417,7 @@ class NokiaSRLDriver(NetworkDriver):
             else:
                 output = self._getObj(obj[keys[0]], *keys[1:], default=default)
                 return output if output else default
-        except Exception as e:
+        except Exception:
             # print(e)
             # raise type(e)("{} occurred when trying to get path {}".format(e, keys))
             # return "##NOTFOUND##"
@@ -2647,7 +2653,7 @@ class SRLAPI(object):
         except Exception as e:
             if "StatusCode.INVALID_ARGUMENT" in str(e):
                 return ""
-            #logging.exception(e)            
+            #logging.exception(e)
             else:
                 for l in str(e).splitlines(False):
                     if "detail" in l:
