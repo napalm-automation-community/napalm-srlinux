@@ -1713,13 +1713,13 @@ class NokiaSRLDriver(NetworkDriver):
                         del running["srl_nokia-system:system"]["srl_nokia-tls:tls"]
             if retrieve == 'all':
                 return {
-                    "running": str(running),
+                    "running": json.dumps(running),
                     "candidate": "",
                     "startup": ""
                 }
             if retrieve == 'running':
                 return {
-                    "running": str(running),
+                    "running": json.dumps(running),
                     "candidate": "",
                     "startup": ""
                 }

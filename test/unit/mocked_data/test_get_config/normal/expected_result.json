@@ -1,1 +1,1 @@
-{"running": "{'srl_nokia-acl:acl': {'cpm-filter': {'ipv4-filter': 'dummy'}}}", "candidate": "", "startup": ""}
+{"running": "{\"srl_nokia-acl:acl\": {\"cpm-filter\": {\"ipv4-filter\": \"dummy\"}}}", "candidate": "", "startup": ""}
