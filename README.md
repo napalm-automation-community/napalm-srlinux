@@ -21,7 +21,7 @@ Releases beyond this have not been validated and should be by users before using
 3) For testing, please refer to [Test Document](https://napalm.readthedocs.io/en/latest/development/testing_framework.html)
 
 #### **Components **
-1) Python - 3.6
+1) Python (3.7 or later)
 2) grpcio
 3) protobuf
 
