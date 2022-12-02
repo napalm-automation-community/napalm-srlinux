@@ -44,7 +44,6 @@ from napalm.base.exceptions import (
 )
 import requests
 
-
 class NokiaSRLDriver(NetworkDriver):
     """Napalm driver for SRL."""
 
@@ -2146,42 +2145,42 @@ class NokiaSRLDriver(NetworkDriver):
         except Exception as e:
             print("Error occurred : {}".format(e))
 
-    def commit_config(self, message='', revert_in=None):
-        try:
-            if not self._is_commit_pending():
-                return self._cli_commit(message, revert_in)
-            else:
-                output = self._replace_auto_commit(filename=self.cand_config_file_path)
-                clear_cand_output = self._clear_candidate()
-                if not clear_cand_output:
-                    output = {"commit_output":output, "error":"Could not remove file {}. Delete it manually for Driver to work correctly next time.".format(self.cand_config_file_path)}
-                return json.dumps(output)
-        except Exception as e:
-            print("Error occurred : {}".format(e))
+    # def commit_config(self, message='', revert_in=None):
+    #     try:
+    #         if not self._is_commit_pending():
+    #             return self._cli_commit(message, revert_in)
+    #         else:
+    #             output = self._replace_auto_commit(filename=self.cand_config_file_path)
+    #             clear_cand_output = self._clear_candidate()
+    #             if not clear_cand_output:
+    #                 output = {"commit_output":output, "error":"Could not remove file {}. Delete it manually for Driver to work correctly next time.".format(self.cand_config_file_path)}
+    #             return json.dumps(output)
+    #     except Exception as e:
+    #         print("Error occurred : {}".format(e))
 
     def _clear_candidate(self):
-        try:
-            os.remove(self.cand_config_file_path)
-            return True
-        except Exception:
-            return False
+      try:
+        os.remove(self.cand_config_file_path)
+        return True
+      except Exception:
+        return False
 
-    def _cli_commit(self, message='', revert_in=None):
-        """
-        Commits the changes requested by the method load_replace_candidate or load_merge_candidate.
-        :return:
-        """
-        try:
-            cmds = [
-                # "enter candidate private name {}".format(self.private_candidate_name),
-                "enter candidate private ",
-                "/",
-                'commit now comment "{}"'.format(message) if message else "commit now"
-            ]
-            output = self.device._jsonrpcRunCli(cmds)
-            return output["result"] if "result" in output else output
-        except Exception as e:
-            print("Error occurred : {}".format(e))
+    # def _cli_commit(self, message='', revert_in=None):
+    #     """
+    #     Commits the changes requested by the method load_replace_candidate or load_merge_candidate.
+    #     :return:
+    #     """
+    #     try:
+    #         cmds = [
+    #             # "enter candidate private name {}".format(self.private_candidate_name),
+    #             "enter candidate private ",
+    #             "/",
+    #             'commit now comment "{}"'.format(message) if message else "commit now"
+    #         ]
+    #         output = self.device._jsonrpcRunCli(cmds)
+    #         return output["result"] if "result" in output else output
+    #     except Exception as e:
+    #         print("Error occurred : {}".format(e))
 
     def compare_config(self):
         try:
@@ -2219,59 +2218,164 @@ class NokiaSRLDriver(NetworkDriver):
         except Exception as e:
             print("Error occurred : {}".format(e))
 
-    def discard_config(self):
-        """
-        Discards the configuration loaded into the candidate.
-        :return:
-        """
-        try:
-            if self._is_commit_pending():
-                cand_clear_output = self._clear_candidate()
-                return "Candidate config is discarded" if cand_clear_output else "Could not remove file {}. Delete it manually for Driver to work correctly next time.".format(self.cand_config_file_path)
-            cmds = [
-                # "enter candidate private name {}".format(self.private_candidate_name),
-                "enter candidate private ",
-                "/",
-                "discard now"
-            ]
-            output = self.device._jsonrpcRunCli(cmds)
-            return output["result"] if "result" in output else output
-        except Exception as e:
-            print("Error occurred : {}".format(e))
+    def load_replace_candidate(self, filename=None, config=None):
+      """
+      Accepts either a native JSON formatted config, or a gNMI style JSON config
+      containing only 'replace'
+      """
+      try:
+        self._load_candidate(filename,config,is_replace=True)
+      except Exception as e:
+        raise ReplaceConfigException("Error during load_replace_candidate operation") from e
 
     def load_merge_candidate(self, filename=None, config=None):
-        try:
-            if self._is_commit_pending():
-                raise Exception("Candidate config is already loaded. Discard it to reload")
-            if filename:
-                if os.path.isfile(filename):
-                    with open(filename) as f:
-                        config = f.read()
-                else:
-                    raise FileNotFoundError("config file {} not found".format(filename))
-            if not config:
-                raise Exception("file/config not found")
-            config_lines = config.split("\n")
-            chkpt_cmds = [
-                {
-                    "action": "update",
-                    "path": "/system/configuration/generate-checkpoint"
-                }
-            ]
-            self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
+      """
+      Accepts either a native JSON formatted config (interpreted as 'update /')
+      or a gNMI style JSON config containing any number of 'delete','replace','update'
+      """
+      try:
+        self._load_candidate(filename,config,is_replace=False)
+      except Exception as e:
+        raise MergeConfigException("Error during load_merge_candidate operation") from e
 
-            commands = []
-            commands.append("enter candidate private")
-            commands.extend(config_lines)
-            output = self.device._jsonrpcRunCli(commands)
-            if "result" in output:
-                result = output["result"]
-                return result[-1]["text"] if "text" in result[-1] else result[-1]
-            elif "error" in output:
-                raise MergeConfigException("Error message from SRL : {}".format(output))
-            raise MergeConfigException("result not found in output. Output : {}".format(output))
-        except Exception as e:
-            raise MergeConfigException("Error during merge operation") from e
+    def _load_candidate(self,filename,config,is_replace):
+      if self._is_commit_pending():
+        raise Exception("Candidate config is already loaded. Discard it to reload")
+
+      if filename:
+        with open(filename,"r") as f:
+          config = f.read()
+        if not config:
+          raise Exception("Configuration is empty")
+      elif not config:
+        raise Exception("Either 'filename' or 'config' argument must be provided")
+
+      try:
+        cfg = json.loads(config)   # try to load it as json, could keep order of keys
+        if 'delete' in cfg or 'update' in cfg or 'replace' in cfg:
+          if is_replace and ('delete' in cfg or 'update' in cfg):
+            raise Exception("'load_replace_candidate' cannot use 'delete' or 'update'")
+        else:
+          cfg = { 'replace' if is_replace else 'update': [ { 'path': '/', 'value': cfg } ] }
+      except json.decoder.JSONDecodeError: # Upon error, assume it's CLI commands
+        pass
+
+      with open(self.cand_config_file_path, 'w') as f:
+        if cfg:
+          json.dump(cfg, f)
+        else:
+          f.write(config)
+
+    def commit_config(self, message='', revert_in=None):
+      if revert_in:
+        raise NotImplementedError("'revert_in' not implemented")
+
+      # Create checkpoint
+      chkpt_cmds = [
+        {
+         "action": "update",
+         "path": "/system/configuration/generate-checkpoint"
+        }
+      ]
+      self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
+
+      with open(self.cand_config_file_path,"r") as f:
+        try:
+          json_config = json.load(f)
+          if message:
+            raise NotImplementedError("'message' not supported with JSON config")
+          self._commit_json_config(json_config)
+        except json.decoder.JSONDecodeError:
+          cli_config = f.read()
+          commands = ["enter candidate private"]
+          commands.extend(cli_config.split('\n'))
+          commands.append("commit now"+(f' comment "{message}"' if message else '') )
+          output = self.device._jsonrpcRunCli(commands)
+
+    def _commit_json_config(self,json_config):
+      request = gnmi_pb2.SetRequest()
+      if 'delete' in json_config:
+        request.delete = [ json_format.ParseDict(self._encodeXpath(p), gnmi_pb2.Path()) for p in json_config['delete']]
+      for k in ('replace','update'):
+        if k in json_config:
+          items = []
+          for u in json_config[k]:
+            replace = gnmi_pb2.Update()
+            path = json_format.ParseDict(self._encodeXpath(u['path']), gnmi_pb2.Path())
+            update.path.CopyFrom(path)
+            update.val.json_ietf_val = json.dumps(u['value']).encode("utf-8")
+            items.append(update)
+          if k=='replace':
+            request.replace = items
+          else:
+            request.update = items
+      self._stub.Set(request, metadata=self._metadata)
+
+    def discard_config(self):
+      if not self._clear_candidate():
+        cmds = [
+         "enter candidate private",
+         "/",
+         "discard now"
+        ]
+        output = self.device._jsonrpcRunCli(cmds)
+        return output["result"] if "result" in output else output
+
+      return "Candidate config discarded"
+
+    # def discard_config(self):
+    #     """
+    #     Discards the configuration loaded into the candidate.
+    #     :return:
+    #     """
+    #     try:
+    #         if self._is_commit_pending():
+    #             cand_clear_output = self._clear_candidate()
+    #             return "Candidate config is discarded" if cand_clear_output else "Could not remove file {}. Delete it manually for Driver to work correctly next time.".format(self.cand_config_file_path)
+    #         cmds = [
+    #             # "enter candidate private name {}".format(self.private_candidate_name),
+    #             "enter candidate private ",
+    #             "/",
+    #             "discard now"
+    #         ]
+    #         output = self.device._jsonrpcRunCli(cmds)
+    #         return output["result"] if "result" in output else output
+    #     except Exception as e:
+    #         print("Error occurred : {}".format(e))
+
+    # def load_merge_candidate(self, filename=None, config=None):
+    #     try:
+    #         if self._is_commit_pending():
+    #             raise Exception("Candidate config is already loaded. Discard it to reload")
+    #         if filename:
+    #             if os.path.isfile(filename):
+    #                 with open(filename) as f:
+    #                     config = f.read()
+    #             else:
+    #                 raise FileNotFoundError("config file {} not found".format(filename))
+    #         if not config:
+    #             raise Exception("file/config not found")
+    #         config_lines = config.split("\n")
+    #         chkpt_cmds = [
+    #             {
+    #                 "action": "update",
+    #                 "path": "/system/configuration/generate-checkpoint"
+    #             }
+    #         ]
+    #         self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
+
+    #         commands = []
+    #         commands.append("enter candidate private")
+    #         commands.extend(config_lines)
+    #         output = self.device._jsonrpcRunCli(commands)
+    #         if "result" in output:
+    #             result = output["result"]
+    #             return result[-1]["text"] if "text" in result[-1] else result[-1]
+    #         elif "error" in output:
+    #             raise MergeConfigException("Error message from SRL : {}".format(output))
+    #         raise MergeConfigException("result not found in output. Output : {}".format(output))
+    #     except Exception as e:
+    #         raise MergeConfigException("Error during merge operation") from e
 
     # def load_merge_candidate_gnmi(self, filename=None, config=None):
     #     try:
@@ -2343,58 +2447,58 @@ class NokiaSRLDriver(NetworkDriver):
     def _is_commit_pending(self):
         return os.path.isfile(self.cand_config_file_path)
 
-    def load_replace_candidate(self, filename=None, config=None):
-        try:
-            if self._is_commit_pending():
-                raise Exception("Candidate store is already loaded with config. Discard it to replace with new config")
-            else:
-                #Read filename or config
-                config_dict = {}
-                if filename:
-                    if os.path.isfile(filename):
-                        with open(filename) as f:
-                            config_dict = json.load(f)
-                    else:
-                        raise FileNotFoundError("config file {} not found".format(filename))
-                elif config:
-                    config_dict = json.loads(config)
-                if not config_dict:
-                    raise Exception("filename/config not found")
+    # def load_replace_candidate(self, filename=None, config=None):
+    #     try:
+    #         if self._is_commit_pending():
+    #             raise Exception("Candidate store is already loaded with config. Discard it to replace with new config")
+    #         else:
+    #             #Read filename or config
+    #             config_dict = {}
+    #             if filename:
+    #                 if os.path.isfile(filename):
+    #                     with open(filename) as f:
+    #                         config_dict = json.load(f)
+    #                 else:
+    #                     raise FileNotFoundError("config file {} not found".format(filename))
+    #             elif config:
+    #                 config_dict = json.loads(config)
+    #             if not config_dict:
+    #                 raise Exception("filename/config not found")
 
-                #read config and save to file
-                with open(self.cand_config_file_path, 'w') as f:
-                    json.dump(config_dict, f)
+    #             #read config and save to file
+    #             with open(self.cand_config_file_path, 'w') as f:
+    #                 json.dump(config_dict, f)
 
-                #running_config = self.get_config()["running"]
-                #running_config_dict = ast.literal_eval(running_config)
-                #return self._diff_json(self.cand_config_file_path, running_config_dict)
-                return {"result": "config is loaded into candidate datastore"}
-        except Exception as e:
-            raise ReplaceConfigException("Error while replacing config") from e
+    #             #running_config = self.get_config()["running"]
+    #             #running_config_dict = ast.literal_eval(running_config)
+    #             #return self._diff_json(self.cand_config_file_path, running_config_dict)
+    #             return {"result": "config is loaded into candidate datastore"}
+    #     except Exception as e:
+    #         raise ReplaceConfigException("Error while replacing config") from e
 
-    def _replace_auto_commit(self, filename=None, config=None):
-        try:
-            config_dict = {}
-            if filename:
-                if os.path.isfile(filename):
-                    with open(filename) as f:
-                        config_dict = json.load(f)
-                else:
-                    raise FileNotFoundError("config file {} not found".format(filename))
-            elif config:
-                config_dict = json.loads(config)
-            if not config_dict:
-                raise Exception("filename/config not found")
-            chkpt_cmds = [
-                {
-                    "action": "update",
-                    "path": "/system/configuration/generate-checkpoint"
-                }
-            ]
-            self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
-            return self.device.gnmi_replace(config_dict)
-        except Exception as e:
-            raise ReplaceConfigException(e)
+    # def _replace_auto_commit(self, filename=None, config=None):
+    #     try:
+    #         config_dict = {}
+    #         if filename:
+    #             if os.path.isfile(filename):
+    #                 with open(filename) as f:
+    #                     config_dict = json.load(f)
+    #             else:
+    #                 raise FileNotFoundError("config file {} not found".format(filename))
+    #         elif config:
+    #             config_dict = json.loads(config)
+    #         if not config_dict:
+    #             raise Exception("filename/config not found")
+    #         chkpt_cmds = [
+    #             {
+    #                 "action": "update",
+    #                 "path": "/system/configuration/generate-checkpoint"
+    #             }
+    #         ]
+    #         self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
+    #         return self.device.gnmi_replace(config_dict)
+    #     except Exception as e:
+    #         raise ReplaceConfigException(e)
 
     def rollback(self):
         try:
@@ -2704,13 +2808,13 @@ class SRLAPI(object):
         self._gnmiSet(update = updates)
 
 
-    def gnmi_replace(self, replace_json):
-        update = gnmi_pb2.Update()
-        #path = json_format.ParseDict(self._encodeXpath(replace_path), gnmi_pb2.Path())
-        #update.path.CopyFrom(path)
-        update.val.json_ietf_val = json.dumps(replace_json).encode("utf-8")
-        updates = [update]
-        self._gnmiSet(replace = updates)
+    # def gnmi_replace(self, replace_json):
+    #     update = gnmi_pb2.Update()
+    #     #path = json_format.ParseDict(self._encodeXpath(replace_path), gnmi_pb2.Path())
+    #     #update.path.CopyFrom(path)
+    #     update.val.json_ietf_val = json.dumps(replace_json).encode("utf-8")
+    #     updates = [update]
+    #     self._gnmiSet(replace = updates)
 
     def _gnmiSet(self, prefix=None, delete=None, replace=None, update=None):
         request = gnmi_pb2.SetRequest()
