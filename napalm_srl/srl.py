@@ -2782,13 +2782,13 @@ class SRLAPI(object):
     #     print(response)
 
 
-    def _gnmi_update(self, update_path, update_json):
-        update = gnmi_pb2.Update()
-        path = json_format.ParseDict(self._encodeXpath(update_path), gnmi_pb2.Path())
-        update.path.CopyFrom(path)
-        update.val.json_ietf_val = json.dumps(update_json).encode("utf-8")
-        updates = [update]
-        self._gnmiSet(update = updates)
+    # def _gnmi_update(self, update_path, update_json):
+    #     update = gnmi_pb2.Update()
+    #     path = json_format.ParseDict(self._encodeXpath(update_path), gnmi_pb2.Path())
+    #     update.path.CopyFrom(path)
+    #     update.val.json_ietf_val = json.dumps(update_json).encode("utf-8")
+    #     updates = [update]
+    #     self._gnmiSet(update = updates)
 
 
     # def gnmi_replace(self, replace_json):
@@ -2799,13 +2799,13 @@ class SRLAPI(object):
     #     updates = [update]
     #     self._gnmiSet(replace = updates)
 
-    def _gnmiSet(self, prefix=None, delete=None, replace=None, update=None):
-        request = gnmi_pb2.SetRequest()
-        if prefix: request.prefix.CopyFrom(prefix)
-        if update: request.update.extend(update)
-        if delete: request.delete.extend(delete)
-        if replace: request.replace.extend(replace)
-        self._stub.Set(request, metadata=self._metadata)
+    # def _gnmiSet(self, prefix=None, delete=None, replace=None, update=None):
+    #     request = gnmi_pb2.SetRequest()
+    #     if prefix: request.prefix.CopyFrom(prefix)
+    #     if update: request.update.extend(update)
+    #     if delete: request.delete.extend(delete)
+    #     if replace: request.replace.extend(replace)
+    #     self._stub.Set(request, metadata=self._metadata)
 
     def _commit_json_config(self,json_config):
         request = gnmi_pb2.SetRequest()
@@ -2829,12 +2829,12 @@ class SRLAPI(object):
     @staticmethod
     def _encodeXpath(path):
         """
-                        Encodes XPATH to dict representation that allows conversion to gnmi_pb.Path object
-                        Parameters:
-                            xpath (str): path string using XPATH syntax
-                        Returns:
-                            (dict): path dict using gnmi_pb2.Path structure for easy conversion
-                    """
+        Encodes XPATH to dict representation that allows conversion to gnmi_pb.Path object
+        Parameters:
+            xpath (str): path string using XPATH syntax
+        Returns:
+            (dict): path dict using gnmi_pb2.Path structure for easy conversion
+        """
         mypath = []
         xpath = path.strip("\t\n\r /")
         if xpath:
