@@ -2250,6 +2250,7 @@ class NokiaSRLDriver(NetworkDriver):
       elif not config:
         raise Exception("Either 'filename' or 'config' argument must be provided")
 
+      cfg = None
       try:
         cfg = json.loads(config)   # try to load it as json, could keep order of keys
         if 'delete' in cfg or 'update' in cfg or 'replace' in cfg:
@@ -2284,32 +2285,14 @@ class NokiaSRLDriver(NetworkDriver):
           json_config = json.load(f)
           if message:
             raise NotImplementedError("'message' not supported with JSON config")
-          self._commit_json_config(json_config)
+          self.device._commit_json_config(json_config)
+          self._clear_candidate()
         except json.decoder.JSONDecodeError:
           cli_config = f.read()
           commands = ["enter candidate private"]
           commands.extend(cli_config.split('\n'))
           commands.append("commit now"+(f' comment "{message}"' if message else '') )
           output = self.device._jsonrpcRunCli(commands)
-
-    def _commit_json_config(self,json_config):
-      request = gnmi_pb2.SetRequest()
-      if 'delete' in json_config:
-        request.delete = [ json_format.ParseDict(self._encodeXpath(p), gnmi_pb2.Path()) for p in json_config['delete']]
-      for k in ('replace','update'):
-        if k in json_config:
-          items = []
-          for u in json_config[k]:
-            replace = gnmi_pb2.Update()
-            path = json_format.ParseDict(self._encodeXpath(u['path']), gnmi_pb2.Path())
-            update.path.CopyFrom(path)
-            update.val.json_ietf_val = json.dumps(u['value']).encode("utf-8")
-            items.append(update)
-          if k=='replace':
-            request.replace = items
-          else:
-            request.update = items
-      self._stub.Set(request, metadata=self._metadata)
 
     def discard_config(self):
       if not self._clear_candidate():
@@ -2824,7 +2807,27 @@ class SRLAPI(object):
         if replace: request.replace.extend(replace)
         self._stub.Set(request, metadata=self._metadata)
 
-    def _encodeXpath(self, path):
+    def _commit_json_config(self,json_config):
+        request = gnmi_pb2.SetRequest()
+        if 'delete' in json_config:
+          request.delete.extend( [ json_format.ParseDict(self._encodeXpath(p), gnmi_pb2.Path()) for p in json_config['delete']] )
+        for k in ('replace','update'):
+          if k in json_config:
+            items = []
+            for u in json_config[k]:
+              update = gnmi_pb2.Update()
+              path = json_format.ParseDict(self._encodeXpath(u['path']), gnmi_pb2.Path())
+              update.path.CopyFrom(path)
+              update.val.json_ietf_val = json.dumps(u['value']).encode("utf-8")
+              items.append(update)
+            if k=='replace':
+              request.replace.extend( items )
+            else:
+              request.update.extend( items )
+        self._stub.Set(request, metadata=self._metadata)
+
+    @staticmethod
+    def _encodeXpath(path):
         """
                         Encodes XPATH to dict representation that allows conversion to gnmi_pb.Path object
                         Parameters:
