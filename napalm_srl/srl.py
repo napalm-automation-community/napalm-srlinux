@@ -2287,12 +2287,19 @@ class NokiaSRLDriver(NetworkDriver):
             raise NotImplementedError("'message' not supported with JSON config")
           self.device._commit_json_config(json_config)
           self._clear_candidate()
+          return "JSON config committed"
         except json.decoder.JSONDecodeError:
           cli_config = f.read()
           commands = ["enter candidate private"]
           commands.extend(cli_config.split('\n'))
           commands.append("commit now"+(f' comment "{message}"' if message else '') )
           output = self.device._jsonrpcRunCli(commands)
+          if "result" in output:
+             result = output["result"]
+             return result[-1]["text"] if "text" in result[-1] else result[-1]
+          elif "error" in output:
+             raise Exception(f"Error message from SRL : {output}")
+          raise Exception(f"result not found in output. Output : {output}")
 
     def discard_config(self):
       if not self._clear_candidate():
