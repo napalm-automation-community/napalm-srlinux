@@ -2165,22 +2165,22 @@ class NokiaSRLDriver(NetworkDriver):
       except Exception:
         return False
 
-    # def _cli_commit(self, message='', revert_in=None):
-    #     """
-    #     Commits the changes requested by the method load_replace_candidate or load_merge_candidate.
-    #     :return:
-    #     """
-    #     try:
-    #         cmds = [
-    #             # "enter candidate private name {}".format(self.private_candidate_name),
-    #             "enter candidate private ",
-    #             "/",
-    #             'commit now comment "{}"'.format(message) if message else "commit now"
-    #         ]
-    #         output = self.device._jsonrpcRunCli(cmds)
-    #         return output["result"] if "result" in output else output
-    #     except Exception as e:
-    #         print("Error occurred : {}".format(e))
+    def _cli_commit(self, message='', revert_in=None):
+      """
+       Commits the changes requested by the method load_replace_candidate or load_merge_candidate.
+       :return:
+      """
+      try:
+          cmds = [
+              # "enter candidate private name {}".format(self.private_candidate_name),
+              "enter candidate private ",
+              "/",
+              'commit now comment "{}"'.format(message) if message else "commit now"
+          ]
+          output = self.device._jsonrpcRunCli(cmds)
+          return self._return_result(output)
+      except Exception as e:
+          print("Error occurred in _cli_commit: {}".format(e))
 
     def compare_config(self):
         try:
@@ -2224,7 +2224,7 @@ class NokiaSRLDriver(NetworkDriver):
       containing only 'replace'
       """
       try:
-        self._load_candidate(filename,config,is_replace=True)
+        return self._load_candidate(filename,config,is_replace=True)
       except Exception as e:
         raise ReplaceConfigException("Error during load_replace_candidate operation") from e
 
@@ -2234,9 +2234,17 @@ class NokiaSRLDriver(NetworkDriver):
       or a gNMI style JSON config containing any number of 'delete','replace','update'
       """
       try:
-        self._load_candidate(filename,config,is_replace=False)
+        return self._load_candidate(filename,config,is_replace=False)
       except Exception as e:
         raise MergeConfigException("Error during load_merge_candidate operation") from e
+
+    def _return_result(self,output):
+      if "result" in output:
+        result = output["result"]
+        return result[-1]["text"] if "text" in result[-1] else result[-1]
+      elif "error" in output:
+        raise Exception(f"Error message from SRL : {output}")
+      raise Exception(f"result not found in output. Output : {output}")
 
     def _load_candidate(self,filename,config,is_replace):
       if self._is_commit_pending():
@@ -2258,14 +2266,20 @@ class NokiaSRLDriver(NetworkDriver):
             raise Exception("'load_replace_candidate' cannot use 'delete' or 'update'")
         else:
           cfg = { 'replace' if is_replace else 'update': [ { 'path': '/', 'value': cfg } ] }
-      except json.decoder.JSONDecodeError: # Upon error, assume it's CLI commands
-        pass
 
-      with open(self.cand_config_file_path, 'w') as f:
-        if cfg:
+        with open(self.cand_config_file_path, 'w') as f:
           json.dump(cfg, f)
-        else:
-          f.write(config)
+        return "JSON candidate config loaded for " + ("replace" if is_replace else "merge")
+      except json.decoder.JSONDecodeError: # Upon error, assume it's CLI commands
+        cmds = [
+          "enter candidate private",
+          "/",
+        ]
+        if is_replace:
+          cmds.append("delete /")
+        cmds.extend( config.split("\n") )
+        output = self.device._jsonrpcRunCli(cmds)
+        return self._return_result(output)
 
     def commit_config(self, message='', revert_in=None):
       if revert_in:
@@ -2280,26 +2294,24 @@ class NokiaSRLDriver(NetworkDriver):
       ]
       self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
 
-      with open(self.cand_config_file_path,"r") as f:
-        try:
-          json_config = json.load(f)
-          if message:
-            raise NotImplementedError("'message' not supported with JSON config")
-          self.device._commit_json_config(json_config)
-          self._clear_candidate()
-          return "JSON config committed"
-        except json.decoder.JSONDecodeError:
-          cli_config = f.read()
-          commands = ["enter candidate private"]
-          commands.extend(cli_config.split('\n'))
-          commands.append("commit now"+(f' comment "{message}"' if message else '') )
-          output = self.device._jsonrpcRunCli(commands)
-          if "result" in output:
-             result = output["result"]
-             return result[-1]["text"] if "text" in result[-1] else result[-1]
-          elif "error" in output:
-             raise Exception(f"Error message from SRL : {output}")
-          raise Exception(f"result not found in output. Output : {output}")
+      if self._is_commit_pending():
+        with open(self.cand_config_file_path,"r") as f:
+          try:
+            json_config = json.load(f)
+            if message:
+              raise NotImplementedError("'message' not supported with JSON config")
+            self.device._commit_json_config(json_config)
+            self._clear_candidate()
+            return "JSON config committed"
+          except json.decoder.JSONDecodeError:
+            cli_config = f.read()
+            commands = ["enter candidate private"]
+            commands.extend(cli_config.split('\n'))
+            commands.append("commit now"+(f' comment "{message}"' if message else '') )
+            output = self.device._jsonrpcRunCli(commands)
+            return self._return_result(output)
+      else:
+        return self._cli_commit(message,revert_in)
 
     def discard_config(self):
       if not self._clear_candidate():
