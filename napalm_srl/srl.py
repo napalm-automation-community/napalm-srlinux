@@ -29,7 +29,6 @@ import datetime
 import inspect
 import grpc
 from google.protobuf import json_format
-import ast
 from napalm_srl import gnmi_pb2, jsondiff
 import tempfile
 
@@ -2175,7 +2174,7 @@ class NokiaSRLDriver(NetworkDriver):
                 return self._compare_config_on_box()
             else: #means to do compare for replace operation i.e offbox -local diff
                 running_config = self.get_config()["running"]
-                running_config_dict = ast.literal_eval(running_config)
+                running_config_dict = json.loads(running_config)
                 cand_config = None
                 with open(self.cand_config_file_path) as f:
                     cand_config = json.load(f)
