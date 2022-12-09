@@ -29,7 +29,10 @@ import datetime
 import inspect
 import grpc
 from google.protobuf import json_format
-from napalm_srl import gnmi_pb2, jsondiff
+
+from . import jsondiff
+from .gnmi_protobuf.v080 import gnmi_pb2
+from .gnmi_protobuf.v080.gnmi_pb2_grpc import gNMIStub
 import tempfile
 
 from napalm.base import NetworkDriver
@@ -2449,7 +2452,7 @@ class SRLAPI(object):
             #     self._channel = grpc.insecure_channel(self.target)
 
             if self._stub is None:
-                self._stub = gnmi_pb2.gNMIStub(self._channel)
+                self._stub = gNMIStub(self._channel)
                 # print("stub", self._stub)
         except Exception as e:
             print("Error in Connection to SRL : {}".format(e))
