@@ -29,7 +29,6 @@ import datetime
 import inspect
 import grpc
 from google.protobuf import json_format
-import ast
 from napalm_srl import gnmi_pb2, jsondiff
 import tempfile
 
@@ -1714,7 +1713,7 @@ class NokiaSRLDriver(NetworkDriver):
                             del _system["srl_nokia-aaa:aaa"]
                         if "srl_nokia-tls:tls" in _system:
                             del _system["srl_nokia-tls:tls"]
-                running_config = json.dumps(running)
+                running_config = json.dumps(running,sort_keys=True)
 
             return {
                 "running": running_config,
@@ -2173,14 +2172,20 @@ class NokiaSRLDriver(NetworkDriver):
             if not self._is_commit_pending(): #means to do compare for merge operation i.e onbox -remote diff
                 return self._compare_config_on_box()
             else: #means to do compare for replace operation i.e offbox -local diff
+                if self.running_format == "cli":
+                    raise NotImplementedError("compare_config for 'cli' format is not supported")
+
                 running_config = self.get_config()["running"]
-                running_config_dict = ast.literal_eval(running_config)
+                running_config_dict = json.loads(running_config)
                 cand_config = None
                 with open(self.cand_config_file_path) as f:
                     cand_config = json.load(f)
+                    if 'updates' in cand_config:
+                        return cand_config # The update is the diff
+                    cand_config = cand_config['replaces'][0]['value']
                 return self._diff_json(cand_config, running_config_dict)
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            print("Error occurred in compare_config: {}".format(e))
 
     def _compare_config_on_box(self):
         """
@@ -2256,7 +2261,7 @@ class NokiaSRLDriver(NetworkDriver):
           cfg = { 'replaces' if is_replace else 'updates': [ { 'path': '/', 'value': cfg } ] }
 
         with open(self.cand_config_file_path, 'w') as f:
-          json.dump(cfg, f)
+          json.dump(cfg, f, sort_keys=True)
         return "JSON candidate config loaded for " + ("replace" if is_replace else "merge")
       except json.decoder.JSONDecodeError: # Upon error, assume it's CLI commands
         cmds = [
@@ -2383,17 +2388,19 @@ class NokiaSRLDriver(NetworkDriver):
 
     def _diff(self, newjsonfile, oldjsonfile):
         try:
-            j = jsondiff.jsondiff()
-            return j.compare(newjsonfile, oldjsonfile)
+           j = jsondiff.jsondiff()
+           return j.compare(newjsonfile, oldjsonfile)
         except Exception as e:
-            print("Error occurred : {}".format(e))
+           print("Error occurred : {}".format(e))
+        # return self._diff_json( json.load(newjsonfile), json.load(oldjsonfile) )
 
     def _diff_json(self, newjson, oldjson):
         try:
-            j = jsondiff.jsondiff()
-            return j.cmp_dict(newjson, oldjson)
+           j = jsondiff.jsondiff()
+           return j.cmp_dict(newjson, oldjson)
         except Exception as e:
-            print("Error occurred : {}".format(e))
+           print("Error occurred : {}".format(e))
+        # return diff(oldjson,newjson)
 
 class SRLAPI(object):
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
