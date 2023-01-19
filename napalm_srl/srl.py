@@ -1713,7 +1713,7 @@ class NokiaSRLDriver(NetworkDriver):
                             del _system["srl_nokia-aaa:aaa"]
                         if "srl_nokia-tls:tls" in _system:
                             del _system["srl_nokia-tls:tls"]
-                running_config = json.dumps(running,sort_keys=True)
+                running_config = json.dumps(running) # don't use sort_keys=True
 
             return {
                 "running": running_config,
