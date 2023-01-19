@@ -2386,21 +2386,12 @@ class NokiaSRLDriver(NetworkDriver):
                     result.append(r)
             return result
 
-    def _diff(self, newjsonfile, oldjsonfile):
-        try:
-           j = jsondiff.jsondiff()
-           return j.compare(newjsonfile, oldjsonfile)
-        except Exception as e:
-           print("Error occurred : {}".format(e))
-        # return self._diff_json( json.load(newjsonfile), json.load(oldjsonfile) )
-
     def _diff_json(self, newjson, oldjson):
         try:
-           j = jsondiff.jsondiff()
-           return j.cmp_dict(newjson, oldjson)
+            j = jsondiff.jsondiff()
+            return j.cmp_dict(newjson, oldjson)
         except Exception as e:
-           print("Error occurred : {}".format(e))
-        # return diff(oldjson,newjson)
+            print("Error occurred : {}".format(e))
 
 class SRLAPI(object):
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
