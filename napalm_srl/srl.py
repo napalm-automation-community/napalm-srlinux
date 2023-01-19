@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 """
-Napalm driver for Skeleton.
+Napalm driver for SR Linux.
 
 Read https://napalm.readthedocs.io for more information.
 """
@@ -65,12 +65,12 @@ class NokiaSRLDriver(NetworkDriver):
 
         self._stub = None
         self._channel = None
-        self.optional_args = optional_args
+        self.running_format = optional_args.get("running_format","json") if optional_args else "json"
 
         self.device = SRLAPI(hostname, username, password, timeout=60, optional_args=optional_args)
 
         self.pending_commit = False
-        self.cand_config_file_path = "/tmp/{}.json".format(hostname);
+        self.cand_config_file_path = f"/tmp/{hostname}.json"
     def open(self):
         self.device.open()
 
@@ -1691,49 +1691,35 @@ class NokiaSRLDriver(NetworkDriver):
         :return:Return the configuration of a device.
         """
         try:
-            if retrieve == 'candidate':
-                return {
-                    "running": "",
-                    "candidate": "",
-                    "startup": ""
-                }
-            if retrieve == 'startup':
-                return {
-                    "running": "",
-                    "candidate": "",
-                    "startup": ""
-                }
+            if retrieve in ['candidate','startup']:
+                raise NotImplementedError(
+                    "Only 'running' or 'all' is supported for get_config")
 
-            if self.optional_args.get('running_format') == 'cli':
-                cmds = [
-                  "info flat",
-                ]
-                output = self.device._jsonrpcRunCli(cmds)
-                running_config = self._return_result(output)
+            if self.running_format == 'cli':
                 if sanitized:
                     raise NotImplementedError(
                         "sanitized=True is not implemented with CLI format")
+                output = self.device._jsonrpcRunCli(["info flat"])
+                running_config = self._return_result(output)
             else:
                 running = self.device._gnmiGet("", {"/"}, "CONFIG")
                 if sanitized:
                     if "srl_nokia-system:system" in running:
-                        if "srl_nokia-aaa:aaa" in running["srl_nokia-system:system"]:
-                            del running["srl_nokia-system:system"]["srl_nokia-aaa:aaa"]
-                        if "srl_nokia-tls:tls" in running["srl_nokia-system:system"]:
-                            del running["srl_nokia-system:system"]["srl_nokia-tls:tls"]
+                        _system = running["srl_nokia-system:system"]
+                        if "srl_nokia-aaa:aaa" in _system:
+                            del _system["srl_nokia-aaa:aaa"]
+                        if "srl_nokia-tls:tls" in _system:
+                            del _system["srl_nokia-tls:tls"]
                 running_config = json.dumps(running)
-            if retrieve == 'all':
+            if retrieve in ['all','running']:
                 return {
                     "running": running_config,
                     "candidate": "",
                     "startup": ""
                 }
-            if retrieve == 'running':
-                return {
-                    "running": running_config,
-                    "candidate": "",
-                    "startup": ""
-                }
+            else:
+                raise CommandErrorException(
+                    f"Unsupported 'retrieve' parameter value in get_config: {retrieve}")
         except Exception as e:
             print("Error occurred : {}".format(e))
 
