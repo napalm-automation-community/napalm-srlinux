@@ -64,7 +64,6 @@ class NokiaSRLDriver(NetworkDriver):
 
         self._stub = None
         self._channel = None
-        self.optional_args = optional_args
 
         self.device = SRLAPI(hostname, username, password, timeout=60, optional_args=optional_args)
 
@@ -1703,33 +1702,22 @@ class NokiaSRLDriver(NetworkDriver):
                     "startup": ""
                 }
 
-            if self.optional_args.get('running_format') == 'cli':
-                cmds = [
-                  "info flat",
-                ]
-                output = self.device._jsonrpcRunCli(cmds)
-                running_config = self._return_result(output)
-                if sanitized:
-                    raise NotImplementedError(
-                        "sanitized=True is not implemented with CLI format")
-            else:
-                running = self.device._gnmiGet("", {"/"}, "CONFIG")
-                if sanitized:
-                    if "srl_nokia-system:system" in running:
-                        if "srl_nokia-aaa:aaa" in running["srl_nokia-system:system"]:
-                            del running["srl_nokia-system:system"]["srl_nokia-aaa:aaa"]
-                        if "srl_nokia-tls:tls" in running["srl_nokia-system:system"]:
-                            del running["srl_nokia-system:system"]["srl_nokia-tls:tls"]
-                running_config = json.dumps(running)
+            running = self.device._gnmiGet("", {"/"}, "CONFIG")
+            if sanitized:
+                if "srl_nokia-system:system" in running:
+                    if "srl_nokia-aaa:aaa" in running["srl_nokia-system:system"]:
+                        del running["srl_nokia-system:system"]["srl_nokia-aaa:aaa"]
+                    if "srl_nokia-tls:tls" in running["srl_nokia-system:system"]:
+                        del running["srl_nokia-system:system"]["srl_nokia-tls:tls"]
             if retrieve == 'all':
                 return {
-                    "running": running_config,
+                    "running": json.dumps(running),
                     "candidate": "",
                     "startup": ""
                 }
             if retrieve == 'running':
                 return {
-                    "running": running_config,
+                    "running": json.dumps(running),
                     "candidate": "",
                     "startup": ""
                 }
