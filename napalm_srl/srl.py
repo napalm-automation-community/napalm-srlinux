@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 """
-Napalm driver for Skeleton.
+Napalm driver for SR Linux.
 
 Read https://napalm.readthedocs.io for more information.
 """
@@ -29,6 +29,7 @@ import datetime
 import inspect
 import grpc
 from google.protobuf import json_format
+import ast
 from napalm_srl import gnmi_pb2, jsondiff
 import tempfile
 
@@ -64,11 +65,12 @@ class NokiaSRLDriver(NetworkDriver):
 
         self._stub = None
         self._channel = None
+        self.running_format = optional_args.get("running_format","json") if optional_args else "json"
 
         self.device = SRLAPI(hostname, username, password, timeout=60, optional_args=optional_args)
 
         self.pending_commit = False
-        self.cand_config_file_path = "/tmp/{}.json".format(hostname);
+        self.cand_config_file_path = f"/tmp/{hostname}.json"
     def open(self):
         self.device.open()
 
@@ -1689,38 +1691,36 @@ class NokiaSRLDriver(NetworkDriver):
         :return:Return the configuration of a device.
         """
         try:
-            if retrieve == 'candidate':
-                return {
-                    "running": "",
-                    "candidate": "",
-                    "startup": ""
-                }
-            if retrieve == 'startup':
+            if retrieve not in ['all','running']:
+                # Only 'running' or 'all' is supported for get_config
                 return {
                     "running": "",
                     "candidate": "",
                     "startup": ""
                 }
 
-            running = self.device._gnmiGet("", {"/"}, "CONFIG")
-            if sanitized:
-                if "srl_nokia-system:system" in running:
-                    if "srl_nokia-aaa:aaa" in running["srl_nokia-system:system"]:
-                        del running["srl_nokia-system:system"]["srl_nokia-aaa:aaa"]
-                    if "srl_nokia-tls:tls" in running["srl_nokia-system:system"]:
-                        del running["srl_nokia-system:system"]["srl_nokia-tls:tls"]
-            if retrieve == 'all':
-                return {
-                    "running": json.dumps(running),
-                    "candidate": "",
-                    "startup": ""
-                }
-            if retrieve == 'running':
-                return {
-                    "running": json.dumps(running),
-                    "candidate": "",
-                    "startup": ""
-                }
+            if self.running_format == 'cli':
+                if sanitized:
+                    raise NotImplementedError(
+                        "sanitized=True is not implemented with CLI format")
+                output = self.device._jsonrpcRunCli(["info flat"])
+                running_config = self._return_result(output)
+            else:
+                running = self.device._gnmiGet("", {"/"}, "CONFIG")
+                if sanitized:
+                    if "srl_nokia-system:system" in running:
+                        _system = running["srl_nokia-system:system"]
+                        if "srl_nokia-aaa:aaa" in _system:
+                            del _system["srl_nokia-aaa:aaa"]
+                        if "srl_nokia-tls:tls" in _system:
+                            del _system["srl_nokia-tls:tls"]
+                running_config = json.dumps(running)
+
+            return {
+                "running": running_config,
+                "candidate": "",
+                "startup": ""
+            }
         except Exception as e:
             print("Error occurred : {}".format(e))
 
@@ -2174,7 +2174,7 @@ class NokiaSRLDriver(NetworkDriver):
                 return self._compare_config_on_box()
             else: #means to do compare for replace operation i.e offbox -local diff
                 running_config = self.get_config()["running"]
-                running_config_dict = json.loads(running_config)
+                running_config_dict = ast.literal_eval(running_config)
                 cand_config = None
                 with open(self.cand_config_file_path) as f:
                     cand_config = json.load(f)
