@@ -1691,9 +1691,13 @@ class NokiaSRLDriver(NetworkDriver):
         :return:Return the configuration of a device.
         """
         try:
-            if retrieve in ['candidate','startup']:
-                raise NotImplementedError(
-                    "Only 'running' or 'all' is supported for get_config")
+            if retrieve not in ['all','running']:
+                # Only 'running' or 'all' is supported for get_config
+                return {
+                    "running": "",
+                    "candidate": "",
+                    "startup": ""
+                }
 
             if self.running_format == 'cli':
                 if sanitized:
@@ -1711,15 +1715,12 @@ class NokiaSRLDriver(NetworkDriver):
                         if "srl_nokia-tls:tls" in _system:
                             del _system["srl_nokia-tls:tls"]
                 running_config = json.dumps(running)
-            if retrieve in ['all','running']:
-                return {
-                    "running": running_config,
-                    "candidate": "",
-                    "startup": ""
-                }
-            else:
-                raise CommandErrorException(
-                    f"Unsupported 'retrieve' parameter value in get_config: {retrieve}")
+
+            return {
+                "running": running_config,
+                "candidate": "",
+                "startup": ""
+            }
         except Exception as e:
             print("Error occurred : {}".format(e))
 
