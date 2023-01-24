@@ -2425,7 +2425,7 @@ class SRLAPI(object):
     def open(self):
         """Implement the NAPALM method open (mandatory)"""
         try:
-            # reading the certificates
+            # read the certificates
             certs = {}
             if self.tls_ca:
                 certs["root_certificates"] = self._readFile(self.tls_ca)
@@ -2433,6 +2433,22 @@ class SRLAPI(object):
                 certs["certificate_chain"] = self._readFile(self.tls_cert)
             if self.tls_key:
                 certs["private_key"] = self._readFile(self.tls_key)
+
+            # If not provided and 'insecure' flag is set, fetch CA cert from server
+            if 'root_certificates' not in certs and self.insecure:
+                # Lazily import dependencies
+                from cryptography import x509
+                import ssl
+                from cryptography.hazmat.backends import default_backend
+
+                ssl_cert = ssl.get_server_certificate((self.hostname, self.gnmi_port)).encode("utf-8")
+                certs["root_certificates"] = ssl_cert
+                if not self.target_name:
+                  ssl_cert_deserialized = x509.load_pem_x509_certificate(ssl_cert, default_backend())
+                  ssl_cert_common_names = ssl_cert_deserialized.subject.get_attributes_for_oid(x509.oid.NameOID.COMMON_NAME)
+                  self.target_name = ssl_cert_common_names[0].value
+                  logger.warning('ssl_target_name_override is auto-discovered, should be used for testing only!')
+
             credentials = grpc.ssl_channel_credentials(**certs)
             self._metadata = [("username", self.username), ("password", self.password)]
             # open a secure channel

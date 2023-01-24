@@ -12,3 +12,4 @@ xmltodict>=0.12.0
 dictdiffer>=0.8.1
 grpcio
 protobuf==3.20.3
+cryptography
