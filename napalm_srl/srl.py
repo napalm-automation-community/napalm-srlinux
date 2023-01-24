@@ -2447,7 +2447,7 @@ class SRLAPI(object):
                   ssl_cert_deserialized = x509.load_pem_x509_certificate(ssl_cert, default_backend())
                   ssl_cert_common_names = ssl_cert_deserialized.subject.get_attributes_for_oid(x509.oid.NameOID.COMMON_NAME)
                   self.target_name = ssl_cert_common_names[0].value
-                  logger.warning('ssl_target_name_override is auto-discovered, should be used for testing only!')
+                  logging.warning(f'ssl_target_name_override(={self.target_name}) is auto-discovered, should be used for testing only!')
 
             credentials = grpc.ssl_channel_credentials(**certs)
             self._metadata = [("username", self.username), ("password", self.password)]
