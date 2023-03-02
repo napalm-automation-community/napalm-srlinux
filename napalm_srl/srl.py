@@ -2557,7 +2557,8 @@ class SRLAPI(object):
             "Accept": "application/json",
         }
         geturl = "https://{}:{}@{}:{}/jsonrpc".format(self.username, self.password, self.hostname, self.jsonrpc_port)
-        resp = requests.post(geturl, headers=headers, json=json_data, timeout=timeout if timeout else self.timeout,verify=False)
+        resp = requests.post(geturl, headers=headers, json=json_data, timeout=timeout if timeout else self.timeout,
+                             verify=self.tls_ca or False)
         resp.raise_for_status()
         return resp.json() if resp.text else ""
 
