@@ -2410,7 +2410,7 @@ class SRLAPI(object):
         if optional_args is None:
             optional_args = {}
         self.gnmi_port = optional_args.get("gnmi_port", 57400)
-        self.jsonrpc_port = optional_args.get("jsonrpc_port", 80)
+        self.jsonrpc_port = optional_args.get("jsonrpc_port", 443)
         if self.gnmi_port:
             self.target = str(self.hostname) + ":" + str(self.gnmi_port)
         self.target_name = optional_args.get("target_name", "")
@@ -2556,8 +2556,9 @@ class SRLAPI(object):
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        geturl = "http://{}:{}@{}:{}/jsonrpc".format(self.username, self.password, self.hostname, self.jsonrpc_port)
-        resp = requests.post(geturl, headers=headers, json=json_data, timeout=timeout if timeout else self.timeout)
+        geturl = "https://{}:{}@{}:{}/jsonrpc".format(self.username, self.password, self.hostname, self.jsonrpc_port)
+        resp = requests.post(geturl, headers=headers, json=json_data, timeout=timeout if timeout else self.timeout,
+                             verify=self.tls_ca or False)
         resp.raise_for_status()
         return resp.json() if resp.text else ""
 
