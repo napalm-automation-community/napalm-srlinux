@@ -27,8 +27,9 @@ Releases beyond this have not been validated and should be by users before using
 
 ##### **Important Notes**
 
-1. **Ports**: The napalm-srlinux driver uses gNMI and JSON-RPC for various functions, Make sure to enable the ports at SR Linux Node (57400 and 80 respecticvely by default)
+1. **Ports**: The napalm-srlinux driver uses gNMI and JSON-RPC for various functions, Make sure to enable the ports at SR Linux Node (57400 and 443 respectively by default)
 2. **Certificates**: The napalm-srlinux driver establishes secure connection only with the node, Hence make sure the appropriate CA/Certificates and Keys are in place.
+  For testing purposes, 'insecure=True' can be used to accept any certificate presented by the device
 3. **Compare_Config**: The `compare_commit` based on the previously called function performs the operation as below, Default is on-box difference
 
 	| Function | compare_config |
