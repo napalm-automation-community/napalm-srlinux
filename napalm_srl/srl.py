@@ -1720,8 +1720,15 @@ class NokiaSRLDriver(NetworkDriver):
                 "candidate": "",
                 "startup": ""
             }
+        except NotImplementedError as e:
+            raise e
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error(f"Error occurred in get_config: {e}")
+            return {
+                "running": "",
+                "candidate": "",
+                "startup": ""
+            }
 
     def get_ntp_servers(self):
         """
@@ -2451,33 +2458,33 @@ class SRLAPI(object):
 
             credentials = grpc.ssl_channel_credentials(**certs)
             self._metadata = [("username", self.username), ("password", self.password)]
-            # open a secure channel
-            # if self.tls_ca and self.tls_cert and self.tls_key:
+
+            # open a secure channel, note that this does *not* send username/pwd yet...
             self._channel = grpc.secure_channel(
                 target=self.target,
                 credentials=credentials,
                 options=(("grpc.ssl_target_name_override", self.target_name),),
             )
-            # print("channel", self._channel)
-            # else:
-            #     self._channel = grpc.insecure_channel(self.target)
 
             if self._stub is None:
                 self._stub = gnmi_pb2.gNMIStub(self._channel)
                 # print("stub", self._stub)
         except Exception as e:
-            print("Error in Connection to SRL : {}".format(e))
+            logging.error("Error in Connection to SRL : {}".format(e))
+            raise ConnectionException(e.msg) from e
 
     def close(self):
         """Implement the NAPALM method close (mandatory)"""
         try:
             if not self._channel:
-                print("No grpc channels created to close")
+                logging.warning("No grpc channels created to close")
                 return
             self._channel.close()
+            self._channel = None
             self._stub = None
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
+            raise ConnectionException(e.msg) from e
 
     @staticmethod
     def _readFile(filename):
