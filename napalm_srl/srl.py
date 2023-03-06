@@ -194,7 +194,7 @@ class NokiaSRLDriver(NetworkDriver):
                                         _find_neighbors(False, ipv6_neighbor_dict)
             return arp_table
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_bgp_neighbors(self):
         """
@@ -379,7 +379,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return bgp_neighbors
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_bgp_neighbors_detail(self, neighbor_address=""):
         """
@@ -713,7 +713,7 @@ class NokiaSRLDriver(NetworkDriver):
                                         bgp_neighbor_detail[instance_name][peer_as_number] = [peer_data]
             return bgp_neighbor_detail
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_environment(self):
         """
@@ -841,7 +841,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return environment_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_facts(self):
         """
@@ -904,7 +904,7 @@ class NokiaSRLDriver(NetworkDriver):
                 "interface_list": interface_list,
             }
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_interfaces(self):
         """
@@ -968,7 +968,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return interfaces
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_interfaces_counters(self):
         """
@@ -1118,7 +1118,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return interface_counters
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_interfaces_ip(self):
         """
@@ -1186,7 +1186,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return interfaces_ip
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_ipv6_neighbors_table(self):
         """
@@ -1261,7 +1261,7 @@ class NokiaSRLDriver(NetworkDriver):
                                                 )
             return ipv6_neighbor_list
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_lldp_neighbors(self):
         """
@@ -1298,7 +1298,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return lldp_neighbors
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_lldp_neighbors_detail(self, interface=""):
         """
@@ -1386,7 +1386,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return lldp_neighbors_detail
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_network_instances(self, name=""):
         """
@@ -1439,7 +1439,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return network_instances
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_users(self):
         """
@@ -1470,7 +1470,7 @@ class NokiaSRLDriver(NetworkDriver):
                 })
             return users_dict
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_bgp_config(self, group="", neighbor=""):
         """
@@ -1610,7 +1610,7 @@ class NokiaSRLDriver(NetworkDriver):
             return {} if group or neighbor else groups_data
             # return {} if group or neighbor else self._removeNotFound(groups_data)
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_snmp_information(self):
         """
@@ -1640,7 +1640,7 @@ class NokiaSRLDriver(NetworkDriver):
             }
             return output
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
     # def get_config_jsonrpc(self, retrieve='all', full=False, sanitized=False):
     #     """
     #     :param retrieve: Which configuration type you want to populate, default is all of them. The rest will be set to “”.
@@ -1747,7 +1747,7 @@ class NokiaSRLDriver(NetworkDriver):
                     })
             return server_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
             # # def get_ntp_peers(self):
     # #     """
@@ -1801,7 +1801,7 @@ class NokiaSRLDriver(NetworkDriver):
                     })
             return stats_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_optics(self):
         """
@@ -1852,7 +1852,7 @@ class NokiaSRLDriver(NetworkDriver):
                 })
             return channel_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_mac_address_table(self):
         """
@@ -1899,7 +1899,7 @@ class NokiaSRLDriver(NetworkDriver):
                     mac_data.append(m_data)
             return mac_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_route_to(self, destination='', protocol='', longer=False):
         """
@@ -2010,7 +2010,7 @@ class NokiaSRLDriver(NetworkDriver):
                 return {}
             return route_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def is_alive(self):
         try:
@@ -2072,7 +2072,7 @@ class NokiaSRLDriver(NetworkDriver):
                     probes[int(splts[0])] = ct_probe
             return {"success": probes}
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def _ping(self, destination, source="", ttl=255, timeout=2, size=100, count=5, vrf=""):
         try:
@@ -2129,7 +2129,7 @@ class NokiaSRLDriver(NetworkDriver):
             })
             return {"success": success_data}
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def cli(self, commands, encoding="text"):
         """
@@ -2148,7 +2148,7 @@ class NokiaSRLDriver(NetworkDriver):
                 output[c] = r
             return output
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def _clear_candidate(self):
       try:
@@ -2172,7 +2172,7 @@ class NokiaSRLDriver(NetworkDriver):
           output = self.device._jsonrpcRunCli(cmds)
           return self._return_result(output)
       except Exception as e:
-          print("Error occurred in _cli_commit: {}".format(e))
+          logging.error("Error occurred in _cli_commit: {}".format(e))
 
     def compare_config(self):
         try:
@@ -2192,7 +2192,7 @@ class NokiaSRLDriver(NetworkDriver):
                     cand_config = cand_config['replaces'][0]['value']
                 return self._diff_json(cand_config, running_config_dict)
         except Exception as e:
-            print("Error occurred in compare_config: {}".format(e))
+            logging.error("Error occurred in compare_config: {}".format(e))
 
     def _compare_config_on_box(self):
         """
@@ -2213,7 +2213,7 @@ class NokiaSRLDriver(NetworkDriver):
                 return output["error"]
             return output
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def load_replace_candidate(self, filename=None, config=None):
       """
@@ -2339,7 +2339,7 @@ class NokiaSRLDriver(NetworkDriver):
             )
             return output
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def _getObj(self, obj, *keys, default=""):
         try:
@@ -2349,8 +2349,8 @@ class NokiaSRLDriver(NetworkDriver):
             else:
                 output = self._getObj(obj[keys[0]], *keys[1:], default=default)
                 return output if output else default
-        except Exception:
-            # print(e)
+        except Exception as e:
+            logging.error(e)
             # raise type(e)("{} occurred when trying to get path {}".format(e, keys))
             # return "##NOTFOUND##"
             return default
@@ -2398,7 +2398,7 @@ class NokiaSRLDriver(NetworkDriver):
             j = jsondiff.jsondiff()
             return j.cmp_dict(newjson, oldjson)
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
 class SRLAPI(object):
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
