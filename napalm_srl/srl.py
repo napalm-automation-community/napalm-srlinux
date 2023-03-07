@@ -2482,7 +2482,7 @@ class SRLAPI(object):
                 # print("stub", self._stub)
         except Exception as e:
             logging.error("Error in Connection to SRL : {}".format(e))
-            raise ConnectionException(e.msg) from e
+            raise ConnectionException(e) from e
 
     def close(self):
         """Implement the NAPALM method close (mandatory)"""
@@ -2495,7 +2495,7 @@ class SRLAPI(object):
             self._stub = None
         except Exception as e:
             logging.error("Error occurred : {}".format(e))
-            raise ConnectionException(e.msg) from e
+            raise ConnectionException(e) from e
 
     @staticmethod
     def _readFile(filename):
