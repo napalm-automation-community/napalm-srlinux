@@ -40,6 +40,7 @@ from napalm.base.exceptions import (
     MergeConfigException,
     ReplaceConfigException,
     CommandErrorException,
+    CommitError,
 )
 import requests
 
@@ -70,6 +71,8 @@ class NokiaSRLDriver(NetworkDriver):
 
         self.pending_commit = False
         self.cand_config_file_path = f"/tmp/{hostname}.json"
+        self.chkpoint_id = 0
+
     def open(self):
         self.device.open()
 
@@ -194,7 +197,7 @@ class NokiaSRLDriver(NetworkDriver):
                                         _find_neighbors(False, ipv6_neighbor_dict)
             return arp_table
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_bgp_neighbors(self):
         """
@@ -379,7 +382,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return bgp_neighbors
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_bgp_neighbors_detail(self, neighbor_address=""):
         """
@@ -713,7 +716,7 @@ class NokiaSRLDriver(NetworkDriver):
                                         bgp_neighbor_detail[instance_name][peer_as_number] = [peer_data]
             return bgp_neighbor_detail
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_environment(self):
         """
@@ -841,7 +844,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return environment_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_facts(self):
         """
@@ -904,7 +907,7 @@ class NokiaSRLDriver(NetworkDriver):
                 "interface_list": interface_list,
             }
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_interfaces(self):
         """
@@ -968,7 +971,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return interfaces
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_interfaces_counters(self):
         """
@@ -1118,7 +1121,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return interface_counters
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_interfaces_ip(self):
         """
@@ -1186,7 +1189,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return interfaces_ip
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_ipv6_neighbors_table(self):
         """
@@ -1261,7 +1264,7 @@ class NokiaSRLDriver(NetworkDriver):
                                                 )
             return ipv6_neighbor_list
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_lldp_neighbors(self):
         """
@@ -1298,7 +1301,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return lldp_neighbors
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_lldp_neighbors_detail(self, interface=""):
         """
@@ -1386,7 +1389,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return lldp_neighbors_detail
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_network_instances(self, name=""):
         """
@@ -1439,7 +1442,7 @@ class NokiaSRLDriver(NetworkDriver):
 
             return network_instances
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_users(self):
         """
@@ -1470,7 +1473,7 @@ class NokiaSRLDriver(NetworkDriver):
                 })
             return users_dict
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_bgp_config(self, group="", neighbor=""):
         """
@@ -1610,7 +1613,7 @@ class NokiaSRLDriver(NetworkDriver):
             return {} if group or neighbor else groups_data
             # return {} if group or neighbor else self._removeNotFound(groups_data)
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_snmp_information(self):
         """
@@ -1640,7 +1643,7 @@ class NokiaSRLDriver(NetworkDriver):
             }
             return output
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
     # def get_config_jsonrpc(self, retrieve='all', full=False, sanitized=False):
     #     """
     #     :param retrieve: Which configuration type you want to populate, default is all of them. The rest will be set to “”.
@@ -1720,8 +1723,15 @@ class NokiaSRLDriver(NetworkDriver):
                 "candidate": "",
                 "startup": ""
             }
+        except NotImplementedError as e:
+            raise e
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error(f"Error occurred in get_config: {e}")
+            return {
+                "running": "",
+                "candidate": "",
+                "startup": ""
+            }
 
     def get_ntp_servers(self):
         """
@@ -1740,7 +1750,7 @@ class NokiaSRLDriver(NetworkDriver):
                     })
             return server_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
             # # def get_ntp_peers(self):
     # #     """
@@ -1794,7 +1804,7 @@ class NokiaSRLDriver(NetworkDriver):
                     })
             return stats_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_optics(self):
         """
@@ -1845,7 +1855,7 @@ class NokiaSRLDriver(NetworkDriver):
                 })
             return channel_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_mac_address_table(self):
         """
@@ -1892,7 +1902,7 @@ class NokiaSRLDriver(NetworkDriver):
                     mac_data.append(m_data)
             return mac_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def get_route_to(self, destination='', protocol='', longer=False):
         """
@@ -2003,7 +2013,7 @@ class NokiaSRLDriver(NetworkDriver):
                 return {}
             return route_data
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def is_alive(self):
         try:
@@ -2065,7 +2075,7 @@ class NokiaSRLDriver(NetworkDriver):
                     probes[int(splts[0])] = ct_probe
             return {"success": probes}
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def _ping(self, destination, source="", ttl=255, timeout=2, size=100, count=5, vrf=""):
         try:
@@ -2122,7 +2132,7 @@ class NokiaSRLDriver(NetworkDriver):
             })
             return {"success": success_data}
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def cli(self, commands, encoding="text"):
         """
@@ -2141,7 +2151,7 @@ class NokiaSRLDriver(NetworkDriver):
                 output[c] = r
             return output
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
     def _clear_candidate(self):
       try:
@@ -2165,7 +2175,8 @@ class NokiaSRLDriver(NetworkDriver):
           output = self.device._jsonrpcRunCli(cmds)
           return self._return_result(output)
       except Exception as e:
-          print("Error occurred in _cli_commit: {}".format(e))
+          logging.error("Error occurred in _cli_commit: {}".format(e))
+          raise CommitError(e) from e
 
     def compare_config(self):
         try:
@@ -2185,28 +2196,27 @@ class NokiaSRLDriver(NetworkDriver):
                     cand_config = cand_config['replaces'][0]['value']
                 return self._diff_json(cand_config, running_config_dict)
         except Exception as e:
-            print("Error occurred in compare_config: {}".format(e))
+            logging.error("Error occurred in compare_config: {}".format(e))
+            raise CommandErrorException(e) from e
 
     def _compare_config_on_box(self):
         """
-        A string showing the difference between the running configuration and the candidate configuration. The running_config is loaded automatically just before doing the comparison so there is no need for you to do it.
+        A string showing the difference between the running configuration and the candidate configuration.
+        The running_config is loaded automatically just before doing the comparison so there is no need for you to do it.
         :return:
         """
-        try:
-            cmds = [
-                "enter candidate private",
-                "/",
-                "diff"
-            ]
-            output = self.device._jsonrpcRunCli(cmds)
-            if "result" in output:
-                result = output["result"]
-                return result[-1]["text"] if "text" in result[-1] else "" if result[-1] =={} else result[-1]
-            elif "error" in output:
-                return output["error"]
-            return output
-        except Exception as e:
-            print("Error occurred : {}".format(e))
+        cmds = [
+            "enter candidate private",
+            "/",
+            "diff"
+        ]
+        output = self.device._jsonrpcRunCli(cmds)
+        if "result" in output:
+            result = output["result"]
+            return result[-1]["text"] if "text" in result[-1] else "" if result[-1] =={} else result[-1]
+        elif "error" in output:
+            return output["error"]
+        return output
 
     def load_replace_candidate(self, filename=None, config=None):
       """
@@ -2278,14 +2288,13 @@ class NokiaSRLDriver(NetworkDriver):
       if revert_in:
         raise NotImplementedError("'revert_in' not implemented")
 
-      # Create checkpoint
+      # Create named checkpoint
+      self.chkpoint_id = self.chkpoint_id + 1
       chkpt_cmds = [
-        {
-         "action": "update",
-         "path": "/system/configuration/generate-checkpoint"
-        }
+        f"/tools system configuration generate-checkpoint name NAPALM-{self.chkpoint_id}"
       ]
-      self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
+      result = self.device._jsonrpcRunCli(chkpt_cmds)
+      logging.info( f"Checkpoint 'NAPALM-{self.chkpoint_id}' created: {result}" )
 
       if self._is_commit_pending():
         with open(self.cand_config_file_path,"r") as f:
@@ -2303,6 +2312,14 @@ class NokiaSRLDriver(NetworkDriver):
             commands.append("commit now"+(f' comment "{message}"' if message else '') )
             output = self.device._jsonrpcRunCli(commands)
             return self._return_result(output)
+
+          # except grpc._channel._InactiveRpcError as e:
+            # Log but do not raise
+          # logging.error(e)
+
+          except Exception as e:
+            logging.error(e)
+            raise CommitError(e) from e
       else:
         return self._cli_commit(message,revert_in)
 
@@ -2326,13 +2343,14 @@ class NokiaSRLDriver(NetworkDriver):
             output = self.device._jsonrpcRunCli(
                 [
                     "enter candidate private",
-                    "load checkpoint id 0",
+                    f"load checkpoint name NAPALM-{self.chkpoint_id}",   # Use named checkpoint to avoid parallel overwrite
                     "commit now"
                 ]
             )
             return output
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
+            raise CommitError(e) from e
 
     def _getObj(self, obj, *keys, default=""):
         try:
@@ -2342,8 +2360,8 @@ class NokiaSRLDriver(NetworkDriver):
             else:
                 output = self._getObj(obj[keys[0]], *keys[1:], default=default)
                 return output if output else default
-        except Exception:
-            # print(e)
+        except Exception as e:
+            logging.error(e)
             # raise type(e)("{} occurred when trying to get path {}".format(e, keys))
             # return "##NOTFOUND##"
             return default
@@ -2391,7 +2409,7 @@ class NokiaSRLDriver(NetworkDriver):
             j = jsondiff.jsondiff()
             return j.cmp_dict(newjson, oldjson)
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
 
 class SRLAPI(object):
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
@@ -2451,33 +2469,33 @@ class SRLAPI(object):
 
             credentials = grpc.ssl_channel_credentials(**certs)
             self._metadata = [("username", self.username), ("password", self.password)]
-            # open a secure channel
-            # if self.tls_ca and self.tls_cert and self.tls_key:
+
+            # open a secure channel, note that this does *not* send username/pwd yet...
             self._channel = grpc.secure_channel(
                 target=self.target,
                 credentials=credentials,
                 options=(("grpc.ssl_target_name_override", self.target_name),),
             )
-            # print("channel", self._channel)
-            # else:
-            #     self._channel = grpc.insecure_channel(self.target)
 
             if self._stub is None:
                 self._stub = gnmi_pb2.gNMIStub(self._channel)
                 # print("stub", self._stub)
         except Exception as e:
-            print("Error in Connection to SRL : {}".format(e))
+            logging.error("Error in Connection to SRL : {}".format(e))
+            raise ConnectionException(e) from e
 
     def close(self):
         """Implement the NAPALM method close (mandatory)"""
         try:
             if not self._channel:
-                print("No grpc channels created to close")
+                logging.warning("No grpc channels created to close")
                 return
             self._channel.close()
+            self._channel = None
             self._stub = None
         except Exception as e:
-            print("Error occurred : {}".format(e))
+            logging.error("Error occurred : {}".format(e))
+            raise ConnectionException(e) from e
 
     @staticmethod
     def _readFile(filename):
