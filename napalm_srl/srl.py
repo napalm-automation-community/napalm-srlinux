@@ -40,6 +40,7 @@ from napalm.base.exceptions import (
     MergeConfigException,
     ReplaceConfigException,
     CommandErrorException,
+    CommitError,
 )
 import requests
 
@@ -70,6 +71,8 @@ class NokiaSRLDriver(NetworkDriver):
 
         self.pending_commit = False
         self.cand_config_file_path = f"/tmp/{hostname}.json"
+        self.chkpoint_id = 0
+
     def open(self):
         self.device.open()
 
@@ -2173,6 +2176,7 @@ class NokiaSRLDriver(NetworkDriver):
           return self._return_result(output)
       except Exception as e:
           logging.error("Error occurred in _cli_commit: {}".format(e))
+          raise CommitError(e) from e
 
     def compare_config(self):
         try:
@@ -2285,14 +2289,13 @@ class NokiaSRLDriver(NetworkDriver):
       if revert_in:
         raise NotImplementedError("'revert_in' not implemented")
 
-      # Create checkpoint
+      # Create named checkpoint
+      self.chkpoint_id = self.chkpoint_id + 1
       chkpt_cmds = [
-        {
-         "action": "update",
-         "path": "/system/configuration/generate-checkpoint"
-        }
+        f"/tools system configuration generate-checkpoint name NAPALM-{self.chkpoint_id}"
       ]
-      self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
+      result = self.device._jsonrpcRunCli(chkpt_cmds)
+      logging.info( f"Checkpoint 'NAPALM-{self.chkpoint_id}' created: {result}" )
 
       if self._is_commit_pending():
         with open(self.cand_config_file_path,"r") as f:
@@ -2310,6 +2313,14 @@ class NokiaSRLDriver(NetworkDriver):
             commands.append("commit now"+(f' comment "{message}"' if message else '') )
             output = self.device._jsonrpcRunCli(commands)
             return self._return_result(output)
+
+          except grpc._channel._InactiveRpcError as e:
+            # Log but do not raise
+            logging.error(e)
+
+          except Exception as e:
+            logging.error(e)
+            raise CommitError(e) from e
       else:
         return self._cli_commit(message,revert_in)
 
@@ -2333,13 +2344,14 @@ class NokiaSRLDriver(NetworkDriver):
             output = self.device._jsonrpcRunCli(
                 [
                     "enter candidate private",
-                    "load checkpoint id 0",
+                    f"load checkpoint name NAPALM-{self.chkpoint_id}",   # Use named checkpoint to avoid parallel overwrite
                     "commit now"
                 ]
             )
             return output
         except Exception as e:
             logging.error("Error occurred : {}".format(e))
+            raise CommitError(e) from e
 
     def _getObj(self, obj, *keys, default=""):
         try:
