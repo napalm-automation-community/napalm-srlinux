@@ -2305,13 +2305,6 @@ class NokiaSRLDriver(NetworkDriver):
             self.device._commit_json_config(json_config)
             self._clear_candidate()
             return "JSON config committed"
-          except json.decoder.JSONDecodeError:
-            cli_config = f.read()
-            commands = ["enter candidate private"]
-            commands.extend(cli_config.split('\n'))
-            commands.append("commit now"+(f' comment "{message}"' if message else '') )
-            output = self.device._jsonrpcRunCli(commands)
-            return self._return_result(output)
 
           # except grpc._channel._InactiveRpcError as e:
             # Log but do not raise
