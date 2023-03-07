@@ -2288,21 +2288,14 @@ class NokiaSRLDriver(NetworkDriver):
       self.device._jsonrpcSet(chkpt_cmds, other_params={"datastore": "tools"})
 
       if self._is_commit_pending():
+        # This config file can only contain valid JSON, not CLI commands
         with open(self.cand_config_file_path,"r") as f:
-          try:
-            json_config = json.load(f)
-            if message:
-              raise NotImplementedError("'message' not supported with JSON config")
-            self.device._commit_json_config(json_config)
-            self._clear_candidate()
-            return "JSON config committed"
-          except json.decoder.JSONDecodeError:
-            cli_config = f.read()
-            commands = ["enter candidate private"]
-            commands.extend(cli_config.split('\n'))
-            commands.append("commit now"+(f' comment "{message}"' if message else '') )
-            output = self.device._jsonrpcRunCli(commands)
-            return self._return_result(output)
+          json_config = json.load(f)
+          if message:
+            raise NotImplementedError("'message' not supported with JSON config")
+          self.device._commit_json_config(json_config)
+          self._clear_candidate()
+          return "JSON config committed"
       else:
         return self._cli_commit(message,revert_in)
 
