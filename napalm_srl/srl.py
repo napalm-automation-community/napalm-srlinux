@@ -2197,27 +2197,26 @@ class NokiaSRLDriver(NetworkDriver):
                 return self._diff_json(cand_config, running_config_dict)
         except Exception as e:
             logging.error("Error occurred in compare_config: {}".format(e))
+            raise CommandErrorException(e) from e
 
     def _compare_config_on_box(self):
         """
-        A string showing the difference between the running configuration and the candidate configuration. The running_config is loaded automatically just before doing the comparison so there is no need for you to do it.
+        A string showing the difference between the running configuration and the candidate configuration.
+        The running_config is loaded automatically just before doing the comparison so there is no need for you to do it.
         :return:
         """
-        try:
-            cmds = [
-                "enter candidate private",
-                "/",
-                "diff"
-            ]
-            output = self.device._jsonrpcRunCli(cmds)
-            if "result" in output:
-                result = output["result"]
-                return result[-1]["text"] if "text" in result[-1] else "" if result[-1] =={} else result[-1]
-            elif "error" in output:
-                return output["error"]
-            return output
-        except Exception as e:
-            logging.error("Error occurred : {}".format(e))
+        cmds = [
+            "enter candidate private",
+            "/",
+            "diff"
+        ]
+        output = self.device._jsonrpcRunCli(cmds)
+        if "result" in output:
+            result = output["result"]
+            return result[-1]["text"] if "text" in result[-1] else "" if result[-1] =={} else result[-1]
+        elif "error" in output:
+            return output["error"]
+        return output
 
     def load_replace_candidate(self, filename=None, config=None):
       """
@@ -2314,9 +2313,9 @@ class NokiaSRLDriver(NetworkDriver):
             output = self.device._jsonrpcRunCli(commands)
             return self._return_result(output)
 
-          except grpc._channel._InactiveRpcError as e:
+          # except grpc._channel._InactiveRpcError as e:
             # Log but do not raise
-            logging.error(e)
+          # logging.error(e)
 
           except Exception as e:
             logging.error(e)
