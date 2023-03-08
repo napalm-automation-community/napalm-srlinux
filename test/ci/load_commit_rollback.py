@@ -34,7 +34,7 @@ print( reply )
 
 config2 = device.get_config()
 parsed2 = json.loads(config2["running"])
-assert( parsed2["srl_nokia-interfaces:interface"][0]["description"] != DESC )
+assert( "description" not in parsed2["srl_nokia-interfaces:interface"][0] )
 
 device.close()
 
