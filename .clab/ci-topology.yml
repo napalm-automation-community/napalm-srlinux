@@ -1,0 +1,14 @@
+---
+name: napalm-ci_cd
+
+topology:
+  kinds:
+    srl:
+      image: ghcr.io/nokia/srlinux:latest # Could pick specific version
+  nodes:
+    # TODO multiple node flavors like ixrd2, ixrd3, ixrd2l, etc.
+    srl:
+      kind: srl
+      mgmt_ipv4: 172.20.20.16
+      mgmt_ipv6: 2001:172:20:20::16
+      # startup-config: startup-config.cmd # Start with basic Containerlab config
