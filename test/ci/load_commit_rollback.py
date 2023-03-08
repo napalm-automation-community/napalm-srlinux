@@ -26,13 +26,13 @@ device.commit_config()
 # get config -> check that description is set
 config = device.get_config()
 print( config )
-assert( config["interface"]["ethernet-1/1"]["description"] == DESC )
+assert( config["running"]["srl_nokia-interfaces:interface"][0]["description"] == DESC )
 
 reply = device.rollback()
 print( reply )
 
 config2 = device.get_config()
-assert( config["interface"]["ethernet-1/1"]["description"] != DESC )
+assert( config["running"]["srl_nokia-interfaces:interface"][0]["description"] != DESC )
 
 device.close()
 
