@@ -25,7 +25,7 @@ device.commit_config()
 
 # get config -> check that description is set
 config = device.get_config()
-print( config )
+print( config["running"]["srl_nokia-interfaces:interface"][0] )
 assert( config["running"]["srl_nokia-interfaces:interface"][0]["description"] == DESC )
 
 reply = device.rollback()

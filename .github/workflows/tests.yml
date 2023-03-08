@@ -63,5 +63,5 @@ jobs:
       run: bash -c "$(curl -sL https://get.containerlab.dev)" # -- -v 0.36.1
     - name: start clab ci topo
       run: make deploy-clab-ci
-    - name: tests
+    - name: Run all CI tests under test/ci
       run: make run-tests
