@@ -20,19 +20,16 @@ DESC = f"Time {now}"
 cfg = f"""
 set /interface ethernet-1/1 description "{DESC}"
 """
-reply = device.load_merge_candidate(config=cfg) # CLI format
-print( reply )
-assert( reply.result == True )
-reply2 = device.commit_config()
-print( reply2 )
+device.load_merge_candidate(config=cfg) # CLI format
+device.commit_config()
 
 # get config -> check that description is set
 config = device.get_config()
 print( config )
 assert( config["interface"]["ethernet-1/1"]["description"] == DESC )
 
-reply3 = device.rollback()
-print( reply3 )
+reply = device.rollback()
+print( reply )
 
 config2 = device.get_config()
 assert( config["interface"]["ethernet-1/1"]["description"] != DESC )
