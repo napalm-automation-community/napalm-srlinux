@@ -25,14 +25,16 @@ device.commit_config()
 
 # get config -> check that description is set
 config = device.get_config()
-print( config["running"]["srl_nokia-interfaces:interface"][0] )
-assert( config["running"]["srl_nokia-interfaces:interface"][0]["description"] == DESC )
+parsed = json.loads(config["running"])
+print( json.dumps(parsed["srl_nokia-interfaces:interface"],indent=2) )
+assert( parsed["srl_nokia-interfaces:interface"][0]["description"] == DESC )
 
 reply = device.rollback()
 print( reply )
 
 config2 = device.get_config()
-assert( config["running"]["srl_nokia-interfaces:interface"][0]["description"] != DESC )
+parsed2 = json.loads(config2["running"])
+assert( parsed2["srl_nokia-interfaces:interface"][0]["description"] != DESC )
 
 device.close()
 
