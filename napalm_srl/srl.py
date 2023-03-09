@@ -2285,6 +2285,9 @@ class NokiaSRLDriver(NetworkDriver):
         return self._return_result(output)
 
     def commit_config(self, message='', revert_in=None):
+      """
+      This method creates a system-wide checkpoint containing the current state before this configuration change.
+      """
       if revert_in:
         raise NotImplementedError("'revert_in' not implemented")
 
@@ -2332,6 +2335,17 @@ class NokiaSRLDriver(NetworkDriver):
         return os.path.isfile(self.cand_config_file_path)
 
     def rollback(self):
+        """
+        Reverts changes made by the most recent commit_config call, by loading the named checkpoint that was created
+
+        Caveat: Checkpoints contain the entire system configuration tree, and restore the system state to the point at which
+                the (named) checkpoint was created (i.e. most recent commit_config call)
+                If changes were made to the config after that checkpoint was created, those changes will be reverted too (!)
+
+        In a highly concurrent environment in which multiple systems are provisioning nodes, it may be better to implement fine-grained
+        rollback consisting of only incremental changes, rather than the entire system state. In that case, 'rollback' would be implemented
+        by another call to commit_config, containing the original config subtree.
+        """
         try:
             output = self.device._jsonrpcRunCli(
                 [
