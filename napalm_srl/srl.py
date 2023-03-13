@@ -24,19 +24,15 @@ import json
 import logging
 import os
 import re
-import itertools
 import datetime
-import inspect
 import grpc
 from google.protobuf import json_format
 from napalm_srl import gnmi_pb2, jsondiff
-import tempfile
 
 from napalm.base import NetworkDriver
-from napalm.base.helpers import convert, ip, mac, as_number
+from napalm.base.helpers import convert, mac, as_number
 from napalm.base.exceptions import (
     ConnectionException,
-    SessionLockedException,
     MergeConfigException,
     ReplaceConfigException,
     CommandErrorException,
@@ -1365,7 +1361,7 @@ class NokiaSRLDriver(NetworkDriver):
                             capabilities_enabled = []
                             for capability in capability_list:
                                 capabilities.append(capability["name"])
-                                if capability["enabled"] == True:
+                                if capability["enabled"] is True:
                                     capabilities_enabled.append(capability["name"])
                             neighbor_data.append({
                                 "parent_interface": interface_name,
@@ -2022,7 +2018,7 @@ class NokiaSRLDriver(NetworkDriver):
                 return {"is_alive": True}
             else:
                 return {"is_alive": False}
-        except:
+        except Exception:
             return {"is_alive": False}
 
     def traceroute(self, destination, source="", ttl=255, timeout=2, vrf=""):
@@ -2115,11 +2111,11 @@ class NokiaSRLDriver(NetworkDriver):
                 'rtt_stddev': float(r_splits[8]),
             })
             ping_lines = []
-            for l in ping_list:
-                if "ping statistics" in l:
+            for line in ping_list:
+                if "ping statistics" in line:
                     break
-                if l.strip():
-                    ping_lines.append(l)
+                if line.strip():
+                    ping_lines.append(line)
             results = []
             for p in ping_lines:
                 p_splits = [s for s in re.split(" |:|=", p.strip()) if s.strip()]
@@ -2265,7 +2261,7 @@ class NokiaSRLDriver(NetworkDriver):
           if is_replace:
             if ('deletes' in cfg or 'updates' in cfg):
               raise Exception("'load_replace_candidate' cannot contain 'deletes' or 'updates'")
-            elif not 'path' in cfg["replaces"] or cfg["replaces"]["path"] != "/":
+            elif "path" not in cfg["replaces"] or cfg["replaces"]["path"] != "/":
               raise Exception("'load_replace_candidate' must use 'replaces' with a single path of '/'")
         else:
           cfg = { 'replaces' if is_replace else 'updates': [ { 'path': '/', 'value': cfg } ] }
@@ -2615,9 +2611,9 @@ class SRLAPI(object):
                 return ""
             #logging.exception(e)
             else:
-                for l in str(e).splitlines(False):
-                    if "detail" in l:
-                        raise Exception(l.strip()) from e
+                for line in str(e).splitlines(False):
+                    if "detail" in line:
+                        raise Exception(line.strip()) from e
         output = self._mergeToSingleDict(
             json_format.MessageToDict(response)["notification"]
         )

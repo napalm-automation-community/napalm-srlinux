@@ -18,11 +18,7 @@ import pytest
 from napalm_srl import srl
 from napalm.base.test.base import TestConfigNetworkDriver
 from napalm.base.exceptions import (
-    ConnectionException,
-    SessionLockedException,
     MergeConfigException,
-    ReplaceConfigException,
-    CommandErrorException,
 )
 class TestConfigSRLDriver(unittest.TestCase, TestConfigNetworkDriver):
     @classmethod

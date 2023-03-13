@@ -26,7 +26,7 @@ setup(
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS',
     ],
-    url="https://github.com/napalm-automation-community/tbd",
+    url="https://github.com/napalm-automation-community/napalm-srlinux",
     python_requires=">=3.7",
     include_package_data=True,
     install_requires=reqs,
