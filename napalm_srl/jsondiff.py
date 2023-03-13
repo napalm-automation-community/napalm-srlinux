@@ -195,7 +195,7 @@ class jsondiff(object):
                         result.extend(res)
                         old.remove(old_to_compare)
                     continue
-                elif not ind_key in n.keys():
+                elif ind_key not in n.keys():
                     result.append({
                         "+++":"{}[{}]".format(parent,index),
                         "value": n

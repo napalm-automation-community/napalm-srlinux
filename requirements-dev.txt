@@ -1,7 +1,8 @@
 coveralls
 ddt
-flake8
-flake8-import-order
+# flake8
+# flake8-import-order
+ruff
 pytest
 pytest-cov
 pytest-json

@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
+import json
+import sys
 from napalm import get_network_driver
-import json, time, sys
 from datetime import datetime
 
 driver = get_network_driver("srl")
