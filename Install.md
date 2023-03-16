@@ -1,5 +1,7 @@
 ## Installation Steps
-**Note**: Certificates are needed to establish successful connection with node. [Refer here for TLS Profiles at SR Linux](https://infocenter.nokia.com/public/SRLINUX200R6A/index.jsp?topic=%2Fcom.srlinux.configbasics%2Fhtml%2Fconfigb-config-mgmt.html)
+**Note**: Certificates are needed to establish a successful connection with node. [Refer here for TLS Profiles at SR Linux](https://infocenter.nokia.com/public/SRLINUX200R6A/index.jsp?topic=%2Fcom.srlinux.configbasics%2Fhtml%2Fconfigb-config-mgmt.html)
+
+During development and for quick testing, the ```insecure``` driver parameter can be set to bypass the need for certificates. Obviously, this is not recommended for production deployments
 
 **Installation**
 
@@ -31,7 +33,7 @@
             tls-profile tls-profile-1
         }
         ```
-        
+
     - Create JSON RPC Server Configurations
         ```
         --{ running }--[ system json-rpc-server ]--
@@ -57,6 +59,53 @@
         }
        ```   
 
+1.a (optional) **Dedicated user account for NAPALM driver access**
+
+To configure a dedicated user account for NAPALM driver access:
+```
+A:srl# info
+    configuration {
+        role napalm {
+            rule / {
+                action write
+            }
+        }
+    }
+    aaa {
+        authentication {
+            user napalm {
+                password "<some secure password>"
+                role [
+                    napalm
+                ]
+            }
+        }
+        authorization {
+            role napalm {
+                services [
+                    gnmi
+                    json-rpc
+                ]
+            }
+        }
+    }
+```
+
+If desired, access to the configuration can be further restricted. For example, to prevent NAPALM from overwriting aaa access rules to the system:
+```
+A:srl# info
+    configuration {
+        role napalm {
+            rule / {
+                action write
+            }
+            rule "/system aaa" {
+                action read
+            }
+        }
+    }
+```
+
 2. **Configurations where the napalm-srlinux driver will be installed/running**
 
 	- Clone the napalm-srlinux repository on your local machine.</br>
@@ -72,7 +121,7 @@
 	    python3 setup.py install
 	    ```
 
-	
+
 **Verification**
 
 Run the example script by pointing to correct certificates.
@@ -96,13 +145,12 @@ optional_args = {
      #"skip_verify": True,
      #"insecure": False
     "encoding": "JSON_IETF"
-} 
+}
 device = driver("172.20.20.2", "admin", "admin", 60, optional_args)
 device.open()
 
-print(json.dumps(device.get_facts())) 
+print(json.dumps(device.get_facts()))
 
 device.close()
 ```
 We welcome suggestions and contributions. Please contact the Nokia owners of this repository for how to contribute.
-
