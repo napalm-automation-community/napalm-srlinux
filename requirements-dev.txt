@@ -3,6 +3,7 @@ ddt
 # flake8
 # flake8-import-order
 ruff
+pre-commit
 pytest
 pytest-cov
 pytest-json

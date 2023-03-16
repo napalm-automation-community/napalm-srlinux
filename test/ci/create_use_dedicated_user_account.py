@@ -22,7 +22,7 @@ set /system configuration role napalm rule / action write
 set /system aaa authorization role napalm services [ gnmi json-rpc ]
 set /system aaa authentication user napalm password "NAPALM" role [ napalm ]
 """
-device.load_merge_candidate(config=json.dumps(cfg)) # CLI format
+device.load_merge_candidate(config=cfg) # CLI format
 device.commit_config()
 
 # get config -> check that AAA is set
