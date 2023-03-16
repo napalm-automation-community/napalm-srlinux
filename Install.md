@@ -108,15 +108,15 @@ A:srl# info
 
 2. **Configurations where the napalm-srlinux driver will be installed/running**
 
-	- Clone the napalm-srlinux repository on your local machine.</br>
+	- Clone the napalm-srlinux repository</br>
 	    ```
 	    git clone https://github.com/napalm-automation-community/napalm-srlinux.git
 	    ```
-	- Install the required packages.</br>
+	- Install the required packages</br>
 	    ```
 	    pip install -r requirements.txt
 	    ```
-	- Clone the napalm-srlinux repository on your local machine. </br>
+	- Install the driver</br>
 	    ```
 	    python3 setup.py install
 	    ```
