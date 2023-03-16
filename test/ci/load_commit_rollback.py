@@ -24,6 +24,14 @@ set /interface ethernet-1/1 description "{DESC}"
 device.load_merge_candidate(config=cfg) # CLI format
 device.commit_config()
 
+cfg2 = {
+ "interfaces": [
+  { "name": "ethernet-1/1", "description": f"{DESC} using JSON" }
+ ]
+}
+device.load_merge_candidate(config=json.dunps(cfg2)) # JSON format
+device.commit_config()
+
 # get config -> check that description is set
 config = device.get_config()
 parsed = json.loads(config["running"])
