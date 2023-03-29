@@ -72,6 +72,7 @@ class NokiaSRLDriver(NetworkDriver):
         self.enter_candidate = "enter candidate private"
         if optional_args and optional_args.get("use_exclusive_candidate",False):
             self.enter_candidate += " exclusive"
+            logging.warning( "Exclusive candidate locking enabled" )
 
     def open(self):
         self.device.open()
