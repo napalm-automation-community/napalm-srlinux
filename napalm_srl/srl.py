@@ -69,6 +69,10 @@ class NokiaSRLDriver(NetworkDriver):
         self.cand_config_file_path = f"/tmp/{hostname}.json"
         self.chkpoint_id = 0
 
+        self.enter_candidate = "enter candidate private"
+        if optional_args and optional_args.get("use_exclusive_candidate",False):
+            self.enter_candidate += " exclusive"
+
     def open(self):
         self.device.open()
 
@@ -2164,7 +2168,7 @@ class NokiaSRLDriver(NetworkDriver):
       try:
           cmds = [
               # "enter candidate private name {}".format(self.private_candidate_name),
-              "enter candidate private ",
+              self.enter_candidate,
               "/",
               'commit now comment "{}"'.format(message) if message else "commit now"
           ]
@@ -2202,7 +2206,7 @@ class NokiaSRLDriver(NetworkDriver):
         :return:
         """
         cmds = [
-            "enter candidate private",
+            self.enter_candidate,
             "/",
             "diff"
         ]
@@ -2271,7 +2275,7 @@ class NokiaSRLDriver(NetworkDriver):
         return "JSON candidate config loaded for " + ("replace" if is_replace else "merge")
       except json.decoder.JSONDecodeError: # Upon error, assume it's CLI commands
         cmds = [
-          "enter candidate private",
+          self.enter_candidate,
           "/",
         ]
         if is_replace:
@@ -2318,7 +2322,7 @@ class NokiaSRLDriver(NetworkDriver):
     def discard_config(self):
       if not self._clear_candidate():
         cmds = [
-         "enter candidate private",
+         self.enter_candidate,
          "/",
          "discard now"
         ]
@@ -2345,7 +2349,7 @@ class NokiaSRLDriver(NetworkDriver):
         try:
             output = self.device._jsonrpcRunCli(
                 [
-                    "enter candidate private",
+                    self.enter_candidate,
                     f"load checkpoint name NAPALM-{self.chkpoint_id}",   # Use named checkpoint to avoid parallel overwrite
                     "commit now"
                 ]
