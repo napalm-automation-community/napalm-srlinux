@@ -16,4 +16,4 @@ destroy-clab-ci: ## Destroy "ci" test topology
 	cd .clab && sudo clab destroy -t ci-topology.yml
 
 run-tests: $(TESTS) ## Run all CI tests under test/ci
-	python3 $<
+	PYTHONPATH="." python3 $<

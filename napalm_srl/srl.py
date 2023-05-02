@@ -2012,14 +2012,15 @@ class NokiaSRLDriver(NetworkDriver):
             logging.error("Error occurred : {}".format(e))
 
     def is_alive(self):
-        try:
-            output = self.device._jsonrpcRunCli(["date"])
-            if "result" in output:
-                return {"is_alive": True}
-            else:
-                return {"is_alive": False}
-        except Exception:
-            return {"is_alive": False}
+        alive = False
+        if self._channel:
+            try:
+                output = self.device._jsonrpcRunCli(["date"])
+                if "result" in output:
+                    alive = True
+            except Exception as e:
+                logging.error( f"Exception in is_alive: {e} -> returning False" )
+        return { "is_alive": alive }
 
     def traceroute(self, destination, source="", ttl=255, timeout=2, vrf=""):
         try:
