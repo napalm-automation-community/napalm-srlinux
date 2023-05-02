@@ -5,6 +5,9 @@ import sys
 from napalm import get_network_driver
 from datetime import datetime
 
+import logging
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+
 driver = get_network_driver("srl")
 optional_args = {
     "gnmi_port": 57400,
@@ -55,6 +58,6 @@ assert( parsed3["srl_nokia-interfaces:interface"][0]["description"] == DESC )
 device.close()
 
 # Regression: check that is_alive returns false
-assert( not device.is_alive() )
+assert( not device.is_alive()['is_alive'] )
 
 sys.exit(0) # Success
