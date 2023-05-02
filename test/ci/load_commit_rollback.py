@@ -47,4 +47,7 @@ assert( "description" not in parsed2["srl_nokia-interfaces:interface"][0] )
 
 device.close()
 
+# Regression: check that is_alive returns false
+assert( not device.is_alive() )
+
 sys.exit(0) # Success
