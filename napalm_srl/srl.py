@@ -38,6 +38,7 @@ from napalm.base.exceptions import (
     CommandErrorException,
     CommitError,
 )
+
 import requests
 
 class NokiaSRLDriver(NetworkDriver):

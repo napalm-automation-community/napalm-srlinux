@@ -7,3 +7,6 @@ paramiko>=2.7.1
 grpcio
 protobuf==3.20.3
 cryptography
+
+# The new 2.0.2 version breaks TLS handshake; investigating...
+urllib3==1.26.15
