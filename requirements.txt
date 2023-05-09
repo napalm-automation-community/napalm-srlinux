@@ -3,13 +3,7 @@ pip>=20.1.1
 pytest>=5.4.3
 setuptools>=47.3.1
 setuptools-rust
-textfsm>=1.1.0
 paramiko>=2.7.1
-lxml>=4.6.2
-ncclient>=0.6.7
-
-xmltodict>=0.12.0
-dictdiffer>=0.8.1
 grpcio
 protobuf==3.20.3
 cryptography
