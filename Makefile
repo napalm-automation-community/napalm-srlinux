@@ -17,3 +17,12 @@ destroy-clab-ci: ## Destroy "ci" test topology
 
 run-tests: $(TESTS) ## Run all CI tests under test/ci
 	PYTHONPATH="." python3 $<
+
+dist: ## This creates a ./dist directory with wheel package
+	python3 -m pip install --upgrade build
+	python3 -m build
+
+release: dist ## release to PyPi
+	python3 -m pip install --upgrade twine
+	# --repository testpypi
+	python3 -m twine upload dist/*
