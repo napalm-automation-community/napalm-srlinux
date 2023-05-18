@@ -38,7 +38,32 @@ from napalm.base.exceptions import (
     CommandErrorException,
     CommitError,
 )
+
 import requests
+
+from requests.packages.urllib3.poolmanager import PoolManager
+from requests.packages.urllib3.util import ssl_
+from requests.adapters import HTTPAdapter
+
+class TLSHttpAdapter(HTTPAdapter):
+    """
+    "Transport adapter" to re-enable the ECDHE-RSA-AES256-SHA cipher as fallback
+
+    urllib3 version 2.0.2 reduced the list of ciphers offered by default,
+    removing the ECDHE-RSA-AES256-SHA cipher. When the cipher list is left empty
+    in SR Linux CLI, by default it only accepts this cipher
+    """
+    def __init__(self, ciphers=None, **kwargs):
+        self.ciphers = ciphers
+        super(TLSHttpAdapter, self).__init__(**kwargs)
+
+    def init_poolmanager(self, connections, maxsize, block=False):
+        logging.warning( f"Enabled TLS ciphers: {self.ciphers}" )
+        ctx = ssl_.create_urllib3_context(ciphers=self.ciphers,cert_reqs=ssl_.CERT_REQUIRED)
+        ctx.check_hostname = False # for some reason, CERT_REQUIRED becomes None
+        self.poolmanager = PoolManager(
+           num_pools=connections, maxsize=maxsize,
+           ssl_context=ctx, block=block)
 
 class NokiaSRLDriver(NetworkDriver):
     """Napalm driver for SRL."""
@@ -2444,6 +2469,12 @@ class SRLAPI(object):
         self.tls_cert = optional_args.get("tls_cert", "")
         self.tls_key = optional_args.get("tls_key", "")
 
+        ciphers = optional_args.get("jsonrpc_ciphers",
+          "TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:ECDHE-RSA-AES256-SHA")
+
+        self.jsonrpc_session = requests.session()
+        self.jsonrpc_session.mount("https://", TLSHttpAdapter(ciphers=ciphers))
+
     def open(self):
         """Implement the NAPALM method open (mandatory)"""
         try:
@@ -2578,9 +2609,11 @@ class SRLAPI(object):
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        geturl = "https://{}:{}@{}:{}/jsonrpc".format(self.username, self.password, self.hostname, self.jsonrpc_port)
-        resp = requests.post(geturl, headers=headers, json=json_data, timeout=timeout if timeout else self.timeout,
-                             verify=self.tls_ca or False)
+        geturl = "https://{}:{}@{}:{}/jsonrpc".format(self.username,
+                  self.password, self.hostname, self.jsonrpc_port)
+        resp = self.jsonrpc_session.post(geturl, headers=headers, json=json_data,
+                                   timeout=timeout if timeout else self.timeout,
+                                   verify=self.tls_ca or False)
         resp.raise_for_status()
         return resp.json() if resp.text else ""
 
