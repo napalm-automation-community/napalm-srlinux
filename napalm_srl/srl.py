@@ -1174,39 +1174,41 @@ class NokiaSRLDriver(NetworkDriver):
                                 if ipv4:
                                     ipv4 = eval(ipv4.replace("'", '"'))
                                     ipv4_address_list = self._find_txt(ipv4, "address")
-                                    ipv4_address_list = list(eval(ipv4_address_list))
-                                    for dictionary_1 in ipv4_address_list:
-                                        ip_address_with_prefix = self._find_txt(
-                                            dictionary_1, "ip-prefix"
-                                        )
-                                        if ip_address_with_prefix:
-                                            ip_address = ip_address_with_prefix.split("/")
-                                            interfaces_ip[sub_interface_name]["ipv4"] = {
-                                                ip_address[0]: {
-                                                    "prefix_length": convert(
-                                                        int, ip_address[1], default="N/A"
-                                                    )
+                                    if len(ipv4_address_list) != 0:
+                                        ipv4_address_list = list(eval(ipv4_address_list))
+                                        for dictionary_1 in ipv4_address_list:
+                                            ip_address_with_prefix = self._find_txt(
+                                                dictionary_1, "ip-prefix"
+                                            )
+                                            if ip_address_with_prefix:
+                                                ip_address = ip_address_with_prefix.split("/")
+                                                interfaces_ip[sub_interface_name]["ipv4"] = {
+                                                    ip_address[0]: {
+                                                        "prefix_length": convert(
+                                                            int, ip_address[1], default="N/A"
+                                                        )
+                                                    }
                                                 }
-                                            }
 
                                 ipv6 = self._find_txt(dictionary, "ipv6")
                                 if ipv6:
                                     ipv6 = eval(ipv6.replace("'", '"'))
                                     ipv6_address_list = self._find_txt(ipv6, "address")
-                                    ipv6_address_list = list(eval(ipv6_address_list))
-                                    for dictionary_1 in ipv6_address_list:
-                                        ip_address_with_prefix = self._find_txt(
-                                            dictionary_1, "ip-prefix"
-                                        )
-                                        if ip_address_with_prefix:
-                                            ip_address = ip_address_with_prefix.split("/")
-                                            interfaces_ip[sub_interface_name]["ipv6"] = {
-                                                ip_address[0]: {
-                                                    "prefix_length": convert(
-                                                        int, ip_address[1], default="N/A"
-                                                    )
+                                    if len(ipv6_address_list) != 0:
+                                        ipv6_address_list = list(eval(ipv6_address_list))
+                                        for dictionary_1 in ipv6_address_list:
+                                            ip_address_with_prefix = self._find_txt(
+                                                dictionary_1, "ip-prefix"
+                                            )
+                                            if ip_address_with_prefix:
+                                                ip_address = ip_address_with_prefix.split("/")
+                                                interfaces_ip[sub_interface_name]["ipv6"] = {
+                                                    ip_address[0]: {
+                                                        "prefix_length": convert(
+                                                            int, ip_address[1], default="N/A"
+                                                        )
+                                                    }
                                                 }
-                                            }
 
             return interfaces_ip
         except Exception as e:
