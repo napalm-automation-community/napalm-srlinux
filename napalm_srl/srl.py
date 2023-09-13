@@ -1166,10 +1166,11 @@ class NokiaSRLDriver(NetworkDriver):
                       if v in s and 'address' in s[v]:
                           for addr in s[v]["address"]:
                             ip_l = addr['ip-prefix'].split('/')
+                            e = { ip_l[0]: { "prefix_length": int(ip_l[1]) } }
                             if v not in interfaces_ip:
-                              interfaces_ip[v] = { ip_l[0]: int(ip_l[1]) }
+                              interfaces_ip[v] = e
                             else:
-                              interfaces_ip[v].update( { ip_l[0]: int(ip_l[1]) } )
+                              interfaces_ip[v].update( e )
 
 
             return interfaces_ip
