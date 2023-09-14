@@ -11,3 +11,4 @@ cryptography
 # however botocore 1.31.14 depends on urllib3<1.27
 # urllib3>=2.0.2
 urllib3
+wheel
