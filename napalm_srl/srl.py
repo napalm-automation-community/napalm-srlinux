@@ -1162,20 +1162,21 @@ class NokiaSRLDriver(NetworkDriver):
 
             for interface in output["srl_nokia-interfaces:interface"]:
                 for s in interface["subinterface"]:
+                    ip_addr = {}
                     for v in ["ipv4","ipv6"]:
                       if v in s and 'address' in s[v]:
                           for addr in s[v]["address"]:
                             ip_l = addr['ip-prefix'].split('/')
-                            e = { f"{interface['name']}.{s['index']}" : { ip_l[0]: { "prefix_length": int(ip_l[1]) } } }
-                            if v not in interfaces_ip:
-                              interfaces_ip[v] = e
+                            e = { ip_l[0]: { "prefix_length": int(ip_l[1]) } }
+                            if v not in ip_addr:
+                              ip_addr[v] = e
                             else:
-                              interfaces_ip[v].update( e )
-
+                              ip_addr[v].update( e )
+                    interfaces_ip[ s['name'] ] = ip_addr
 
             return interfaces_ip
         except Exception as e:
-            logging.error(f"Error occurred : {e}")
+            logging.exception(f"Error occurred : {e}")
 
     def get_ipv6_neighbors_table(self):
         """
