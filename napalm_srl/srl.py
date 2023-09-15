@@ -2441,6 +2441,21 @@ class SRLAPI(object):
         self.jsonrpc_session = requests.session()
         self.jsonrpc_session.mount("https://", TLSHttpAdapter(ciphers=ciphers))
 
+        # Warn about incompatible settings
+        if self.jsonrpc_port == 443:
+            if self.insecure:
+                logging.warning( "Incompatible settings: insecure JSON RPC uses port 80, not 443" )
+        elif self.jsonrpc_port == 80:
+            if not self.insecure:
+                logging.warning( "Incompatible settings: secure JSON RPC uses port 443, not 80" )
+        else:
+            logging.warning( f"Unknown JSON RPC port configured ({self.jsonrpc_port}), only 443(default) or 80 are supported" )
+
+        if not self.insecure:
+            if not self.skip_verify and not (self.tls_cert and self.tls_key and self.tls_ca):
+                logging.warning( "Incompatible settings: secure JSON RPC with skip_verify=False " + 
+                                 "requires certificate parameters 'tls_cert','tls_key' and 'tls_ca' to be set" )
+
     def open(self):
         """Implement the NAPALM method open (mandatory)"""
         try:
@@ -2575,11 +2590,13 @@ class SRLAPI(object):
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        geturl = "https://{}:{}@{}:{}/jsonrpc".format(self.username,
-                  self.password, self.hostname, self.jsonrpc_port)
+        proto = "https" if (self.jsonrpc_port==443 or not self.insecure) else "http"
+        geturl = f"{proto}://{self.username}:{self.password}@{self.hostname}:{self.jsonrpc_port}/jsonrpc"
+        cert = ( self.tls_cert, self.tls_key ) if self.tls_cert and self.tls_key else None
         resp = self.jsonrpc_session.post(geturl, headers=headers, json=json_data,
                                    timeout=timeout if timeout else self.timeout,
-                                   verify=self.tls_ca or False)
+                                   cert=cert,
+                                   verify=False if self.skip_verify else self.tls_ca)
         resp.raise_for_status()
         return resp.json() if resp.text else ""
 
