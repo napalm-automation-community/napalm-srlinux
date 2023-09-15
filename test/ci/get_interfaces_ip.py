@@ -30,6 +30,6 @@ device.commit_config()
 
 # get_interfaces_ip() should not fail when no ip addresses are present
 ip_addresses = device.get_interfaces_ip()
-
-assert(ip_addresses.get("system0.0") == {})
 assert(ip_addresses is not None)
+assert(ip_addresses.get("system0.0") == {})
+
