@@ -2590,7 +2590,7 @@ class SRLAPI(object):
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        proto = "https" if not self.insecure else "http"
+        proto = "https" if (self.jsonrpc_port==443 or not self.insecure) else "http"
         geturl = f"{proto}://{self.username}:{self.password}@{self.hostname}:{self.jsonrpc_port}/jsonrpc"
         cert = ( self.tls_cert, self.tls_key ) if self.tls_cert and self.tls_key else None
         resp = self.jsonrpc_session.post(geturl, headers=headers, json=json_data,
