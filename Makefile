@@ -2,7 +2,7 @@
 
 .DEFAULT_GOAL := help
 
-.PHONY: help deploy-clab-ci destroy-clab-ci run-tests
+.PHONY: help deploy-clab-ci destroy-clab-ci run-tests dist
 
 TESTS := $(shell find test/ci -name '*.py')
 
@@ -16,7 +16,9 @@ destroy-clab-ci: ## Destroy "ci" test topology
 	cd .clab && sudo clab destroy -t ci-topology.yml --cleanup
 
 run-tests: $(TESTS) ## Run all CI tests under test/ci
-	PYTHONPATH="." python3 $<
+	for test in $(TESTS); do \
+		PYTHONPATH="." python3 $$test; \
+	done
 
 dist: ## This creates a ./dist directory with wheel package
 	python3 -m pip install --upgrade build
