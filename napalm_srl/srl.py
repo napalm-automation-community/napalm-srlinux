@@ -2485,7 +2485,7 @@ class SRLAPI(object):
 
             credentials = grpc.ssl_channel_credentials(**certs)
             self._metadata = [("username", self.username), ("password", self.password)]
-            print( self.target )
+
             # open a secure channel, note that this does *not* send username/pwd yet...
             self._channel = grpc.secure_channel(
                 target=self.target,
