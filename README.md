@@ -1,6 +1,26 @@
 ## **Nokia napalm-srlinux**
 Community NAPALM driver for the Nokia SR Linux OS. [https://www.nokia.com/networks/products/service-router-linux-NOS/](https://www.nokia.com/networks/products/service-router-linux-NOS/) 
 
+# Getting started - quick connection code snippet
+```
+driver = get_network_driver("srl")
+optional_args = {
+  "gnmi_port": 57400, # default
+  "jsonrpc_port": 443, # default
+
+  # "tls_ca": tls_ca, # Root CA to verify SSL connections
+  # "tls_cert": cwd + "srl/client.pem",
+  # "tls_key": cwd + "srl/client.key",
+  # "skip_verify": True,
+  "insecure": True, # FOR TESTING PURPOSES ONLY - this uses the server certificate as root of trust
+  "encoding": "JSON_IETF"
+}
+device = driver("host-or-ip", "admin", "NokiaSrl1!", 10, optional_args)
+device.open()
+facts = device.get_facts()
+print( facts )
+device.close()
+```
 
 #### **NAPALM**
 NAPALM (Network Automation and Programmability Abstraction Layer with Multivendor support) is a Python library that implements a set of functions to interact with different router vendor devices using a unified API.
