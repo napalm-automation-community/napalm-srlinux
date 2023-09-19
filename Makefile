@@ -2,7 +2,7 @@
 
 .DEFAULT_GOAL := help
 
-.PHONY: help deploy-clab-ci destroy-clab-ci run-tests
+.PHONY: help deploy-clab-ci destroy-clab-ci run-tests dist
 
 TESTS := $(shell find test/ci -name '*.py')
 
