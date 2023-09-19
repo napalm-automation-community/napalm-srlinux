@@ -2441,20 +2441,19 @@ class SRLAPI(object):
         self.jsonrpc_session = requests.session()
         self.jsonrpc_session.mount("https://", TLSHttpAdapter(ciphers=ciphers))
 
-        # Warn about incompatible settings
-        if self.jsonrpc_port == 443:
-            if self.insecure:
-                logging.warning( "Incompatible settings: insecure JSON RPC uses port 80, not 443" )
-        elif self.jsonrpc_port == 80:
+        # Warn about incompatible/oddball settings
+        if self.jsonrpc_port == 80:
             if not self.insecure:
-                logging.warning( "Incompatible settings: secure JSON RPC uses port 443, not 80" )
-        else:
-            logging.warning( f"Unknown JSON RPC port configured ({self.jsonrpc_port}), only 443(default) or 80 are supported" )
+                logging.warning( "Secure JSON RPC uses port 443, not 80. " +
+                                 "Set 'insecure=True' flag to indicate this is ok" )
+        elif self.jsonrpc_port != 443:
+            logging.warning( f"Non-default JSON RPC port configured ({self.jsonrpc_port}), typically only 443(default) or 80 are used" )
 
         if not self.insecure:
-            if not self.skip_verify and not (self.tls_cert and self.tls_key and self.tls_ca):
-                logging.warning( "Incompatible settings: secure JSON RPC with skip_verify=False " + 
-                                 "requires certificate parameters 'tls_cert','tls_key' and 'tls_ca' to be set" )
+            if not self.tls_ca:
+                logging.warning( "Incompatible settings: insecure=False " + 
+                                 "requires certificate parameter 'tls_ca' to be set " +
+                                 "when using self-signed certificates" )
 
     def open(self):
         """Implement the NAPALM method open (mandatory)"""
@@ -2477,6 +2476,7 @@ class SRLAPI(object):
 
                 ssl_cert = ssl.get_server_certificate((self.hostname, self.gnmi_port)).encode("utf-8")
                 certs["root_certificates"] = ssl_cert
+                logging.warning("Using server certificate as root CA due to 'insecure' flag, not recommended for production use" )
                 if not self.target_name:
                   ssl_cert_deserialized = x509.load_pem_x509_certificate(ssl_cert, default_backend())
                   ssl_cert_common_names = ssl_cert_deserialized.subject.get_attributes_for_oid(x509.oid.NameOID.COMMON_NAME)
@@ -2485,7 +2485,7 @@ class SRLAPI(object):
 
             credentials = grpc.ssl_channel_credentials(**certs)
             self._metadata = [("username", self.username), ("password", self.password)]
-
+            print( self.target )
             # open a secure channel, note that this does *not* send username/pwd yet...
             self._channel = grpc.secure_channel(
                 target=self.target,
