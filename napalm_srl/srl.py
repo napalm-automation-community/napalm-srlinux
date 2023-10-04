@@ -91,6 +91,8 @@ class NokiaSRLDriver(NetworkDriver):
         self.device = SRLAPI(hostname, username, password, timeout=60, optional_args=optional_args)
 
         self.pending_commit = False
+        # Whether to save changes to startup config, default False
+        self.commit_mode = "save" if optional_args and optional_args.get("commit_save",False) else "now"
         self.cand_config_file_path = f"/tmp/{hostname}.json"
         self.chkpoint_id = 0
 
@@ -2155,10 +2157,9 @@ class NokiaSRLDriver(NetworkDriver):
       """
       try:
           cmds = [
-              # "enter candidate private name {}".format(self.private_candidate_name),
               "enter candidate private ",
               "/",
-              'commit now comment "{}"'.format(message) if message else "commit now"
+              f'commit { self.commit_mode }' + (f'comment "{message}"' if message else '')
           ]
           output = self.device._jsonrpcRunCli(cmds)
           return self._return_result(output)
@@ -2339,7 +2340,7 @@ class NokiaSRLDriver(NetworkDriver):
                 [
                     "enter candidate private",
                     f"load checkpoint name NAPALM-{self.chkpoint_id}",   # Use named checkpoint to avoid parallel overwrite
-                    "commit now"
+                    f"commit {self.commit_mode}"
                 ]
             )
             return output
