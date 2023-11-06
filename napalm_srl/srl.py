@@ -18,7 +18,7 @@
 Napalm driver for SR Linux.
 
 Read https://napalm.readthedocs.io for more information.
-"""
+""" 
 import base64
 import json
 import logging
@@ -2592,11 +2592,11 @@ class SRLAPI(object):
             "Accept": "application/json",
         }
         proto = "https" if (self.jsonrpc_port==443 or (self.jsonrpc_port!=80 and not self.insecure)) else "http"
-        geturl = f"{proto}://{self.username}:{self.password}@{self.hostname}:{self.jsonrpc_port}/jsonrpc"
+        geturl = f"{proto}://{self.hostname}:{self.jsonrpc_port}/jsonrpc"
         cert = ( self.tls_cert, self.tls_key ) if self.tls_cert and self.tls_key else None
         resp = self.jsonrpc_session.post(geturl, headers=headers, json=json_data,
                                    timeout=timeout if timeout else self.timeout,
-                                   cert=cert,
+                                   auth=(self.username, self.password), cert=cert,
                                    verify=False if self.skip_verify else self.tls_ca)
         resp.raise_for_status()
         return resp.json() if resp.text else ""
