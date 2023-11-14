@@ -9,7 +9,7 @@ __author__ = 'Jose Valente <jose.valente@nokia.com>'
 
 setup(
     name="napalm-srl",
-    version="1.0.2",
+    version="1.0.3",
     packages=find_packages(),
     author="Jose Valente",
     author_email="jose.valente@nokia.com",
