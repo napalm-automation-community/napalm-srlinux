@@ -26,6 +26,7 @@ import os
 import re
 import datetime
 import grpc
+import tempfile
 from google.protobuf import json_format
 from napalm_srl import gnmi_pb2, jsondiff
 
@@ -93,7 +94,7 @@ class NokiaSRLDriver(NetworkDriver):
         self.pending_commit = False
         # Whether to save changes to startup config, default False
         self.commit_mode = "save" if optional_args and optional_args.get("commit_save",False) else "now"
-        self.cand_config_file_path = f"/tmp/{hostname}.json"
+        self.tmp_cfgfile = None
         self.chkpoint_id = 0
 
     def open(self):
@@ -2144,11 +2145,11 @@ class NokiaSRLDriver(NetworkDriver):
             logging.error("Error occurred : {}".format(e))
 
     def _clear_candidate(self):
-      try:
-        os.remove(self.cand_config_file_path)
-        return True
-      except Exception:
-        return False
+      if self.tmp_cfgfile is not None:
+          self.tmp_cfgfile.close()
+          self.tmp_cfgfile = None
+          return True
+      return False
 
     def _cli_commit(self, message='', revert_in=None):
       """
@@ -2177,12 +2178,10 @@ class NokiaSRLDriver(NetworkDriver):
 
                 running_config = self.get_config()["running"]
                 running_config_dict = json.loads(running_config)
-                cand_config = None
-                with open(self.cand_config_file_path) as f:
-                    cand_config = json.load(f)
-                    if 'updates' in cand_config:
-                        return cand_config # The update is the diff
-                    cand_config = cand_config['replaces'][0]['value']
+                cand_config = json.load(self.tmp_cfgfile)
+                if 'updates' in cand_config:
+                    return cand_config # The update is the diff
+                cand_config = cand_config['replaces'][0]['value']
                 return self._diff_json(cand_config, running_config_dict)
         except Exception as e:
             logging.error("Error occurred in compare_config: {}".format(e))
@@ -2259,8 +2258,9 @@ class NokiaSRLDriver(NetworkDriver):
         else:
           cfg = { 'replaces' if is_replace else 'updates': [ { 'path': '/', 'value': cfg } ] }
 
-        with open(self.cand_config_file_path, 'w') as f:
-          json.dump(cfg, f, sort_keys=True)
+        self.tmp_cfgfile = tempfile.TemporaryFile(mode='w')
+        json.dump(cfg, self.tmp_cfgfile, sort_keys=True)
+        self.tmp_cfgfile.seek(0) # Prepare for reading back
         return "JSON candidate config loaded for " + ("replace" if is_replace else "merge")
       except json.decoder.JSONDecodeError: # Upon error, assume it's CLI commands
         cmds = [
@@ -2289,22 +2289,21 @@ class NokiaSRLDriver(NetworkDriver):
       logging.info( f"Checkpoint 'NAPALM-{self.chkpoint_id}' created: {result}" )
 
       if self._is_commit_pending():
-        with open(self.cand_config_file_path,"r") as f:
-          try:
-            json_config = json.load(f)
-            if message:
-              raise NotImplementedError("'message' not supported with JSON config")
-            self.device._commit_json_config(json_config)
-            self._clear_candidate()
-            return "JSON config committed"
+        try:
+          json_config = json.load(self.tmp_cfgfile)
+          if message:
+            raise NotImplementedError("'message' not supported with JSON config")
+          self.device._commit_json_config(json_config)
+          self._clear_candidate()
+          return "JSON config committed"
 
           # except grpc._channel._InactiveRpcError as e:
             # Log but do not raise
           # logging.error(e)
 
-          except Exception as e:
-            logging.error(e)
-            raise CommitError(e) from e
+        except Exception as e:
+          logging.error(e)
+          raise CommitError(e) from e
       else:
         return self._cli_commit(message,revert_in)
 
@@ -2321,7 +2320,7 @@ class NokiaSRLDriver(NetworkDriver):
       return "Candidate config discarded"
 
     def _is_commit_pending(self):
-        return os.path.isfile(self.cand_config_file_path)
+        return self.tmp_cfgfile is not None
 
     def rollback(self):
         """
