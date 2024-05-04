@@ -1675,7 +1675,13 @@ class NokiaSRLDriver(NetworkDriver):
     #         }
 
 
-    def get_config(self, retrieve='all', full=False, sanitized=False):
+    def get_config(
+        self,
+        retrieve: str = "all",
+        full: bool = False,
+        sanitized: bool = False,
+        format: str = "text",    # This driver supports 'cli' for CLI, else default 'json'
+    ):
         """
         :param retrieve: Which configuration type you want to populate, default is all of them. The rest will be set to “”.
         :param full:Retrieve all the configuration. For instance, on ios, “sh run all”.
@@ -1691,7 +1697,7 @@ class NokiaSRLDriver(NetworkDriver):
                     "startup": ""
                 }
 
-            if self.running_format == 'cli':
+            if self.running_format == 'cli' or format == 'cli':
                 if sanitized:
                     raise NotImplementedError(
                         "sanitized=True is not implemented with CLI format")

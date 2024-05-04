@@ -7,16 +7,16 @@ name = "napalm-srl"
 version="1.0.4"
 description="Network Automation and Programmability Abstraction Layer driver for Nokia SR Linux"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dynamic = [ "dependencies" ]
 classifiers = [
     "Topic :: System :: Networking",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Natural Language :: English",
 ]
 authors = [
