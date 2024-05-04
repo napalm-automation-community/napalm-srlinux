@@ -1680,7 +1680,7 @@ class NokiaSRLDriver(NetworkDriver):
         retrieve: str = "all",
         full: bool = False,
         sanitized: bool = False,
-        format: str = "json",    # This driver supports 'cli' or 'text' for CLI, or default 'json'
+        format: str = "text",    # This driver supports 'cli' for CLI, else default 'json'
     ):
         """
         :param retrieve: Which configuration type you want to populate, default is all of them. The rest will be set to “”.
@@ -1697,7 +1697,7 @@ class NokiaSRLDriver(NetworkDriver):
                     "startup": ""
                 }
 
-            if self.running_format == 'cli' or format in ['cli','text']:
+            if self.running_format == 'cli' or format == 'cli':
                 if sanitized:
                     raise NotImplementedError(
                         "sanitized=True is not implemented with CLI format")
