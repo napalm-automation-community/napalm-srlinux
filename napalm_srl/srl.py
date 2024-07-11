@@ -2295,7 +2295,6 @@ class NokiaSRLDriver(NetworkDriver):
       logging.info( f"Checkpoint 'NAPALM-{self.chkpoint_id}' created: {result}" )
 
       if self._is_commit_pending():
-        print("pending commit")
         try:
           self.tmp_cfgfile.seek(0)
           json_config = json.load(self.tmp_cfgfile)
