@@ -2312,7 +2312,6 @@ class NokiaSRLDriver(NetworkDriver):
           logging.error(e)
           raise CommitError(e) from e
       else:
-        print("no commit pending")
         return self._cli_commit(message,revert_in)
 
     def discard_config(self):
