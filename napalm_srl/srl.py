@@ -2264,7 +2264,7 @@ class NokiaSRLDriver(NetworkDriver):
         else:
           cfg = { 'replaces' if is_replace else 'updates': [ { 'path': '/', 'value': cfg } ] }
 
-        self.tmp_cfgfile = tempfile.TemporaryFile(mode='w')
+        self.tmp_cfgfile = tempfile.TemporaryFile(mode='w+')
         json.dump(cfg, self.tmp_cfgfile, sort_keys=True)
         self.tmp_cfgfile.seek(0) # Prepare for reading back
         return "JSON candidate config loaded for " + ("replace" if is_replace else "merge")
@@ -2296,6 +2296,7 @@ class NokiaSRLDriver(NetworkDriver):
 
       if self._is_commit_pending():
         try:
+          self.tmp_cfgfile.seek(0)
           json_config = json.load(self.tmp_cfgfile)
           if message:
             raise NotImplementedError("'message' not supported with JSON config")
@@ -2884,3 +2885,4 @@ class SRLAPI(object):
                 if isinstance(aDict[key], dict):
                     aDict[key] = self._dictToList(aDict[key])
         return aDict
+
