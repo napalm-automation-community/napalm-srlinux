@@ -5,18 +5,12 @@
 from napalm import get_network_driver
 import json
 
-driver = get_network_driver("srl")
+driver = get_network_driver("srlinux")
 optional_args = {
-    "gnmi_port": 57400,
     "jsonrpc_port": 80,
-    "target_name": "172.20.20.2",
-    "tls_cert":"/root/gnmic_certs/srl_certs/clientCert.crt",
-    "tls_ca": "/root/gnmic_certs/srl_certs/RootCA.crt",
-    "tls_key": "/root/gnmic_certs/srl_certs/clientKey.pem",
      #"skip_verify": True,
      #"insecure": False
-    "encoding": "JSON_IETF"
-} 
+}
 device = driver("172.20.20.2", "admin", "admin", 60, optional_args)
 device.open()
 #print(json.dumps(device.get_bgp_config(neighbor="", group=""))) #Done

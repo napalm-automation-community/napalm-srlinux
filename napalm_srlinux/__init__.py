@@ -12,7 +12,7 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-"""napalm-srl package."""
-from napalm_srl.srl import NokiaSRLDriver  # noqa
+"""napalm-srlinux package."""
+from napalm_srlinux.srlinux import NokiaSRLinuxDriver  # noqa
 
-__all__ = ('NokiaSRLDriver',)
+__all__ = ('NokiaSRLinuxDriver',)

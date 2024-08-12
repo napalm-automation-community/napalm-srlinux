@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as file:
 __author__ = 'Jose Valente <jose.valente@nokia.com>'
 
 setup(
-    name="napalm-srl",
+    name="napalm-srlinux",
     version="1.0.5",
     packages=find_packages(),
     author="Jose Valente",

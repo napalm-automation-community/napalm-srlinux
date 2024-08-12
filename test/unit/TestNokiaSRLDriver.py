@@ -15,7 +15,7 @@
 
 import unittest
 import pytest
-from napalm_srl import srl
+from napalm_srlinux import srlinux
 from napalm.base.test.base import TestConfigNetworkDriver
 from napalm.base.exceptions import (
     MergeConfigException,
@@ -38,7 +38,7 @@ class TestConfigSRLDriver(unittest.TestCase, TestConfigNetworkDriver):
             # "insecure": False
             "encoding": "JSON_IETF"
         }
-        cls.device = srl.NokiaSRLDriver(
+        cls.device = srl.NokiaSRLinuxDriver(
             hostname, username, password, timeout=60, optional_args=optional_args
         )
         cls.device.open()

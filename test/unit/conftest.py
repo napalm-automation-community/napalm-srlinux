@@ -11,7 +11,7 @@ from napalm.base.test import conftest as parent_conftest
 
 from napalm.base.test.double import BaseTestDouble
 
-from napalm_srl import srl
+from napalm_srlinux import srlinux
 import json
 
 @pytest.fixture(scope="session", autouse=True)
@@ -26,7 +26,7 @@ def set_device_parameters(request):
         request.cls.device.close()
     request.addfinalizer(fin)
 
-    request.cls.driver = srl.NokiaSRLDriver
+    request.cls.driver = srl.NokiaSRLinuxDriver
     request.cls.patched_driver = PatchedsrlDriver
     request.cls.vendor = 'srl'
     parent_conftest.set_device_parameters(request)
@@ -37,7 +37,7 @@ def pytest_generate_tests(metafunc):
     parent_conftest.pytest_generate_tests(metafunc, __file__)
 
 
-class PatchedsrlDriver(srl.NokiaSRLDriver):
+class PatchedsrlDriver(srl.NokiaSRLinuxDriver):
     """Patched Skeleton Driver."""
 
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
