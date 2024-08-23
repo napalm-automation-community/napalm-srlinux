@@ -15,28 +15,27 @@
 # SPDX-License-Identifier: Apache-2.0
 
 """
-Napalm driver for SR Linux.
+Napalm driver for Nokia SR Linux.
 
 Read https://napalm.readthedocs.io for more information.
 """
 
-import jsonpath_ng
-import logging
-import re
 import datetime
 import enum
+import logging
+import re
+from typing import AnyStr, Optional, Union
 
+import httpx
+import jsonpath_ng
 from napalm.base import NetworkDriver
 from napalm.base.exceptions import (
+    CommandErrorException,
+    CommitError,
     ConnectionException,
     MergeConfigException,
     ReplaceConfigException,
-    CommandErrorException,
-    CommitError,
 )
-
-import httpx
-from typing import Optional, AnyStr, Union
 
 
 class NokiaSRLinuxDriver(NetworkDriver):
@@ -48,8 +47,12 @@ class NokiaSRLinuxDriver(NetworkDriver):
         self.username = username
         self.password = password
         self.timeout = timeout
-        self.running_format = optional_args.get("running_format", "json") if optional_args else "json"
-        self.device = SRLinuxDevice(hostname, username, password, timeout=60, optional_args=optional_args)
+        self.running_format = (
+            optional_args.get("running_format", "json") if optional_args else "json"
+        )
+        self.device = SRLinuxDevice(
+            hostname, username, password, timeout=60, optional_args=optional_args
+        )
 
     def open(self) -> None:
         self.device.open()
@@ -59,17 +62,17 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
     def get_arp_table(self, vrf: Optional[AnyStr] = "") -> list:
         """
-            Returns a list of dictionaries having the following set of keys:
-                interface (string)
-                mac (string)
-                ip (string)
-                age (float)
-            ‘vrf’ of null-string will default to all VRFs.
-            Specific ‘vrf’ will return the ARP table entries for that VRFs
-             (including potentially ‘default’ or ‘global’).
+        Returns a list of dictionaries having the following set of keys:
+            interface (string)
+            mac (string)
+            ip (string)
+            age (float)
+        ‘vrf’ of null-string will default to all VRFs.
+        Specific ‘vrf’ will return the ARP table entries for that VRFs
+         (including potentially ‘default’ or ‘global’).
 
-            In all cases the same data structure is returned and no reference to the VRF that was
-            used is included in the output.
+        In all cases the same data structure is returned and no reference to the VRF that was
+        used is included in the output.
         """
         raise NotImplementedError
 
@@ -98,16 +101,11 @@ class NokiaSRLinuxDriver(NetworkDriver):
             uptime of the last active BGP session.
         """
 
-        return_data = {
-            "global": {
-                "router_id": "",
-                "peers": {}
-            }
-        }
+        return_data = {"global": {"router_id": "", "peers": {}}}
 
         jrpc_output = self.device.get_paths(
             ["/network-instance[name=*]/protocols/bgp", "/system/information"],
-            SRLinuxDevice.RPCDatastore.STATE
+            SRLinuxDevice.RPCDatastore.STATE,
         )
 
         # TODO: handle exception
@@ -130,25 +128,34 @@ class NokiaSRLinuxDriver(NetworkDriver):
                 instance_name = "global"
 
             router_id = NokiaSRLinuxDriver._get_value_from_jsonpath(
-                "$.protocols.srl_nokia-bgp:bgp.router-id", network_instance)
+                "$.protocols.srl_nokia-bgp:bgp.router-id", network_instance
+            )
             global_asn = NokiaSRLinuxDriver._get_value_from_jsonpath(
-                "$.protocols.srl_nokia-bgp:bgp.autonomous-system", network_instance)
+                "$.protocols.srl_nokia-bgp:bgp.autonomous-system", network_instance
+            )
 
             return_data.update({instance_name: {"router_id": router_id, "peers": {}}})
 
             # extract BGP Neighbours
             bgp_neighbors = NokiaSRLinuxDriver._get_by_jsonpath(
-                "$.protocols.srl_nokia-bgp:bgp.neighbor[*]",
-                network_instance
+                "$.protocols.srl_nokia-bgp:bgp.neighbor[*]", network_instance
             )
 
             for neighbor in bgp_neighbors:
                 cur_neighbor = {
-                    "local_as": neighbor.get("local-as", {}).get("as-number", global_asn),
+                    "local_as": neighbor.get("local-as", {}).get(
+                        "as-number", global_asn
+                    ),
                     "remote_as": neighbor.get("peer-as", global_asn),
-                    "remote_id": neighbor.get("peer-remote-id", neighbor.get("peer-address")),
-                    "is_up": True if neighbor.get("session-state", "nil") == "established" else False,
-                    "is_enabled": True if neighbor.get("admin-state", False) == "enable" else False,
+                    "remote_id": neighbor.get(
+                        "peer-remote-id", neighbor.get("peer-address")
+                    ),
+                    "is_up": True
+                    if neighbor.get("session-state", "nil") == "established"
+                    else False,
+                    "is_enabled": True
+                    if neighbor.get("admin-state", False) == "enable"
+                    else False,
                     "description": neighbor.get("description", ""),
                     "uptime": -1,
                     "address_family": {},
@@ -156,9 +163,11 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
                 if cur_neighbor["is_up"]:
                     last_established = datetime.datetime.strptime(
-                        neighbor.get("last-established"),
-                        "%Y-%m-%dT%H:%M:%S.%fZ")
-                    cur_neighbor["uptime"] = (system_date_time - last_established).seconds
+                        neighbor.get("last-established"), "%Y-%m-%dT%H:%M:%S.%fZ"
+                    )
+                    cur_neighbor["uptime"] = (
+                        system_date_time - last_established
+                    ).seconds
 
                 for afi_safi in neighbor.get("afi-safi", []):
                     # IPv4
@@ -176,7 +185,9 @@ class NokiaSRLinuxDriver(NetworkDriver):
                             "accepted_prefixes": afi_safi.get("accepted-routes", 0),
                         }
 
-                return_data[instance_name]["peers"][neighbor.get("peer-address")] = cur_neighbor
+                return_data[instance_name]["peers"][neighbor.get("peer-address")] = (
+                    cur_neighbor
+                )
         return return_data
 
     def get_bgp_neighbors_detail(self, neighbor_address: Optional[AnyStr] = "") -> dict:
@@ -264,25 +275,26 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
     def get_interfaces(self) -> dict:
         """
-       Returns a dictionary of dictionaries.
-       The keys for the first dictionary will be the interfaces in the devices.
-       The inner dictionary contains the following data for each interface:
-           is_up (True/False)
-           is_enabled (True/False)
-           description (string)
-           last_flapped (float in seconds)
-           speed (float in Mbit)
-           MTU (in Bytes)
-           mac_address (string)
+        Returns a dictionary of dictionaries.
+        The keys for the first dictionary will be the interfaces in the devices.
+        The inner dictionary contains the following data for each interface:
+            is_up (True/False)
+            is_enabled (True/False)
+            description (string)
+            last_flapped (float in seconds)
+            speed (float in Mbit)
+            MTU (in Bytes)
+            mac_address (string)
         """
 
         interfaces = {}
 
         json_data = self.device.get_paths(
-            ["/interface[name=*]",
-             "/system/information",
-             ],
-            SRLinuxDevice.RPCDatastore.STATE
+            [
+                "/interface[name=*]",
+                "/system/information",
+            ],
+            SRLinuxDevice.RPCDatastore.STATE,
         )
 
         # TODO: handle exception
@@ -293,35 +305,38 @@ class NokiaSRLinuxDriver(NetworkDriver):
         for interface in interfaces_json.get("srl_nokia-interfaces:interface"):
             interfaces[interface.get("name")] = {
                 "is_up": True if interface.get("oper-state") == "up" else False,
-                "is_enabled": True if interface.get("admin-state") == "enable" else False,
+                "is_enabled": True
+                if interface.get("admin-state") == "enable"
+                else False,
                 "description": interface.get("description"),
                 "last-flapped": NokiaSRLinuxDriver._calculate_time_since(
-                    system_data.get("current-datetime"),
-                    interface.get("last-change")
+                    system_data.get("current-datetime"), interface.get("last-change")
                 ),
-                "speed": NokiaSRLinuxDriver._port_speed_to_mbits(interface.get("ethernet", {}).get("port-speed")),
+                "speed": NokiaSRLinuxDriver._port_speed_to_mbits(
+                    interface.get("ethernet", {}).get("port-speed")
+                ),
                 "mtu": interface.get("mtu"),
-                "mac_address": interface.get("ethernet", {}).get("hw-mac-address")
+                "mac_address": interface.get("ethernet", {}).get("hw-mac-address"),
             }
 
         return interfaces
 
     def get_interfaces_counters(self):
         """
-            Returns a dictionary of dictionaries where the first key is an interface name
-            and the inner dictionary contains the following keys:
-                tx_errors (int)
-                rx_errors (int)
-                tx_discards (int)
-                rx_discards (int)
-                tx_octets (int)
-                rx_octets (int)
-                tx_unicast_packets (int)
-                rx_unicast_packets (int)
-                tx_multicast_packets (int)
-                rx_multicast_packets (int)
-                tx_broadcast_packets (int)
-                rx_broadcast_packets (int)
+        Returns a dictionary of dictionaries where the first key is an interface name
+        and the inner dictionary contains the following keys:
+            tx_errors (int)
+            rx_errors (int)
+            tx_discards (int)
+            rx_discards (int)
+            tx_octets (int)
+            rx_octets (int)
+            tx_unicast_packets (int)
+            rx_unicast_packets (int)
+            tx_multicast_packets (int)
+            rx_multicast_packets (int)
+            tx_broadcast_packets (int)
+            rx_broadcast_packets (int)
         """
         raise NotImplementedError
 
@@ -359,11 +374,10 @@ class NokiaSRLinuxDriver(NetworkDriver):
         """
         lldp_neighbors = {}
         json_output = self.device.get_paths(
-            ["/system/lldp"],
-            SRLinuxDevice.RPCDatastore.STATE
+            ["/system/lldp"], SRLinuxDevice.RPCDatastore.STATE
         )
 
-        #TODO: Handle exception
+        # TODO: Handle exception
 
         if not json_output:
             # no lldp interfaces
@@ -381,7 +395,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
                 neighbors.append(
                     {
                         "port": neighor.get("port-id"),
-                        "hostname": neighor.get("system-name")
+                        "hostname": neighor.get("system-name"),
                     }
                 )
             lldp_neighbors[interface.get("name")] = neighbors
@@ -412,11 +426,10 @@ class NokiaSRLinuxDriver(NetworkDriver):
                 docsis-cable-device
                 station
             remote_system_enabled_capab (list)
-            """
+        """
         lldp_neighbors = {}
         json_output = self.device.get_paths(
-            ["/system/lldp"],
-            SRLinuxDevice.RPCDatastore.STATE
+            ["/system/lldp"], SRLinuxDevice.RPCDatastore.STATE
         )
 
         # TODO: handle exception
@@ -442,9 +455,13 @@ class NokiaSRLinuxDriver(NetworkDriver):
                         "remote_port_description": neighor.get("port-description", ""),
                         "remote_chassis_id": neighor.get("chassis-id", ""),
                         "remote_system_name": neighor.get("system-name", ""),
-                        "remote_system_description": neighor.get("system-description", ""),
-                        "remote_system_capab": [cap.get("name").split(":")[1].lower() for cap in
-                                                neighor.get("capability", [])]
+                        "remote_system_description": neighor.get(
+                            "system-description", ""
+                        ),
+                        "remote_system_capab": [
+                            cap.get("name").split(":")[1].lower()
+                            for cap in neighor.get("capability", [])
+                        ],
                     }
                 )
             lldp_neighbors[interface.get("name")] = neighbors
@@ -453,17 +470,17 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
     def get_network_instances(self, name=""):
         """
-           Return a dictionary of network instances (VRFs) configured, including default/global
-               Parameters:	name (string) –
-               Returns:
-                   name (dict)
-                       name (unicode)
-                       type (unicode)
-                       state (dict)
-                           route_distinguisher (unicode)
-                       interfaces (dict)
-                           interface (dict)
-                               interface name: (dict)
+        Return a dictionary of network instances (VRFs) configured, including default/global
+            Parameters:	name (string) –
+            Returns:
+                name (dict)
+                    name (unicode)
+                    type (unicode)
+                    state (dict)
+                        route_distinguisher (unicode)
+                    interfaces (dict)
+                        interface (dict)
+                            interface name: (dict)
         """
         raise NotImplementedError
 
@@ -482,32 +499,38 @@ class NokiaSRLinuxDriver(NetworkDriver):
         users_dict = {}
 
         paths_data = self.device.get_paths(
-            ["/system/aaa/authentication/admin-user",
-             "/system/aaa/authentication/user[username=*]"],
-            SRLinuxDevice.RPCDatastore.STATE
+            [
+                "/system/aaa/authentication/admin-user",
+                "/system/aaa/authentication/user[username=*]",
+            ],
+            SRLinuxDevice.RPCDatastore.STATE,
         )
 
         # TODO: handle thrown exception
 
         # first result is the admin user
         admin_user = paths_data[0]
-        users_dict.update({
-            "admin": {
-                "level": 0,  # Not supported by SRLinux
-                "password": admin_user["password"],
-                "ssh-keys": [k for k in admin_user["ssh-key"]]
+        users_dict.update(
+            {
+                "admin": {
+                    "level": 0,  # Not supported by SRLinux
+                    "password": admin_user["password"],
+                    "ssh-keys": [k for k in admin_user["ssh-key"]],
+                }
             }
-        })
+        )
 
         # all other users
         for user in paths_data[1]["user"]:
-            users_dict.update({
-                user["username"]: {
-                    "level": 0,
-                    "password": user["password"],
-                    "ssh-keys": [k for k in user.get("ssh-key", [])]
+            users_dict.update(
+                {
+                    user["username"]: {
+                        "level": 0,
+                        "password": user["password"],
+                        "ssh-keys": [k for k in user.get("ssh-key", [])],
+                    }
                 }
-            })
+            )
 
         return users_dict
 
@@ -533,7 +556,13 @@ class NokiaSRLinuxDriver(NetworkDriver):
         """
         raise NotImplementedError
 
-    def get_config(self, retrieve: str = "all", full: bool = False, sanitized: bool = False, format: str = "text"):
+    def get_config(
+        self,
+        retrieve: str = "all",
+        full: bool = False,
+        sanitized: bool = False,
+        format: str = "text",
+    ):
         """
         :param retrieve: Which configuration type you want to populate, default is all of them. The rest will be set to “”.
         :param full:Retrieve all the configuration. For instance, on ios, “sh run all”.
@@ -574,7 +603,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         """
         raise NotImplementedError
 
-    def get_route_to(self, destination='', protocol='', longer=False):
+    def get_route_to(self, destination="", protocol="", longer=False):
         """
         Returns a dictionary of dictionaries containing details of all available routes to a destination.
         """
@@ -586,19 +615,24 @@ class NokiaSRLinuxDriver(NetworkDriver):
         """
         try:
             alive = self.device.open()
-            return {'is_alive': alive}
+            return {"is_alive": alive}
         except Exception:
-            return {'is_alive': False}
+            return {"is_alive": False}
 
     def traceroute(self, destination, source="", ttl=255, timeout=2, vrf=""):
         raise NotImplementedError
 
-    def ping(self, destination: str, source: Optional[str] = "", ttl: Optional[int] = 255,
-             timeout: Optional[int] = 2,
-             size: Optional[int] = 100,
-             count: Optional[int] = 5,
-             vrf: Optional[AnyStr] = "default",
-             source_interface: Optional[AnyStr] = "") -> dict:
+    def ping(
+        self,
+        destination: str,
+        source: Optional[str] = "",
+        ttl: Optional[int] = 255,
+        timeout: Optional[int] = 2,
+        size: Optional[int] = 100,
+        count: Optional[int] = 5,
+        vrf: Optional[AnyStr] = "default",
+        source_interface: Optional[AnyStr] = "",
+    ) -> dict:
         """
         Executes a ping against the provided destination
         Returns a dictionary in the required NAPALM format.
@@ -611,46 +645,46 @@ class NokiaSRLinuxDriver(NetworkDriver):
         elif source:
             ping_src = source
 
-        ping_cmd = [f"ping {destination}",
-                    f"-I {ping_src}" if ping_src else "",
-                    f"-t {ttl}" if ttl else "",
-                    f"-W {timeout}" if timeout else "",
-                    f"-s {size}" if size else "",
-                    f"-c {count}" if count else "",
-                    f"network-instance {vrf}"]
+        ping_cmd = [
+            f"ping {destination}",
+            f"-I {ping_src}" if ping_src else "",
+            f"-t {ttl}" if ttl else "",
+            f"-W {timeout}" if timeout else "",
+            f"-s {size}" if size else "",
+            f"-c {count}" if count else "",
+            f"network-instance {vrf}",
+        ]
         try:
-            result = self.device.run_cli_commands(
-                [" ".join(ping_cmd)]
-            )
+            result = self.device.run_cli_commands([" ".join(ping_cmd)])
         except Exception as e:
-            return {
-                'error': str(e)
-            }
+            return {"error": str(e)}
         ping_text = result[0].get("text")
         re_pattern = "(\d+) packets transmitted, (\d+) received, (\d*\.?\d*)% packet loss, time (\w+)ms(\nrtt min/avg/max/mdev = (\d*\.?\d*)/(\d*\.?\d*)/(\d*\.?\d*)/(\d*\.?\d*))?"
         re_match = re.search(re_pattern, ping_text)
 
         # If DNS doesn't resolve or a host isn't in the route-table, fail the request.
         if not re_match:
-            return {'error': 'Unable to complete request'}
+            return {"error": "Unable to complete request"}
 
         groups = re_match.groups()
-        pings_pattern = '(\d+\.\d+\.\d+\.\d+)\)?: icmp_seq=\d+ ttl=\d+ time=(\d+\.\d+) ms'
+        pings_pattern = (
+            "(\d+\.\d+\.\d+\.\d+)\)?: icmp_seq=\d+ ttl=\d+ time=(\d+\.\d+) ms"
+        )
         pings = re.findall(pings_pattern, ping_text)
 
         # SRL doesn't print stats if at least one ping isn't successful.
         has_stats = len(groups) == 9
 
-        ping_results = [{'ip_address': p[0], 'rtt': p[1]} for p in pings]
+        ping_results = [{"ip_address": p[0], "rtt": p[1]} for p in pings]
         return {
-            'success': {
-                'probes_sent': groups[0],
-                'packet_loss': int(groups[0]) - int(groups[1]),
-                'rtt_min': groups[5] if has_stats else -1.0,
-                'rtt_max': groups[7] if has_stats else -1.0,
-                'rtt_avg': groups[6] if has_stats else -1.0,
-                'rtt_stddev': groups[8] if has_stats else -1.0,
-                'results': ping_results
+            "success": {
+                "probes_sent": groups[0],
+                "packet_loss": int(groups[0]) - int(groups[1]),
+                "rtt_min": groups[5] if has_stats else -1.0,
+                "rtt_max": groups[7] if has_stats else -1.0,
+                "rtt_avg": groups[6] if has_stats else -1.0,
+                "rtt_stddev": groups[8] if has_stats else -1.0,
+                "results": ping_results,
             }
         }
 
@@ -676,15 +710,15 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
     def load_merge_candidate(self, filename=None, config=None):
         """
-      Accepts either a native JSON formatted config (interpreted as 'update /')
-      or a gNMI style JSON config containing any number of 'deletes','replaces','updates'
-      """
+        Accepts either a native JSON formatted config (interpreted as 'update /')
+        or a gNMI style JSON config containing any number of 'deletes','replaces','updates'
+        """
         raise NotImplementedError
 
-    def commit_config(self, message='', revert_in=None):
+    def commit_config(self, message="", revert_in=None):
         """
-      This method creates a system-wide checkpoint containing the current state before this configuration change.
-      """
+        This method creates a system-wide checkpoint containing the current state before this configuration change.
+        """
         raise NotImplementedError
 
     def discard_config(self):
@@ -718,19 +752,19 @@ class NokiaSRLinuxDriver(NetworkDriver):
         quoted_keys = []
         for k in keys:
             # find keys with [...] at the end
-            if '[' in k and ':' in k:
+            if "[" in k and ":" in k:
                 x = re.findall("(.*)(\[.*])", k)
                 # quote the key portion, leaving the slice indicator unquoted
                 quoted_key = f"['{x[0][0]}']{x[0][1]}"
                 quoted_keys.append(quoted_key)
-            elif ':' in k:
+            elif ":" in k:
                 # quote keys with : in them
                 quoted_keys.append(f"['{k}']")
             else:
                 # don't touch otherwise
                 quoted_keys.append(k)
 
-        return jsonpath_ng.parse('.'.join(quoted_keys))
+        return jsonpath_ng.parse(".".join(quoted_keys))
 
     @staticmethod
     def _get_by_jsonpath(jsonpath: AnyStr, data: dict) -> list:
@@ -757,8 +791,12 @@ class NokiaSRLinuxDriver(NetworkDriver):
         Calculate the difference between a timestamp and the system's time.
         SRL timestamps are in the format "%Y-%m-%dT%H:%M:%S.%fZ"
         """
-        system_datetime = datetime.datetime.strptime(system_time, "%Y-%m-%dT%H:%M:%S.%fZ")
-        ref_datetime = datetime.datetime.strptime(reference_time, "%Y-%m-%dT%H:%M:%S.%fZ")
+        system_datetime = datetime.datetime.strptime(
+            system_time, "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
+        ref_datetime = datetime.datetime.strptime(
+            reference_time, "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
         return (ref_datetime - system_datetime).seconds
 
     @staticmethod
@@ -793,6 +831,7 @@ class SRLinuxDevice(object):
         """
         Enum class used to represent RPC Methods
         """
+
         GET = "get"
         SET = "set"
         VALIDATE = "validate"
@@ -802,6 +841,7 @@ class SRLinuxDevice(object):
         """
         Enum class used to represent RPC Actions
         """
+
         REPLACE = "replace"
         UPDATE = "update"
         DELETE = "delete"
@@ -810,13 +850,20 @@ class SRLinuxDevice(object):
         """
         Enum class used to represent SRL Data stores for RPC calls.
         """
+
         CANDIDATE = "candidate"
         RUNNING = "running"
         STATE = "state"
         TOOLS = "tools"
 
-    def __init__(self, hostname: str, username: str, password: str, timeout: Optional[int] = 60,
-                 optional_args: Optional[dict] = None):
+    def __init__(
+        self,
+        hostname: str,
+        username: str,
+        password: str,
+        timeout: Optional[int] = 60,
+        optional_args: Optional[dict] = None,
+    ):
         """Constructor."""
         self.device = None
         self.hostname = hostname
@@ -841,20 +888,25 @@ class SRLinuxDevice(object):
         # Warn about incompatible/oddball settings
         if self.jsonrpc_port == 80:
             if not self.insecure:
-                logging.warning("Secure JSON RPC uses port 443, not 80." +
-                                "Set 'insecure=True' flag to indicate this is ok")
+                logging.warning(
+                    "Secure JSON RPC uses port 443, not 80."
+                    + "Set 'insecure=True' flag to indicate this is ok"
+                )
         elif self.jsonrpc_port != 443:
             logging.warning(
-                f"Non-default JSON RPC port configured ({self.jsonrpc_port}), typically only 443(default) or 80 are used")
+                f"Non-default JSON RPC port configured ({self.jsonrpc_port}), typically only 443(default) or 80 are used"
+            )
 
         if not self.insecure:
             if not self.tls_ca:
-                logging.warning("Incompatible settings: insecure=False " +
-                                "requires certificate parameter 'tls_ca' to be set " +
-                                "when using self-signed certificates")
+                logging.warning(
+                    "Incompatible settings: insecure=False "
+                    + "requires certificate parameter 'tls_ca' to be set "
+                    + "when using self-signed certificates"
+                )
 
     def open(self):
-        """ Check the supplied init params actually work, throw an exception if not."""
+        """Check the supplied init params actually work, throw an exception if not."""
         # Set up a JSON RPC Client and test connectivity to the endpoint.
         path = "/system/information/version"
         ok, data = self.get_paths([path], SRLinuxDevice.RPCDatastore.STATE)
@@ -862,10 +914,12 @@ class SRLinuxDevice(object):
         if ok:
             return True
         else:
-            raise Exception("Error opening connection. Error: " + data.get("error").get("message"))
+            raise Exception(
+                "Error opening connection. Error: " + data.get("error").get("message")
+            )
 
     def close(self):
-        """Cleanup the HTTP Client """
+        """Cleanup the HTTP Client"""
         self.jsonrpc_session.close()
 
     def get_paths(self, paths: list, datastore: RPCDatastore) -> list:
@@ -876,14 +930,15 @@ class SRLinuxDevice(object):
         commands = [{"path": p, "datastore": datastore} for p in paths]
 
         ok, result = self._jsonrpc_request(
-            SRLinuxDevice.RPCMethod.GET,
-            {"commands": commands}
+            SRLinuxDevice.RPCMethod.GET, {"commands": commands}
         )
 
         if ok:
             return result.get("result")
         else:
-            raise Exception("Error getting subtrees from YANG path. Error: " + result.get("error"))
+            raise Exception(
+                "Error getting subtrees from YANG path. Error: " + result.get("error")
+            )
 
     def run_cli_commands(self, commands: list) -> list:
         """
@@ -891,8 +946,7 @@ class SRLinuxDevice(object):
         a command isn't valid or fails. Returns a list of results.
         """
         ok, response = self._jsonrpc_request(
-            SRLinuxDevice.RPCMethod.CLI,
-            {"commands": commands}
+            SRLinuxDevice.RPCMethod.CLI, {"commands": commands}
         )
 
         if ok:
@@ -912,15 +966,24 @@ class SRLinuxDevice(object):
 
         request_data = {
             "jsonrpc": "2.0",
-            "id": datetime.datetime.now().strftime('%s'),
+            "id": datetime.datetime.now().strftime("%s"),
             "method": method,
             "params": params,
         }
 
-        proto = "https" if (self.jsonrpc_port == 443 or (self.jsonrpc_port != 80 and not self.insecure)) else "http"
+        proto = (
+            "https"
+            if (
+                self.jsonrpc_port == 443
+                or (self.jsonrpc_port != 80 and not self.insecure)
+            )
+            else "http"
+        )
         url = f"{proto}://{self.hostname}:{self.jsonrpc_port}/jsonrpc"
 
-        result = self.jsonrpc_session.post(url, headers=headers, json=request_data, timeout=self.timeout)
+        result = self.jsonrpc_session.post(
+            url, headers=headers, json=request_data, timeout=self.timeout
+        )
 
         if result.status_code == httpx.codes.OK and result.json().get("error"):
             return False, result.json()
@@ -937,13 +1000,13 @@ class SRLinuxDevice(object):
         """
         cert = None
         if not self.insecure:
-            cert = (self.tls_cert_path, self.tls_key_path, self.tls_key_password) \
-                if self.tls_key_password else (self.tls_cert_path, self.tls_key_path)
+            cert = (
+                (self.tls_cert_path, self.tls_key_path, self.tls_key_password)
+                if self.tls_key_password
+                else (self.tls_cert_path, self.tls_key_path)
+            )
 
-        opts = {
-            "verify": (not self.insecure),
-            "auth": (self.username, self.password)
-        }
+        opts = {"verify": (not self.insecure), "auth": (self.username, self.password)}
 
         if cert:
             opts["cert"] = cert

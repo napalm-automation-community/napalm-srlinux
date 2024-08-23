@@ -13,6 +13,7 @@
 # the License.
 
 """napalm-srlinux package."""
+
 from napalm_srlinux.srlinux import NokiaSRLinuxDriver  # noqa
 
-__all__ = ('NokiaSRLinuxDriver',)
+__all__ = ("NokiaSRLinuxDriver",)
