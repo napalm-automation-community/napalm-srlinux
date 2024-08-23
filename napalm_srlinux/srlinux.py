@@ -913,10 +913,10 @@ class SRLinuxDevice(object):
 
         if ok:
             return True
-        else:
-            raise Exception(
-                "Error opening connection. Error: " + data.get("error").get("message")
-            )
+
+        raise Exception(
+            "Error opening connection. Error: " + data.get("error").get("message")
+        )
 
     def close(self):
         """Cleanup the HTTP Client"""
@@ -935,14 +935,14 @@ class SRLinuxDevice(object):
 
         if ok:
             return result.get("result")
-        else:
-            raise Exception(
-                "Error getting subtrees from YANG path. Error: " + result.get("error")
-            )
+
+        raise Exception(
+            "Error getting subtrees from YANG path. Error: " + result.get("error")
+        )
 
     def run_cli_commands(self, commands: list) -> list:
         """
-        Runs a list of  CLI commands on the device, returns the result or raises an exception if
+        Runs a list of CLI commands on the device, returns the result or raises an exception if
         a command isn't valid or fails. Returns a list of results.
         """
         ok, response = self._jsonrpc_request(
@@ -951,10 +951,10 @@ class SRLinuxDevice(object):
 
         if ok:
             return response.get("result")
-        else:
-            raise Exception(response.get("error", {}).get("message"))
 
-    def _jsonrpc_request(self, method: RPCMethod, params: dict) -> (bool, dict):
+        raise Exception(response.get("error", {}).get("message"))
+
+    def _jsonrpc_request(self, method: RPCMethod, params: dict) -> tuple[bool, dict]:
         """
         Make a JSON RPC request, raise an exception if the HTTP request returns anything other than 2xx
         Return a boolean success value (if HTTP 2xx) and the result.
