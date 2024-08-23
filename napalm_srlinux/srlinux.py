@@ -37,6 +37,8 @@ from napalm.base.exceptions import (
     ReplaceConfigException,
 )
 
+from napalm_srlinux import types
+
 
 class NokiaSRLinuxDriver(NetworkDriver):
     """Napalm driver for Nokia SR Linux."""
@@ -273,7 +275,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
         raise NotImplementedError
 
-    def get_interfaces(self) -> dict:
+    def get_interfaces(self) -> dict[str, types.Interface]:
         """
         Returns a dictionary of dictionaries.
         The keys for the first dictionary will be the interfaces in the devices.
@@ -303,21 +305,19 @@ class NokiaSRLinuxDriver(NetworkDriver):
         system_data = json_data[1]
 
         for interface in interfaces_json.get("srl_nokia-interfaces:interface"):
-            interfaces[interface.get("name")] = {
-                "is_up": True if interface.get("oper-state") == "up" else False,
-                "is_enabled": True
-                if interface.get("admin-state") == "enable"
-                else False,
-                "description": interface.get("description"),
-                "last-flapped": NokiaSRLinuxDriver._calculate_time_since(
+            interfaces[interface.get("name")] = types.Interface(
+                is_up=interface.get("oper-state") == "up",
+                is_enabled=interface.get("admin-state") == "enable",
+                description=interface.get("description"),
+                last_flapped=NokiaSRLinuxDriver._calculate_time_since(
                     system_data.get("current-datetime"), interface.get("last-change")
                 ),
-                "speed": NokiaSRLinuxDriver._port_speed_to_mbits(
+                speed=NokiaSRLinuxDriver._port_speed_to_mbits(
                     interface.get("ethernet", {}).get("port-speed")
                 ),
-                "mtu": interface.get("mtu"),
-                "mac_address": interface.get("ethernet", {}).get("hw-mac-address"),
-            }
+                mtu=interface.get("mtu"),
+                mac_address=interface.get("ethernet", {}).get("hw-mac-address"),
+            )
 
         return interfaces
 
