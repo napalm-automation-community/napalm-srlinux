@@ -4,16 +4,14 @@
 
 """Tests for getters."""
 
-from napalm.base.test.getters import BaseTestGetters
-
-
 import pytest
+from napalm.base.test.getters import BaseTestGetters
 
 
 @pytest.mark.usefixtures("set_device_parameters")
 class TestGetter(BaseTestGetters):
     """Test get_* methods."""
+
     def test_get_route_to_longer(self):
         pytest.skip("Longer option not Supported")
         return
-
