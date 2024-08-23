@@ -50,7 +50,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         self.running_format = (
             optional_args.get("running_format", "json") if optional_args else "json"
         )
-        self.device = SRLinuxDevice(
+        self.device: SRLinuxDevice = SRLinuxDevice(
             hostname, username, password, timeout=60, optional_args=optional_args
         )
 
@@ -848,7 +848,7 @@ class SRLinuxDevice(object):
 
     class RPCDatastore(str, enum.Enum):
         """
-        Enum class used to represent SRL Data stores for RPC calls.
+        Enum class used to represent SR Linux Data stores for RPC calls.
         """
 
         CANDIDATE = "candidate"
