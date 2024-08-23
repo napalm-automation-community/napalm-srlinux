@@ -39,7 +39,7 @@ from napalm.base.exceptions import (
 
 
 class NokiaSRLinuxDriver(NetworkDriver):
-    """Napalm driver for SRLinux."""
+    """Napalm driver for Nokia SR Linux."""
 
     def __init__(self, hostname, username, password, timeout=60, optional_args=None):
         """Constructor."""
@@ -67,9 +67,9 @@ class NokiaSRLinuxDriver(NetworkDriver):
             mac (string)
             ip (string)
             age (float)
-        ‘vrf’ of null-string will default to all VRFs.
-        Specific ‘vrf’ will return the ARP table entries for that VRFs
-         (including potentially ‘default’ or ‘global’).
+        'vrf' of null-string will default to all VRFs.
+        Specific 'vrf' will return the ARP table entries for that VRFs
+         (including potentially 'default' or 'global').
 
         In all cases the same data structure is returned and no reference to the VRF that was
         used is included in the output.
@@ -93,7 +93,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
                 uptime (int in seconds)
                 address_family (dictionary) - A dictionary of address families available for
                 the neighbor.
-                So far it can be ‘ipv4’ or ‘ipv6’
+                So far it can be 'ipv4' or 'ipv6'
                     received_prefixes (int)
                     accepted_prefixes (int)
                     sent_prefixes (int)
@@ -241,13 +241,13 @@ class NokiaSRLinuxDriver(NetworkDriver):
         Returns a dictionary where:
 
             fans is a dictionary of dictionaries where the key is the location and the values:
-                status (True/False) - True if it’s ok, false if it’s broken
+                status (True/False) - True if it's ok, false if it's broken
             temperature is a dict of dictionaries where the key is the location and the values:
                 temperature (float) - Temperature in celsius the sensor is reporting.
             is_alert (True/False) - True if the temperature is above the alert threshold
             is_critical (True/False) - True if the temp is above the critical threshold
             power is a dictionary of dictionaries where the key is the PSU id and the values:
-                status (True/False) - True if it’s ok, false if it’s broken
+                status (True/False) - True if it's ok, false if it's broken
                 capacity (float) - Capacity in W that the power supply can support
                 output (float) - Watts drawn by the system
             cpu is a dictionary of dictionaries where the key is the ID and the values
@@ -345,7 +345,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         Returns all configured IP addresses on all interfaces as a dictionary of dictionaries.
         of the main dictionary represent the name of the interface.
         Values of the main dictionary represent are dictionaries that may consist of two keys
-        ‘ipv4’ and ‘ipv6’ (one, both or none) which are themselves dictionaries with the IP addresses as keys.
+        'ipv4' and 'ipv6' (one, both or none) which are themselves dictionaries with the IP addresses as keys.
         Each IP Address dictionary has the following keys:
             prefix_length (int)
         """
@@ -407,7 +407,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         Returns a detailed view of the LLDP neighbors as a dictionary containing lists
         of dictionaries for each interface.
 
-        Empty entries are returned as an empty string (e.g. ‘’) or list where applicable.
+        Empty entries are returned as an empty string (e.g. '') or list where applicable.
 
         Inner dictionaries contain fields:
             parent_interface (string)
@@ -440,7 +440,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
         lldp_interfaces = json_output[0].get("interface")
 
-        # TODO: respect the `interface` param
+        # TODO: respect the 'interface' param
         for interface in lldp_interfaces:
             if not interface.get("neighbor"):
                 continue
@@ -823,7 +823,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
 class SRLinuxDevice(object):
     """
-    Represents an SRLinux device and abstracts the connection Protocol
+    Represents a Nokia SR Linux device and abstracts the connection Protocol
     used to talk to the device.
     """
 
