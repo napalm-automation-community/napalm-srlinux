@@ -66,3 +66,6 @@ venv
 
 # pyenv
 .python-version
+
+# personal dir
+private/
