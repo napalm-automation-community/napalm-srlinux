@@ -105,7 +105,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
         jrpc_output = self.device.get_paths(
             ["/network-instance[name=*]/protocols/bgp", "/system/information"],
-            SRLinuxDevice.RPCDatastore.STATE,
+            SRLinuxDevice.Datastore.STATE,
         )
 
         # TODO: handle exception
@@ -294,7 +294,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
                 "/interface[name=*]",
                 "/system/information",
             ],
-            SRLinuxDevice.RPCDatastore.STATE,
+            SRLinuxDevice.Datastore.STATE,
         )
 
         # TODO: handle exception
@@ -374,7 +374,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         """
         lldp_neighbors = {}
         json_output = self.device.get_paths(
-            ["/system/lldp"], SRLinuxDevice.RPCDatastore.STATE
+            ["/system/lldp"], SRLinuxDevice.Datastore.STATE
         )
 
         # TODO: Handle exception
@@ -429,7 +429,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         """
         lldp_neighbors = {}
         json_output = self.device.get_paths(
-            ["/system/lldp"], SRLinuxDevice.RPCDatastore.STATE
+            ["/system/lldp"], SRLinuxDevice.Datastore.STATE
         )
 
         # TODO: handle exception
@@ -503,7 +503,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
                 "/system/aaa/authentication/admin-user",
                 "/system/aaa/authentication/user[username=*]",
             ],
-            SRLinuxDevice.RPCDatastore.STATE,
+            SRLinuxDevice.Datastore.STATE,
         )
 
         # TODO: handle thrown exception
@@ -846,7 +846,7 @@ class SRLinuxDevice(object):
         UPDATE = "update"
         DELETE = "delete"
 
-    class RPCDatastore(str, enum.Enum):
+    class Datastore(str, enum.Enum):
         """
         Enum class used to represent SR Linux Data stores for RPC calls.
         """
@@ -909,7 +909,7 @@ class SRLinuxDevice(object):
         """Check the supplied init params actually work, throw an exception if not."""
         # Set up a JSON RPC Client and test connectivity to the endpoint.
         path = "/system/information/version"
-        ok, data = self.get_paths([path], SRLinuxDevice.RPCDatastore.STATE)
+        ok, data = self.get_paths([path], SRLinuxDevice.Datastore.STATE)
 
         if ok:
             return True
@@ -922,7 +922,7 @@ class SRLinuxDevice(object):
         """Cleanup the HTTP Client"""
         self.jsonrpc_session.close()
 
-    def get_paths(self, paths: list, datastore: RPCDatastore) -> list:
+    def get_paths(self, paths: list, datastore: Datastore) -> list:
         """
         Get the subtrees from a list of YANG paths from the specified datastore.
         Returns a list of results.
