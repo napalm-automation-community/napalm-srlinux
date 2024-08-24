@@ -14,44 +14,50 @@
 # the License.
 
 import unittest
+
 import pytest
-from napalm_srl import srl
-from napalm.base.test.base import TestConfigNetworkDriver
 from napalm.base.exceptions import (
     MergeConfigException,
 )
+from napalm.base.test.base import TestConfigNetworkDriver
+
+from napalm_srlinux import srlinux
+
+
 class TestConfigSRLDriver(unittest.TestCase, TestConfigNetworkDriver):
     @classmethod
     def setUpClass(cls):
         hostname = "172.20.20.10"
         username = "admin"
         password = "admin"
-        cls.vendor = "test/unit/" + "srl" #to facilitate executing test without errors prepended path
+        cls.vendor = (
+            "test/unit/" + "srl"
+        )  # to facilitate executing test without errors prepended path
 
         optional_args = {
             "port": 57400,
             "target_name": "srl",
-            "tls_cert":"/root/gnmic_certs/srl_certs/clientCert.crt",
+            "tls_cert": "/root/gnmic_certs/srl_certs/clientCert.crt",
             "tls_ca": "/etc/containerlab/lab-examples/srlceos01/clab-srlceos01/ca/root/root-ca.pem",
             "tls_key": "/root/gnmic_certs/srl_certs/clientKey.pem",
             # "skip_verify": True,
             # "insecure": False
-            "encoding": "JSON_IETF"
+            "encoding": "JSON_IETF",
         }
-        cls.device = srl.NokiaSRLDriver(
+        cls.device = srlinux.NokiaSRLinuxDriver(
             hostname, username, password, timeout=60, optional_args=optional_args
         )
         cls.device.open()
 
         cls.device.load_replace_candidate(filename="%s/initial.conf" % cls.vendor)
-        #auto commit for load replace
-        #cls.device.commit_config()
+        # auto commit for load replace
+        # cls.device.commit_config()
 
     def test_merge_configuration(self):
         intended_diff = self.read_file("%s/merge_good.diff" % self.vendor)
 
         self.device.load_merge_candidate(filename="%s/merge_good.conf" % self.vendor)
-        #self.device.commit_config()
+        # self.device.commit_config()
 
         # Reverting changes
 
@@ -64,7 +70,7 @@ class TestConfigSRLDriver(unittest.TestCase, TestConfigNetworkDriver):
         self.assertEqual(str(diff).strip(), intended_diff)
 
     def test_merge_configuration_typo_and_rollback(self):
-        #because of autocommit in load_replace_candidate -  this requires a discard_config before test begins
+        # because of autocommit in load_replace_candidate -  this requires a discard_config before test begins
         result = False
         try:
             self.device.discard_config()
@@ -89,5 +95,3 @@ class TestConfigSRLDriver(unittest.TestCase, TestConfigNetworkDriver):
     def test_replacing_config_and_diff_and_discard(self):
         # because of autocommit in load_replace_candidate -  this test case cannot be passed
         pytest.skip("Constraint due to auto commit in load_replace_candidate")
-
-		

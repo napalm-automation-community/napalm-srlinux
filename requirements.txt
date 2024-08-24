@@ -2,12 +2,6 @@ napalm>=2.0.0
 pip>=20.1.1
 pytest>=5.4.3
 setuptools>=47.3.1
-paramiko>=2.7.1
-grpcio
-protobuf==3.20.3
-cryptography
-
-# The new 2.0.2 version contains security enhancements
-# however botocore 1.31.14 depends on urllib3<1.27
-# urllib3>=2.0.2
-urllib3
+httpx>=0.27.0
+jsonpath-ng>=1.6.0
+pydantic>=2.8.2
