@@ -24,7 +24,7 @@ import datetime
 import enum
 import logging
 import re
-from typing import AnyStr, Optional, Union
+from typing import Any, AnyStr, Optional, Union
 
 import httpx
 import jsonpath_ng
@@ -875,7 +875,7 @@ class SRLinuxDevice(object):
             optional_args = {}
 
         # Optional Arguments
-        self.jsonrpc_port = optional_args.get("jsonrpc_port", 443)
+        self.jsonrpc_port = self._determine_jsonrpc_port(optional_args)
         self.skip_verify = optional_args.get("skip_verify", False)
         self.insecure = optional_args.get("insecure", False)
         self.tls_ca = optional_args.get("tls_ca", "")
@@ -883,7 +883,8 @@ class SRLinuxDevice(object):
         self.tls_key_path = optional_args.get("tls_key_path", "")
         self.tls_key_password = optional_args.get("tls_key_password", "")
 
-        self.jsonrpc_session = self._new_jsonrpc_client()
+        self.jsonrpc_client = self._new_jsonrpc_client()
+        self.jsonrpc_url = self._compose_jsonrpc_url()
 
         # Warn about incompatible/oddball settings
         if self.jsonrpc_port == 80:
@@ -907,22 +908,18 @@ class SRLinuxDevice(object):
 
     def open(self):
         """Check the supplied init params actually work, throw an exception if not."""
-        # Set up a JSON RPC Client and test connectivity to the endpoint.
-        path = "/system/information/version"
-        ok, data = self.get_paths([path], SRLinuxDevice.Datastore.STATE)
-
-        if ok:
-            return True
-
-        raise Exception(
-            "Error opening connection. Error: " + data.get("error").get("message")
-        )
+        try:
+            self.jsonrpc_client.head(self.jsonrpc_url)
+        except httpx.RequestError as exc:
+            raise ConnectionError(
+                "Error opening http(s) connection to JSON-RPC server"
+            ) from exc
 
     def close(self):
         """Cleanup the HTTP Client"""
-        self.jsonrpc_session.close()
+        self.jsonrpc_client.close()
 
-    def get_paths(self, paths: list, datastore: Datastore) -> list:
+    def get_paths(self, paths: list, datastore: Datastore) -> Any:
         """
         Get the subtrees from a list of YANG paths from the specified datastore.
         Returns a list of results.
@@ -971,18 +968,8 @@ class SRLinuxDevice(object):
             "params": params,
         }
 
-        proto = (
-            "https"
-            if (
-                self.jsonrpc_port == 443
-                or (self.jsonrpc_port != 80 and not self.insecure)
-            )
-            else "http"
-        )
-        url = f"{proto}://{self.hostname}:{self.jsonrpc_port}/jsonrpc"
-
-        result = self.jsonrpc_session.post(
-            url, headers=headers, json=request_data, timeout=self.timeout
+        result = self.jsonrpc_client.post(
+            self.jsonrpc_url, headers=headers, json=request_data, timeout=self.timeout
         )
 
         if result.status_code == httpx.codes.OK and result.json().get("error"):
@@ -1012,3 +999,38 @@ class SRLinuxDevice(object):
             opts["cert"] = cert
 
         return httpx.Client(**opts)
+
+    def _compose_jsonrpc_url(self):
+        """
+        Compose the JSON RPC URL, based on the initialized arguments.
+        """
+
+        proto = (
+            "https"
+            if (
+                self.jsonrpc_port == 443
+                or (self.jsonrpc_port != 80 and not self.insecure)
+            )
+            else "http"
+        )
+        url = f"{proto}://{self.hostname}:{self.jsonrpc_port}/jsonrpc"
+        # print(url)
+
+        return url
+
+    def _determine_jsonrpc_port(self, opt_args):
+        """
+        Determine the JSON RPC port based on the optional arguments.
+        """
+
+        # by default assume 443 port is used by jsonrpc server
+        port: int = 443
+
+        # if jsonrpc_port is specified, use that
+        if opt_args.get("jsonrpc_port"):
+            port = opt_args.get("jsonrpc_port")
+        # when insecure is set and jsonrpc_port is not specified, use 80
+        elif opt_args.get("insecure"):
+            port = 80
+
+        return port
