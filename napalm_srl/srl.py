@@ -2874,15 +2874,23 @@ class SRLAPI(object):
             )
 
     def _dictToList(self, aDict):
-        for key in aDict.keys():
+        keys_to_update = {}
+        keys_to_delete = []
+
+        for key in list(aDict.keys()):  # Use list() to avoid modifying during iteration
             if key.startswith("___"):
-                aDict[key[3:]] = [
+                keys_to_update[key[3:]] = [
                     self._dictToList(val) if isinstance(val, dict) else val
                     for val in aDict[key].values()
                 ]
-                del aDict[key]
-            else:
-                if isinstance(aDict[key], dict):
-                    aDict[key] = self._dictToList(aDict[key])
+                keys_to_delete.append(key)  # Mark for deletion
+            elif isinstance(aDict[key], dict):
+                aDict[key] = self._dictToList(aDict[key])
+
+        # Apply updates outside the loop
+        aDict.update(keys_to_update)
+        for key in keys_to_delete:
+            del aDict[key]
+
         return aDict
 
