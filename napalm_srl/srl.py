@@ -18,7 +18,7 @@
 Napalm driver for SR Linux.
 
 Read https://napalm.readthedocs.io for more information.
-""" 
+"""
 import base64
 import json
 import logging
@@ -2458,7 +2458,7 @@ class SRLAPI(object):
 
         if not self.insecure:
             if not self.tls_ca:
-                logging.warning( "Incompatible settings: insecure=False " + 
+                logging.warning( "Incompatible settings: insecure=False " +
                                  "requires certificate parameter 'tls_ca' to be set " +
                                  "when using self-signed certificates" )
 
