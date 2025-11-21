@@ -89,7 +89,7 @@ class NokiaSRLDriver(NetworkDriver):
         self._channel = None
         self.running_format = optional_args.get("running_format","json") if optional_args else "json"
 
-        self.device = SRLAPI(hostname, username, password, timeout=60, optional_args=optional_args)
+        self.device = SRLAPI(hostname, username, password, timeout=timeout, optional_args=optional_args)
 
         self.pending_commit = False
         # Whether to save changes to startup config, default False
