@@ -18,7 +18,7 @@
 Napalm driver for SR Linux.
 
 Read https://napalm.readthedocs.io for more information.
-""" 
+"""
 import base64
 import json
 import logging
@@ -89,7 +89,7 @@ class NokiaSRLDriver(NetworkDriver):
         self._channel = None
         self.running_format = optional_args.get("running_format","json") if optional_args else "json"
 
-        self.device = SRLAPI(hostname, username, password, timeout=60, optional_args=optional_args)
+        self.device = SRLAPI(hostname, username, password, timeout=timeout, optional_args=optional_args)
 
         self.pending_commit = False
         # Whether to save changes to startup config, default False
@@ -2458,7 +2458,7 @@ class SRLAPI(object):
 
         if not self.insecure:
             if not self.tls_ca:
-                logging.warning( "Incompatible settings: insecure=False " + 
+                logging.warning( "Incompatible settings: insecure=False " +
                                  "requires certificate parameter 'tls_ca' to be set " +
                                  "when using self-signed certificates" )
 
