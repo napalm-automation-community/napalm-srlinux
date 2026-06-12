@@ -9,7 +9,8 @@ mgmt:
 topology:
   kinds:
     srl:
-      image: ghcr.io/nokia/srlinux:latest # Could pick specific version
+      # version is taken from the SRL_VERSION env var, e.g. 24.10, 25.10, 26.3
+      image: ghcr.io/nokia/srlinux:${SRL_VERSION:=latest}
   nodes:
     # TODO multiple node flavors like ixrd2, ixrd3, ixrd2l, etc.
     srl:

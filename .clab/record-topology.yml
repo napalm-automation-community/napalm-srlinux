@@ -10,7 +10,7 @@ mgmt:
 topology:
   kinds:
     nokia_srlinux:
-      image: ghcr.io/nokia/srlinux:latest
+      image: ghcr.io/nokia/srlinux:${SRL_VERSION:=latest}
   nodes:
     srl1:
       kind: nokia_srlinux

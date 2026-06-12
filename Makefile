@@ -6,17 +6,20 @@
 
 TESTS := $(shell find test/ci -name '*.py')
 
+# SR Linux container version for the test topologies, e.g. make deploy-clab-ci SRL_VERSION=24.10
+SRL_VERSION ?= latest
+
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-deploy-clab-ci: ## Deploy "ci" test topology
-	cd .clab && sudo clab deploy -t ci-topology.yml --reconfigure
+deploy-clab-ci: ## Deploy "ci" test topology (SRL_VERSION selects the SR Linux release, default: latest)
+	cd .clab && sudo SRL_VERSION=$(SRL_VERSION) clab deploy -t ci-topology.yml --reconfigure
 
 destroy-clab-ci: ## Destroy "ci" test topology
 	cd .clab && sudo clab destroy -t ci-topology.yml --cleanup
 
-deploy-clab-record: ## Deploy the two-node fixture-recording topology
-	cd .clab && sudo clab deploy -t record-topology.yml --reconfigure
+deploy-clab-record: ## Deploy the two-node fixture-recording topology (SRL_VERSION selects the release)
+	cd .clab && sudo SRL_VERSION=$(SRL_VERSION) clab deploy -t record-topology.yml --reconfigure
 
 destroy-clab-record: ## Destroy the fixture-recording topology
 	cd .clab && sudo clab destroy -t record-topology.yml --cleanup

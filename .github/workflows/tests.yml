@@ -32,6 +32,12 @@ jobs:
     runs-on: ubuntu-latest
     needs:
     - tests # Will only run if unit tests pass
+    strategy:
+      fail-fast: false
+      matrix:
+        # latest patch release of each supported SR Linux train
+        srlinux-version: ["24.10", "25.10", "26.3"]
+    name: clab-ci-tests (srlinux ${{ matrix.srlinux-version }})
     steps:
     - uses: actions/checkout@v4
 
@@ -47,7 +53,7 @@ jobs:
       run: bash -c "$(curl -sL https://get.containerlab.dev)"
 
     - name: start clab ci topo
-      run: make deploy-clab-ci
+      run: make deploy-clab-ci SRL_VERSION=${{ matrix.srlinux-version }}
 
     - name: Run all CI tests under test/ci
       run: make run-tests
