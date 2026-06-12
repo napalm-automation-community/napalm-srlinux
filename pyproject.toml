@@ -39,6 +39,9 @@ dev = [
     "ruff>=0.8",
     "rich",
 ]
+docs = [
+    "zensical>=0.0.45",
+]
 
 [tool.setuptools]
 packages = ["napalm_srlinux"]

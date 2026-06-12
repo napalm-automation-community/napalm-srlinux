@@ -1,8 +1,8 @@
 # napalm-srlinux
 
-Community [NAPALM](https://napalm.readthedocs.io) driver for the [Nokia SR Linux](https://learn.srlinux.dev) network OS.
+Community [NAPALM](https://napalm.readthedocs.io) driver for the [Nokia SR Linux](https://learn.srlinux.dev) network OS, built on the **JSON-RPC** management interface; the only runtime dependencies are `napalm` and `httpx`.
 
-Version 2.x is a complete rewrite of the driver on top of SR Linux's **JSON-RPC** management interface. The gNMI/protobuf transport of the 1.x driver (and its `grpcio`/`protobuf` dependencies) is gone; the only runtime dependencies are `napalm` and `httpx`.
+**Documentation: https://napalm-automation-community.github.io/napalm-srlinux/**
 
 ## Installation
 
