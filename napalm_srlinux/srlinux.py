@@ -18,12 +18,18 @@
 Read https://napalm.readthedocs.io for more information.
 """
 
+# annotations must stay lazy: some napalm.base.models names differ across the
+# supported napalm range (e.g. BGPConfigGroupDict arrived in 5.1.0)
+from __future__ import annotations
+
 import json
 import logging
+import uuid
 
 from napalm.base import NetworkDriver, models
 from napalm.base.exceptions import (
     CommandErrorException,
+    CommitConfirmException,
     CommitError,
     ConnectionException,
     MergeConfigException,
@@ -61,8 +67,22 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
         # client-side candidate configuration, see load_*_candidate()
         self._candidate: dict | None = None
+        # checkpoints and named candidates persist on the device across driver
+        # instances, so both need a per-instance component: otherwise instances
+        # overwrite each other's rollback anchors, and a candidate left open by
+        # one session (e.g. by 'commit confirmed') is silently reused by the
+        # next, which then commits against a stale baseline
+        session = uuid.uuid4().hex[:8]
+        self._checkpoint_prefix = f"NAPALM-{session}"
+        self._candidate_name = f"napalm-{session}"
         self._checkpoint_id = 0
         self._last_checkpoint: str | None = None
+        # the named candidate held open by an unconfirmed CLI-mode commit
+        self._pending_cli_candidate: str | None = None
+        # informational only: pending confirms live device-side and survive
+        # across (stateless) JSON-RPC sessions, so behavior always consults
+        # has_pending_commit() rather than this flag
+        self._pending_confirm = False
 
         self.device = SRLinuxDevice(
             hostname, username, password, timeout=timeout, optional_args=optional_args
@@ -751,6 +771,57 @@ class NokiaSRLinuxDriver(NetworkDriver):
             return [instance]
         return []
 
+    def get_vlans(self) -> dict[int, models.VlanDict]:
+        """
+        Returns a dictionary of VLANs keyed by VLAN ID.
+
+        SR Linux has no global VLAN table; VLANs exist as single-tagged
+        encapsulation on bridged subinterfaces attached to mac-vrf network
+        instances. The VLAN name is the name of the (first) mac-vrf carrying
+        that VLAN ID and the interfaces are the member subinterfaces. Untagged
+        bridged subinterfaces and 'vlan-id any' have no VLAN identity and are
+        not reported.
+        """
+        ni_data, interfaces_data = self.device.get_paths(
+            ["/network-instance[name=*]", "/interface[name=*]/subinterface"],
+            Datastore.STATE,
+        )
+
+        # "<interface>.<subinterface-index>" -> [vlan ids]
+        vlan_map: dict[str, list[int]] = {}
+        for interface in helpers.value_at(interfaces_data, "interface", default=[]):
+            for subinterface in interface.get("subinterface", []):
+                encap = helpers.value_at(subinterface, "vlan", "encap", default={})
+                vlan_ids = []
+                single = helpers.value_at(encap, "single-tagged", "vlan-id")
+                if single is not None:
+                    vlan_id = convert(int, single, default=None)  # None for "any"
+                    if vlan_id is not None:
+                        vlan_ids.append(vlan_id)
+                ranges = helpers.value_at(encap, "single-tagged-range", "low-vlan-id", default=[])
+                for entry in ranges:
+                    low = convert(int, entry.get("range-low-vlan-id"), default=None)
+                    high = convert(int, entry.get("high-vlan-id"), default=low)
+                    if low is None or high is None or not 0 < high - low + 1 <= 4094:
+                        continue
+                    vlan_ids.extend(range(low, high + 1))
+                if vlan_ids:
+                    vlan_map[subinterface.get("name", "")] = vlan_ids
+
+        vlans: dict[int, models.VlanDict] = {}
+        for instance in self._network_instance_list(ni_data):
+            if helpers.strip_module_prefix(instance.get("type", "")) != "mac-vrf":
+                continue
+            for member in instance.get("interface", []):
+                subif_name = member.get("name", "")
+                for vlan_id in vlan_map.get(subif_name, []):
+                    vlan = vlans.setdefault(
+                        vlan_id, {"name": instance.get("name", ""), "interfaces": []}
+                    )
+                    if subif_name not in vlan["interfaces"]:
+                        vlan["interfaces"].append(subif_name)
+        return vlans
+
     def get_users(self) -> dict[str, models.UsersDict]:
         """
         Returns a dictionary with the configured users.
@@ -1161,7 +1232,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         count: int = 5,
         vrf: str = "",
         source_interface: str = "",
-    ) -> models.PingDict:
+    ) -> models.PingResultDict:
         """
         Execute a ping against the provided destination from the device.
         """
@@ -1193,7 +1264,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         ttl: int = 255,
         timeout: int = 2,
         vrf: str = "",
-    ) -> models.TracerouteDict:
+    ) -> models.TracerouteResultDict:
         """
         Execute a traceroute against the provided destination from the device.
 
@@ -1215,22 +1286,26 @@ class NokiaSRLinuxDriver(NetworkDriver):
         text = result[0].get("text", "") if isinstance(result[0], dict) else str(result[0])
         return helpers.parse_traceroute_output(text)
 
-    def cli(self, commands: list[str], encoding: str = "text") -> dict[str, str]:
+    def cli(self, commands: list[str], encoding: str = "text") -> dict[str, str | dict]:
         """
-        Execute a list of CLI commands and return the output of each one.
+        Execute a list of CLI commands and return the output of each one,
+        as text or as the structured JSON-RPC result ('json' encoding).
 
         The JSON-RPC cli method aggregates the output of all commands of one
         request into a single result, so each command is sent as its own request
         to preserve the per-command mapping.
         """
-        if encoding not in ("text",):
+        if encoding not in ("text", "json"):
             raise NotImplementedError(f"{encoding} is not a supported encoding")
 
         output = {}
         for command in commands:
-            results = self.device.run_cli_commands([command])
+            results = self.device.run_cli_commands([command], output_format=encoding)
             result = results[0] if results else ""
-            output[command] = result.get("text", "") if isinstance(result, dict) else result
+            if encoding == "json":
+                output[command] = result
+            else:
+                output[command] = result.get("text", "") if isinstance(result, dict) else result
         return output
 
     # ------------------------------------------------------------------ config management
@@ -1348,7 +1423,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         # candidate persists across JSON-RPC requests, so it is reset before and
         # discarded after; the cli method aggregates each request's output into
         # one blob, which for the middle request is exactly the diff text.
-        enter = "enter candidate private name napalm-diff"
+        enter = f"enter candidate private name {self._candidate_name}-diff"
         self._discard_named_candidate(enter)
         try:
             commands = [enter, "/"]
@@ -1376,17 +1451,25 @@ class NokiaSRLinuxDriver(NetworkDriver):
         """
         Commits the loaded candidate configuration.
 
-        A named checkpoint (NAPALM-<n>) is created before the change so that
-        rollback() can restore the previous state.
+        A named checkpoint (NAPALM-<session>-<n>) is created before the change
+        so that rollback() can restore the previous state.
+
+        When revert_in is given, the commit is confirmed: the device starts a
+        revert timer of that many seconds and reverts the change automatically
+        unless confirm_commit() is called in time. With commit_save mode the
+        'save startup' is deferred until the commit is confirmed, so startup
+        never holds a config that may still auto-revert.
         """
-        if revert_in is not None:
-            raise NotImplementedError("'revert_in' is not supported")
+        if revert_in is not None and (not isinstance(revert_in, int) or revert_in <= 0):
+            raise CommitConfirmException("'revert_in' must be a positive number of seconds")
         if self._candidate is None:
             raise CommitError("No candidate config loaded; nothing to commit")
+        if self.has_pending_commit():
+            raise CommitError("Pending commit confirm already in process!")
 
         # checkpoint the pre-change state as the rollback anchor
         self._checkpoint_id += 1
-        checkpoint_name = f"NAPALM-{self._checkpoint_id}"
+        checkpoint_name = f"{self._checkpoint_prefix}-{self._checkpoint_id}"
         checkpoint_cmd = f"/tools system configuration generate-checkpoint name {checkpoint_name}"
         if message:
             checkpoint_cmd += f' comment "{message}"'
@@ -1396,48 +1479,125 @@ class NokiaSRLinuxDriver(NetworkDriver):
             self._last_checkpoint = checkpoint_name
 
             if self._candidate["mode"] == "json":
-                self.device.set_paths(self._candidate["commands"], Datastore.CANDIDATE)
-                if self.commit_mode == "save":
+                self.device.set_paths(
+                    self._candidate["commands"],
+                    Datastore.CANDIDATE,
+                    confirm_timeout=revert_in,
+                )
+                if revert_in is None and self.commit_mode == "save":
                     self.device.run_cli_commands(["save startup"])
             else:
-                commands = ["enter candidate private", "/"]
+                # a named candidate: 'commit confirmed' keeps the candidate
+                # session open on the device until accepted/rejected, and a
+                # shared 'enter candidate private' session would be silently
+                # reused (with its stale baseline) by later config operations
+                enter = f"enter candidate private name {self._candidate_name}"
+                self._discard_named_candidate(enter)
+                commands = [enter, "/"]
                 if self._candidate["replace"]:
                     commands.append("delete /")
                 commands += self._candidate["lines"]
-                commit = f"commit {self.commit_mode}"
-                if message:
-                    commit += f' comment "{message}"'
-                commands.append(commit)
+                if revert_in is not None:
+                    # not combinable with save/comment; the message is already
+                    # recorded in the checkpoint comment above
+                    commands.append(f"commit confirmed timeout {revert_in}")
+                else:
+                    commit = f"commit {self.commit_mode}"
+                    if message:
+                        commit += f' comment "{message}"'
+                    commands.append(commit)
                 self.device.run_cli_commands(commands)
+                if revert_in is not None:
+                    self._pending_cli_candidate = enter
         except CommandErrorException as exc:
             raise CommitError(f"Commit failed: {exc}") from exc
 
         self._candidate = None
+        self._pending_confirm = revert_in is not None
+
+    def has_pending_commit(self) -> bool:
+        """
+        Returns True when a confirmed commit is awaiting confirmation on the
+        device (regardless of which session started it).
+        """
+        (data,) = self.device.get_paths(
+            ["/system/configuration/commit[id=*]"], Datastore.STATE
+        )
+        commits = helpers.value_at(data, "commit", default=[])
+        if isinstance(commits, dict):
+            commits = [commits]
+        return any(
+            helpers.strip_module_prefix(str(entry.get("status", ""))) == "unconfirmed"
+            for entry in commits
+            if isinstance(entry, dict)
+        )
+
+    def confirm_commit(self) -> None:
+        """
+        Confirms a pending confirmed commit, cancelling its revert timer. With
+        commit_save mode the config is persisted to startup now (deferred from
+        commit_config).
+        """
+        if not self.has_pending_commit():
+            raise CommitError("No pending commit-confirm found")
+        try:
+            self.device.run_cli_commands(["/tools system configuration confirmed-accept"])
+            if self.commit_mode == "save":
+                self.device.run_cli_commands(["save startup"])
+        except CommandErrorException as exc:
+            raise CommitError(f"Confirm failed: {exc}") from exc
+        self._close_pending_cli_candidate()
+        self._pending_confirm = False
+
+    def _close_pending_cli_candidate(self) -> None:
+        """Close the candidate session a CLI-mode confirmed commit left open."""
+        if self._pending_cli_candidate:
+            self._discard_named_candidate(self._pending_cli_candidate)
+            self._pending_cli_candidate = None
 
     def discard_config(self) -> None:
         """
         Discards the loaded candidate configuration. The candidate only exists
         client-side, so this never touches the device.
+
+        A pending confirmed commit is not affected; use rollback() to reject it
+        or let its revert timer expire.
         """
         self._candidate = None
 
     def rollback(self) -> None:
         """
-        Reverts changes made by the most recent commit_config call by loading the
-        named checkpoint that was created.
+        Reverts changes made by the most recent commit_config call.
+
+        A pending confirmed commit is rejected immediately (its revert timer is
+        cancelled and the change reverted); otherwise the named checkpoint that
+        commit_config created is loaded.
 
         Caveat: checkpoints contain the entire system configuration tree and
         restore the system state to the point at which the checkpoint was created
         (i.e. the most recent commit_config call). Changes made to the config
         after that checkpoint was created will be reverted too.
         """
+        if self.has_pending_commit():
+            try:
+                self.device.run_cli_commands(
+                    ["/tools system configuration confirmed-reject"]
+                )
+            except CommandErrorException as exc:
+                raise CommitError(f"Rollback (confirmed-reject) failed: {exc}") from exc
+            self._close_pending_cli_candidate()
+            self._pending_confirm = False
+            return
+
         if not self._last_checkpoint:
             raise CommitError("No checkpoint recorded; nothing to roll back to")
 
+        enter = f"enter candidate private name {self._candidate_name}"
+        self._discard_named_candidate(enter)
         try:
             self.device.run_cli_commands(
                 [
-                    "enter candidate private",
+                    enter,
                     f"load checkpoint name {self._last_checkpoint}",
                     f"commit {self.commit_mode}",
                 ]

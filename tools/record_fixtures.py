@@ -59,12 +59,18 @@ set / interface ethernet-1/2 subinterface 0 ipv6 address 2001:db8:0:2::1/64
 set / interface ethernet-1/3 admin-state enable
 set / interface ethernet-1/3 subinterface 0 type bridged
 set / interface ethernet-1/3 subinterface 0 admin-state enable
+set / interface ethernet-1/4 admin-state enable
+set / interface ethernet-1/4 vlan-tagging true
+set / interface ethernet-1/4 subinterface 100 type bridged
+set / interface ethernet-1/4 subinterface 100 admin-state enable
+set / interface ethernet-1/4 subinterface 100 vlan encap single-tagged vlan-id 100
 set / network-instance default type default admin-state enable
 set / network-instance default interface ethernet-1/1.0
 set / network-instance TEST type ip-vrf admin-state enable
 set / network-instance TEST interface ethernet-1/2.0
 set / network-instance bridge1 type mac-vrf admin-state enable
 set / network-instance bridge1 interface ethernet-1/3.0
+set / network-instance bridge1 interface ethernet-1/4.100
 set / routing-policy policy all default-action policy-result accept
 set / network-instance default protocols bgp autonomous-system 65001
 set / network-instance default protocols bgp router-id 1.1.1.1
@@ -217,6 +223,7 @@ RECORDINGS = {
     "test_get_lldp_neighbors": lambda d: d.get_lldp_neighbors(),
     "test_get_lldp_neighbors_detail": lambda d: d.get_lldp_neighbors_detail(),
     "test_get_network_instances": lambda d: d.get_network_instances(),
+    "test_get_vlans": lambda d: d.get_vlans(),
     "test_get_users": lambda d: d.get_users(),
     "test_get_snmp_information": lambda d: d.get_snmp_information(),
     "test_get_config": lambda d: d.get_config(),

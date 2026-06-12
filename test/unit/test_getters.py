@@ -4,7 +4,7 @@
 
 """Tests for getters.
 
-Methods that SR Linux does not support (probes, vlans, firewall policies,
+Methods that SR Linux does not support (probes, firewall policies,
 route_to with longer=True, ...) raise NotImplementedError and are skipped
 automatically by the napalm test framework.
 """

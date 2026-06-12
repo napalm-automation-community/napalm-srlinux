@@ -11,6 +11,12 @@ jobs:
       max-parallel: 5
       matrix:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
+        napalm-version: ["lock"]
+        include:
+          # floor of the napalm>=5.0.0,<6 range
+          - python-version: "3.12"
+            napalm-version: "5.0.0"
+    name: tests (py${{ matrix.python-version }}, napalm ${{ matrix.napalm-version }})
     steps:
     - uses: actions/checkout@v4
 
@@ -22,11 +28,16 @@ jobs:
     - name: Install dependencies
       run: uv sync
 
+    - name: Pin napalm
+      if: matrix.napalm-version != 'lock'
+      # napalm 5.0.0 imports pkg_resources, which setuptools 81 removed
+      run: uv pip install napalm==${{ matrix.napalm-version }} "setuptools<81"
+
     - name: Lint with Ruff
-      run: uv run ruff check napalm_srlinux test tools examples
+      run: uv run --no-sync ruff check napalm_srlinux test tools examples
 
     - name: Run unit tests
-      run: uv run pytest test/unit
+      run: uv run --no-sync pytest test/unit
 
   clab-ci-tests:
     runs-on: ubuntu-latest

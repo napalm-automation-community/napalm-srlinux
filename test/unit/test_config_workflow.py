@@ -13,6 +13,7 @@ import json
 import pytest
 from napalm.base.exceptions import (
     CommandErrorException,
+    CommitConfirmException,
     CommitError,
     MergeConfigException,
     ReplaceConfigException,
@@ -36,6 +37,8 @@ class RecordingDevice:
     def __init__(self):
         self.calls = []
         self.validate_error = None
+        # device-side pending confirmed commit, reflected in the commit list
+        self.pending = False
 
     def open(self):
         pass
@@ -45,14 +48,23 @@ class RecordingDevice:
 
     def get_paths(self, paths, datastore):
         self.calls.append(("get", paths, datastore))
-        return [{} for _ in paths]
+        results = []
+        for path in paths:
+            if path.startswith("/system/configuration/commit"):
+                status = "unconfirmed" if self.pending else "complete"
+                results.append(
+                    {"srl_nokia-configuration:commit": [{"id": 1, "status": status}]}
+                )
+            else:
+                results.append({})
+        return results
 
     def run_cli_commands(self, commands, output_format="text"):
         self.calls.append(("cli", commands))
         return [{"text": f"output of {c}"} for c in commands]
 
     def set_paths(self, commands, datastore=None, confirm_timeout=None):
-        self.calls.append(("set", commands, datastore))
+        self.calls.append(("set", commands, datastore, confirm_timeout))
         return {}
 
     def validate_paths(self, commands):
@@ -142,11 +154,12 @@ class TestCompareConfig:
         kinds = [c[0] for c in driver.device.calls]
         assert kinds == ["cli", "cli", "cli"]  # reset, diff, cleanup
         reset, diff, cleanup = (c[1] for c in driver.device.calls)
-        assert reset == ["enter candidate private name napalm-diff", "discard now"]
-        assert diff[0] == "enter candidate private name napalm-diff"
+        enter = f"enter candidate private name {driver._candidate_name}-diff"
+        assert reset == [enter, "discard now"]
+        assert diff[0] == enter
         assert diff[-1] == "diff"
         assert CLI_CONFIG.splitlines()[0] in diff
-        assert cleanup == ["enter candidate private name napalm-diff", "discard now"]
+        assert cleanup == [enter, "discard now"]
 
     def test_cli_replace_mode_deletes_first(self, driver):
         driver.load_replace_candidate(config=CLI_CONFIG)
@@ -161,28 +174,28 @@ class TestCommitConfig:
         with pytest.raises(CommitError, match="No candidate"):
             driver.commit_config()
 
-    def test_revert_in_not_supported(self, driver):
-        driver.load_merge_candidate(config=JSON_CONFIG)
-        with pytest.raises(NotImplementedError):
-            driver.commit_config(revert_in=60)
-
     def test_json_commit_checkpoints_then_sets(self, driver):
         driver.load_merge_candidate(config=JSON_CONFIG)
         driver.commit_config()
         kinds = [c[0] for c in driver.device.calls]
-        assert kinds == ["validate", "cli", "set"]
-        checkpoint_cmds = driver.device.calls[1][1]
-        assert "generate-checkpoint name NAPALM-1" in checkpoint_cmds[0]
+        assert kinds == ["validate", "get", "cli", "set"]
+        checkpoint_cmds = driver.device.calls[2][1]
+        assert f"generate-checkpoint name {driver._last_checkpoint}" in checkpoint_cmds[0]
         assert driver._candidate is None
-        assert driver._last_checkpoint == "NAPALM-1"
+        # unique per driver instance so concurrent/sequential sessions never
+        # overwrite each other's rollback anchors on the device
+        assert driver._last_checkpoint == f"{driver._checkpoint_prefix}-1"
 
     def test_cli_commit_single_request_with_message(self, driver):
         driver.load_merge_candidate(config=CLI_CONFIG)
         driver.commit_config(message="maintenance")
         kind, commands = driver.device.calls[-1]
         assert kind == "cli"
-        assert commands[0] == "enter candidate private"
+        assert commands[0] == f"enter candidate private name {driver._candidate_name}"
         assert commands[-1] == 'commit now comment "maintenance"'
+        # a stale candidate with the same name is discarded beforehand
+        discard = driver.device.calls[-2][1]
+        assert discard == [commands[0], "discard now"]
 
     def test_cli_replace_commit_deletes_first(self, driver):
         driver.load_replace_candidate(config=CLI_CONFIG)
@@ -201,7 +214,7 @@ class TestCommitConfig:
         driver.commit_config()
         driver.load_merge_candidate(config=JSON_CONFIG)
         driver.commit_config()
-        assert driver._last_checkpoint == "NAPALM-2"
+        assert driver._last_checkpoint == f"{driver._checkpoint_prefix}-2"
 
 
 class TestDiscardAndRollback:
@@ -222,7 +235,110 @@ class TestDiscardAndRollback:
         kind, commands = driver.device.calls[-1]
         assert kind == "cli"
         assert commands == [
-            "enter candidate private",
-            "load checkpoint name NAPALM-1",
+            f"enter candidate private name {driver._candidate_name}",
+            f"load checkpoint name {driver._last_checkpoint}",
             "commit now",
         ]
+
+
+class TestCommitConfirm:
+    def test_revert_in_passes_confirm_timeout(self, driver):
+        driver.load_merge_candidate(config=JSON_CONFIG)
+        driver.commit_config(revert_in=60)
+        kinds = [c[0] for c in driver.device.calls]
+        assert kinds == ["validate", "get", "cli", "set"]
+        checkpoint_cmds = driver.device.calls[2][1]
+        assert f"generate-checkpoint name {driver._last_checkpoint}" in checkpoint_cmds[0]
+        assert driver.device.calls[-1][3] == 60  # confirm_timeout
+        assert driver._pending_confirm is True
+
+    def test_revert_in_defers_save(self, driver):
+        driver.commit_mode = "save"
+        driver.load_merge_candidate(config=JSON_CONFIG)
+        driver.commit_config(revert_in=60)
+        assert ["save startup"] not in [c[1] for c in driver.device.calls if c[0] == "cli"]
+
+    def test_cli_mode_uses_commit_confirmed(self, driver):
+        driver.load_merge_candidate(config=CLI_CONFIG)
+        driver.commit_config(message="maintenance", revert_in=60)
+        kind, commands = driver.device.calls[-1]
+        assert kind == "cli"
+        assert commands[-1] == "commit confirmed timeout 60"
+        # 'commit confirmed' keeps the candidate session open on the device
+        assert driver._pending_cli_candidate == commands[0]
+
+    def test_confirm_after_cli_commit_closes_candidate(self, driver):
+        driver.load_merge_candidate(config=CLI_CONFIG)
+        driver.commit_config(revert_in=60)
+        driver.device.pending = True
+        driver.confirm_commit()
+        assert driver._pending_cli_candidate is None
+        assert driver.device.calls[-1][1] == [
+            f"enter candidate private name {driver._candidate_name}",
+            "discard now",
+        ]
+
+    def test_reject_after_cli_commit_closes_candidate(self, driver):
+        driver.load_merge_candidate(config=CLI_CONFIG)
+        driver.commit_config(revert_in=60)
+        driver.device.pending = True
+        driver.rollback()
+        assert driver._pending_cli_candidate is None
+        assert driver.device.calls[-1][1] == [
+            f"enter candidate private name {driver._candidate_name}",
+            "discard now",
+        ]
+
+    def test_commit_while_pending_raises(self, driver):
+        driver.device.pending = True
+        driver.load_merge_candidate(config=JSON_CONFIG)
+        with pytest.raises(CommitError, match="already in process"):
+            driver.commit_config()
+
+    @pytest.mark.parametrize("revert_in", [0, -5, "60", 60.5])
+    def test_invalid_revert_in_raises(self, driver, revert_in):
+        driver.load_merge_candidate(config=JSON_CONFIG)
+        with pytest.raises(CommitConfirmException):
+            driver.commit_config(revert_in=revert_in)
+
+    def test_has_pending_commit(self, driver):
+        assert driver.has_pending_commit() is False
+        driver.device.pending = True
+        assert driver.has_pending_commit() is True
+
+    def test_has_pending_commit_defensive_shapes(self, driver):
+        for data in [{}, {"commit": {"id": 1, "status": "unconfirmed"}}, {"commit": None}]:
+            driver.device.get_paths = lambda paths, datastore, d=data: [d]
+            expected = data.get("commit") is not None
+            assert driver.has_pending_commit() is expected
+
+    def test_confirm_commit_accepts(self, driver):
+        driver.device.pending = True
+        driver.confirm_commit()
+        kind, commands = driver.device.calls[-1]
+        assert kind == "cli"
+        assert commands == ["/tools system configuration confirmed-accept"]
+        assert driver._pending_confirm is False
+
+    def test_confirm_commit_saves_startup_in_save_mode(self, driver):
+        driver.commit_mode = "save"
+        driver.device.pending = True
+        driver.confirm_commit()
+        assert driver.device.calls[-1] == ("cli", ["save startup"])
+        assert driver.device.calls[-2][1] == ["/tools system configuration confirmed-accept"]
+
+    def test_confirm_commit_without_pending_raises(self, driver):
+        with pytest.raises(CommitError, match="No pending"):
+            driver.confirm_commit()
+
+    def test_rollback_while_pending_rejects(self, driver):
+        driver.load_merge_candidate(config=JSON_CONFIG)
+        driver.commit_config(revert_in=60)
+        driver.device.pending = True
+        driver.rollback()
+        kind, commands = driver.device.calls[-1]
+        assert kind == "cli"
+        assert commands == ["/tools system configuration confirmed-reject"]
+        assert driver._pending_confirm is False
+        # the checkpoint anchor is untouched and remains usable
+        assert driver._last_checkpoint == f"{driver._checkpoint_prefix}-1"
