@@ -1,0 +1,28 @@
+[
+  {
+    "password": "$y$j9T$pNVjOgcNNGIWjBcdDfK/7.$Ir4uYxszxtqzVj5AGiZvdWJGs.bpLWBJvHON3YgqnC2",
+    "superuser": true,
+    "last-successful-login": "2026-06-12T16:29:58.463Z",
+    "ssh-key": [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKUhBr4BmuypXaZjAe3N/sZOaIzoEqRePi7N+TvqtJr+",
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDfUygcDODd+aiVgxYw5A1Isx3/gWGv/gcMBDkrA88I9q9CtVA4L+CAg5xqcrWBPfD7IaLPLkWivFtmYYc8NPBl4bffARf0bpqQTOyb4k5BJctCglTVpg/i6PVfdZTWORkL/UyLDQ/ludhno2qpuiykRhztQKqSKqqvclmXOvmGEMcCM9xxPDmNBX9SFMKL6j5dPbBhsRQjYr8hfk4OTPn9MpwQFa2cF3wGikt1MOicpQY5V1zqHOnbxqM40LzQCgoMTOpbw3/eSDxR7ylmjQy50/B2P9kAA+H+dotaz61ZYhjc7RDO9GZQWznb2E7DvD3JRkFCGJdgnZPs5O74MOTBontiRifCKEEKIZZODsZZ3Uga5uL7yw7IB47bReyDaSic85TVGYRKqlrjrVW5SdgOovPT4JO8V8cEzDF0/55bKnemIZ8M9l3SIoeb1ZuTN/INLb4zE49ll8x+qxP07rfcPb51phDRrmjIUs8qhp3kS+9/iHSe9J03+lsUdYG3ci0P/s3Rw6mQk2uRj1SVq53d91256hIO6W1hCHMbRxK9ZL6ldji20YjfNk76sVyFR6dAC8cW8FkADdsNyg7s7ot4Og1QTKGhcIR6RZ3ufk+2sN0gqa1lscKNqWL8C1A3qe5ageHmjGIPNesWs55LmjXy9dv57t3Q83WabRoZ5Np6GQ=="
+    ]
+  },
+  {
+    "user": [
+      {
+        "username": "linuxadmin",
+        "password": "$y$j9T$0dhyedqIhXCKxo03TPudQ0$a8o6k88JXKdBKHp74RHh49jAOTC3H42G4m88b6HIRC6",
+        "ssh-key": [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKUhBr4BmuypXaZjAe3N/sZOaIzoEqRePi7N+TvqtJr+",
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDfUygcDODd+aiVgxYw5A1Isx3/gWGv/gcMBDkrA88I9q9CtVA4L+CAg5xqcrWBPfD7IaLPLkWivFtmYYc8NPBl4bffARf0bpqQTOyb4k5BJctCglTVpg/i6PVfdZTWORkL/UyLDQ/ludhno2qpuiykRhztQKqSKqqvclmXOvmGEMcCM9xxPDmNBX9SFMKL6j5dPbBhsRQjYr8hfk4OTPn9MpwQFa2cF3wGikt1MOicpQY5V1zqHOnbxqM40LzQCgoMTOpbw3/eSDxR7ylmjQy50/B2P9kAA+H+dotaz61ZYhjc7RDO9GZQWznb2E7DvD3JRkFCGJdgnZPs5O74MOTBontiRifCKEEKIZZODsZZ3Uga5uL7yw7IB47bReyDaSic85TVGYRKqlrjrVW5SdgOovPT4JO8V8cEzDF0/55bKnemIZ8M9l3SIoeb1ZuTN/INLb4zE49ll8x+qxP07rfcPb51phDRrmjIUs8qhp3kS+9/iHSe9J03+lsUdYG3ci0P/s3Rw6mQk2uRj1SVq53d91256hIO6W1hCHMbRxK9ZL6ldji20YjfNk76sVyFR6dAC8cW8FkADdsNyg7s7ot4Og1QTKGhcIR6RZ3ufk+2sN0gqa1lscKNqWL8C1A3qe5ageHmjGIPNesWs55LmjXy9dv57t3Q83WabRoZ5Np6GQ=="
+        ]
+      },
+      {
+        "username": "testuser",
+        "password": "$y$j9T$4416195d85c38e2c$0MJ2QlwoB0JfrzJsrz5/SATzTkosPqbRcoVX5dR8WM3",
+        "superuser": false
+      }
+    ]
+  }
+]

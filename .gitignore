@@ -63,3 +63,9 @@ target/
 .ipynb_checkpoints
 venv
 .idea
+
+# uv virtualenv
+.venv/
+
+# containerlab runtime artifacts
+.clab/clab-*/

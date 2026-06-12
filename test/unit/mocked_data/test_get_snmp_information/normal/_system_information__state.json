@@ -1,0 +1,10 @@
+[
+  {
+    "contact": "netops",
+    "location": "lab",
+    "description": "SRLinux-v25.3.2-312-ga0c5002f15 7220 IXR-D2L Copyright (c) 2000-2025 Nokia. Kernel 6.17.0-35-generic #35~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue May 26 19:30:42 UTC 2",
+    "current-datetime": "2026-06-12T16:29:58.399Z",
+    "last-booted": "2026-06-12T14:43:22.583Z",
+    "version": "v25.3.2-312-ga0c5002f15"
+  }
+]

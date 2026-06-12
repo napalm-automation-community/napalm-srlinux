@@ -1,0 +1,515 @@
+[
+  {
+    "srl_nokia-interfaces:interface": [
+      {
+        "name": "ethernet-1/1",
+        "subinterface": [
+          {
+            "index": 0,
+            "type": "srl_nokia-interfaces:routed",
+            "admin-state": "enable",
+            "ip-mtu": 1500,
+            "name": "ethernet-1/1.0",
+            "ifindex": 1,
+            "oper-state": "up",
+            "last-change": "2026-06-12T14:43:49.686Z",
+            "ipv4": {
+              "admin-state": "enable",
+              "allow-directed-broadcast": false,
+              "address": [
+                {
+                  "ip-prefix": "10.0.0.1/30",
+                  "origin": "static",
+                  "primary": [
+                    null
+                  ],
+                  "status": "preferred"
+                }
+              ],
+              "unnumbered": {
+                "admin-state": "disable"
+              },
+              "srl_nokia-interfaces-nbr:arp": {
+                "duplicate-address-detection": true,
+                "timeout": 14400,
+                "learn-unsolicited": false,
+                "proxy-arp": false,
+                "neighbor": [
+                  {
+                    "ipv4-address": "10.0.0.2",
+                    "link-layer-address": "1A:35:01:FF:00:01",
+                    "origin": "dynamic",
+                    "expiration-time": "2026-06-12T18:44:00.256Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ]
+              }
+            },
+            "ipv6": {
+              "admin-state": "enable",
+              "address": [
+                {
+                  "ip-prefix": "2001:db8:0:1::1/64",
+                  "type": "global-unicast",
+                  "origin": "static",
+                  "primary": [
+                    null
+                  ],
+                  "status": "preferred"
+                },
+                {
+                  "ip-prefix": "fe80::189a:ff:feff:1/64",
+                  "type": "link-local-unicast",
+                  "origin": "link-layer",
+                  "status": "preferred"
+                }
+              ],
+              "srl_nokia-interfaces-nbr:neighbor-discovery": {
+                "duplicate-address-detection": true,
+                "reachable-time": 30,
+                "stale-time": 14400,
+                "learn-unsolicited": "none",
+                "proxy-nd": false,
+                "neighbor": [
+                  {
+                    "ipv6-address": "2001:db8:0:1::2",
+                    "link-layer-address": "1A:35:01:FF:00:01",
+                    "origin": "dynamic",
+                    "is-router": true,
+                    "current-state": "reachable",
+                    "next-state-time": "2026-06-12T16:30:14.225Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  },
+                  {
+                    "ipv6-address": "fe80::1835:1ff:feff:1",
+                    "link-layer-address": "1A:35:01:FF:00:01",
+                    "origin": "dynamic",
+                    "is-router": true,
+                    "current-state": "reachable",
+                    "next-state-time": "2026-06-12T16:30:08.789Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ],
+                "limit": {
+                  "log-only": false,
+                  "warning-threshold-pct": 90
+                }
+              },
+              "srl_nokia-interfaces-router-adv:router-advertisement": {
+                "router-role": {
+                  "admin-state": "disable",
+                  "current-hop-limit": 64,
+                  "managed-configuration-flag": false,
+                  "other-configuration-flag": false,
+                  "max-advertisement-interval": 600,
+                  "min-advertisement-interval": 200,
+                  "reachable-time": 0,
+                  "retransmit-time": 0,
+                  "router-lifetime": 1800
+                }
+              }
+            },
+            "statistics": {
+              "in-packets": "322",
+              "in-octets": "27441",
+              "in-discarded-packets": "322",
+              "in-forwarded-packets": "0",
+              "in-forwarded-octets": "0",
+              "in-matched-ra-packets": "0",
+              "out-forwarded-packets": "0",
+              "out-forwarded-octets": "0",
+              "out-originated-packets": "335",
+              "out-originated-octets": "27679",
+              "out-discarded-packets": "0",
+              "out-packets": "335",
+              "out-octets": "27679"
+            }
+          }
+        ]
+      },
+      {
+        "name": "ethernet-1/2",
+        "subinterface": [
+          {
+            "index": 0,
+            "type": "srl_nokia-interfaces:routed",
+            "admin-state": "enable",
+            "ip-mtu": 1500,
+            "name": "ethernet-1/2.0",
+            "ifindex": 32769,
+            "oper-state": "up",
+            "last-change": "2026-06-12T14:43:49.686Z",
+            "ipv4": {
+              "admin-state": "enable",
+              "allow-directed-broadcast": false,
+              "address": [
+                {
+                  "ip-prefix": "10.0.1.1/30",
+                  "origin": "static",
+                  "primary": [
+                    null
+                  ],
+                  "status": "preferred"
+                }
+              ],
+              "unnumbered": {
+                "admin-state": "disable"
+              },
+              "srl_nokia-interfaces-nbr:arp": {
+                "duplicate-address-detection": true,
+                "timeout": 14400,
+                "learn-unsolicited": false,
+                "proxy-arp": false,
+                "neighbor": [
+                  {
+                    "ipv4-address": "10.0.1.2",
+                    "link-layer-address": "1A:35:01:FF:00:02",
+                    "origin": "dynamic",
+                    "expiration-time": "2026-06-12T18:46:36.080Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ]
+              }
+            },
+            "ipv6": {
+              "admin-state": "enable",
+              "address": [
+                {
+                  "ip-prefix": "2001:db8:0:2::1/64",
+                  "type": "global-unicast",
+                  "origin": "static",
+                  "primary": [
+                    null
+                  ],
+                  "status": "preferred"
+                },
+                {
+                  "ip-prefix": "fe80::189a:ff:feff:2/64",
+                  "type": "link-local-unicast",
+                  "origin": "link-layer",
+                  "status": "preferred"
+                }
+              ],
+              "srl_nokia-interfaces-nbr:neighbor-discovery": {
+                "duplicate-address-detection": true,
+                "reachable-time": 30,
+                "stale-time": 14400,
+                "learn-unsolicited": "none",
+                "proxy-nd": false,
+                "neighbor": [
+                  {
+                    "ipv6-address": "2001:db8:0:2::2",
+                    "link-layer-address": "1A:35:01:FF:00:02",
+                    "origin": "dynamic",
+                    "is-router": true,
+                    "current-state": "stale",
+                    "next-state-time": "2026-06-12T20:29:55.599Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  },
+                  {
+                    "ipv6-address": "fe80::1835:1ff:feff:2",
+                    "link-layer-address": "1A:35:01:FF:00:02",
+                    "origin": "dynamic",
+                    "is-router": true,
+                    "current-state": "reachable",
+                    "next-state-time": "2026-06-12T16:30:21.188Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ],
+                "limit": {
+                  "log-only": false,
+                  "warning-threshold-pct": 90
+                }
+              },
+              "srl_nokia-interfaces-router-adv:router-advertisement": {
+                "router-role": {
+                  "admin-state": "disable",
+                  "current-hop-limit": 64,
+                  "managed-configuration-flag": false,
+                  "other-configuration-flag": false,
+                  "max-advertisement-interval": 600,
+                  "min-advertisement-interval": 200,
+                  "reachable-time": 0,
+                  "retransmit-time": 0,
+                  "router-lifetime": 1800
+                }
+              }
+            },
+            "statistics": {
+              "in-packets": "26",
+              "in-octets": "3012",
+              "in-discarded-packets": "26",
+              "in-forwarded-packets": "0",
+              "in-forwarded-octets": "0",
+              "in-matched-ra-packets": "0",
+              "out-forwarded-packets": "0",
+              "out-forwarded-octets": "0",
+              "out-originated-packets": "21",
+              "out-originated-octets": "2742",
+              "out-discarded-packets": "0",
+              "out-packets": "21",
+              "out-octets": "2742"
+            }
+          }
+        ]
+      },
+      {
+        "name": "ethernet-1/3",
+        "subinterface": [
+          {
+            "index": 0,
+            "type": "srl_nokia-interfaces:bridged",
+            "admin-state": "enable",
+            "l2-mtu": 9232,
+            "name": "ethernet-1/3.0",
+            "ifindex": 65537,
+            "oper-state": "up",
+            "last-change": "2026-06-12T14:43:49.686Z",
+            "ipv4": {
+              "admin-state": "disable",
+              "allow-directed-broadcast": false,
+              "unnumbered": {
+                "admin-state": "disable"
+              },
+              "srl_nokia-interfaces-nbr:arp": {
+                "duplicate-address-detection": true,
+                "timeout": 14400,
+                "learn-unsolicited": false,
+                "proxy-arp": false
+              }
+            },
+            "ipv6": {
+              "admin-state": "disable",
+              "srl_nokia-interfaces-nbr:neighbor-discovery": {
+                "duplicate-address-detection": true,
+                "reachable-time": 30,
+                "stale-time": 14400,
+                "learn-unsolicited": "none",
+                "proxy-nd": false,
+                "limit": {
+                  "log-only": false,
+                  "warning-threshold-pct": 90
+                }
+              },
+              "srl_nokia-interfaces-router-adv:router-advertisement": {
+                "router-role": {
+                  "admin-state": "disable",
+                  "current-hop-limit": 64,
+                  "managed-configuration-flag": false,
+                  "other-configuration-flag": false,
+                  "max-advertisement-interval": 600,
+                  "min-advertisement-interval": 200,
+                  "reachable-time": 0,
+                  "retransmit-time": 0,
+                  "router-lifetime": 1800
+                }
+              }
+            },
+            "statistics": {
+              "in-packets": "20",
+              "in-octets": "1260",
+              "in-discarded-packets": "0",
+              "in-forwarded-packets": "20",
+              "in-forwarded-octets": "1260",
+              "in-matched-ra-packets": "0",
+              "out-forwarded-packets": "0",
+              "out-forwarded-octets": "0",
+              "out-originated-packets": "0",
+              "out-originated-octets": "0",
+              "out-discarded-packets": "0",
+              "out-packets": "0",
+              "out-octets": "0"
+            },
+            "bridge-table": {
+              "discard-unknown-src-mac": false,
+              "mac-limit": {
+                "maximum-entries": 250,
+                "warning-threshold-pct": 95
+              },
+              "mac-learning": {
+                "admin-state": "enable",
+                "aging": {
+                  "admin-state": "enable"
+                },
+                "srl_nokia-interfaces-bridge-table-mac-learning-entries:learnt-entries": {
+                  "mac": [
+                    {
+                      "address": "1A:35:01:FF:00:03",
+                      "last-update": "2026-06-12T16:29:47.000Z",
+                      "aging": "85"
+                    }
+                  ]
+                }
+              },
+              "mac-duplication": {
+                "action": "use-net-instance-action",
+                "srl_nokia-interfaces-bridge-table-mac-duplication-entries:duplicate-entries": {}
+              },
+              "srl_nokia-interfaces-bridge-table-mac-table:mac-table": {
+                "mac": [
+                  {
+                    "address": "1A:35:01:FF:00:03",
+                    "type": "learnt",
+                    "last-update": "2026-06-12T16:25:35.000Z"
+                  }
+                ]
+              },
+              "srl_nokia-interfaces-bridge-table-statistics:statistics": {
+                "active-entries": "1",
+                "total-entries": "1",
+                "failed-entries": "0",
+                "mac-type": [
+                  {
+                    "type": "static",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "duplicate",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "learnt",
+                    "active-entries": "1",
+                    "total-entries": "1",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "evpn",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "evpn-static",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "eth-cfm",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "mgmt0",
+        "subinterface": [
+          {
+            "index": 0,
+            "admin-state": "enable",
+            "ip-mtu": 1500,
+            "name": "mgmt0.0",
+            "ifindex": 1077936129,
+            "oper-state": "up",
+            "last-change": "2026-06-12T14:43:22.818Z",
+            "ipv4": {
+              "admin-state": "enable",
+              "allow-directed-broadcast": false,
+              "address": [
+                {
+                  "ip-prefix": "172.20.21.11/24",
+                  "origin": "dhcp",
+                  "status": "preferred"
+                }
+              ],
+              "unnumbered": {
+                "admin-state": "disable"
+              },
+              "srl_nokia-interfaces-ip-dhcp:dhcp-client": {},
+              "srl_nokia-interfaces-nbr:arp": {
+                "duplicate-address-detection": true,
+                "timeout": 14400,
+                "learn-unsolicited": false,
+                "proxy-arp": false,
+                "neighbor": [
+                  {
+                    "ipv4-address": "172.20.21.1",
+                    "link-layer-address": "3E:78:AD:72:1F:05",
+                    "origin": "dynamic",
+                    "expiration-time": "2026-06-12T20:22:57.942Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ]
+              }
+            },
+            "ipv6": {
+              "admin-state": "enable",
+              "address": [
+                {
+                  "ip-prefix": "fe80::20a3:e3ff:fe5a:a61e/64",
+                  "type": "link-local-unicast",
+                  "origin": "link-layer",
+                  "status": "preferred"
+                }
+              ],
+              "srl_nokia-interfaces-ip-dhcp:dhcp-client": {},
+              "srl_nokia-interfaces-nbr:neighbor-discovery": {
+                "duplicate-address-detection": true,
+                "reachable-time": 30,
+                "stale-time": 14400,
+                "learn-unsolicited": "none",
+                "proxy-nd": false,
+                "limit": {
+                  "log-only": false,
+                  "warning-threshold-pct": 90
+                }
+              },
+              "srl_nokia-interfaces-router-adv:router-advertisement": {
+                "router-role": {
+                  "admin-state": "disable",
+                  "current-hop-limit": 64,
+                  "managed-configuration-flag": false,
+                  "other-configuration-flag": false,
+                  "max-advertisement-interval": 600,
+                  "min-advertisement-interval": 200,
+                  "reachable-time": 0,
+                  "retransmit-time": 0,
+                  "router-lifetime": 1800
+                }
+              }
+            },
+            "statistics": {
+              "in-packets": "1238",
+              "in-octets": "198519",
+              "in-discarded-packets": "1238",
+              "in-forwarded-packets": "0",
+              "in-forwarded-octets": "0",
+              "in-matched-ra-packets": "0",
+              "out-forwarded-packets": "0",
+              "out-forwarded-octets": "0",
+              "out-originated-packets": "914",
+              "out-originated-octets": "262343",
+              "out-discarded-packets": "0",
+              "out-packets": "914",
+              "out-octets": "262343"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

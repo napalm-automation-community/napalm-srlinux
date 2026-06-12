@@ -1,0 +1,3242 @@
+[
+  {
+    "srl_nokia-interfaces:interface": [
+      {
+        "name": "ethernet-1/1",
+        "admin-state": "enable",
+        "mtu": 9232,
+        "loopback-mode": "none",
+        "ifindex": 16382,
+        "oper-state": "up",
+        "last-change": "2026-06-12T14:43:32.348Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "srl_nokia-interfaces-vlans:vlan-tagging": false,
+        "srl_nokia-interfaces-vlans:tpid": "srl_nokia-interfaces-vlans:TPID_0X8100",
+        "phy-group-members": [
+          "ethernet-1/1",
+          "ethernet-1/2",
+          "ethernet-1/3",
+          "ethernet-1/6"
+        ],
+        "statistics": {
+          "in-packets": "443",
+          "in-octets": "48049",
+          "in-unicast-packets": "306",
+          "in-broadcast-packets": "6",
+          "in-multicast-packets": "125",
+          "in-discarded-packets": "6",
+          "in-error-packets": "0",
+          "in-fcs-error-packets": "0",
+          "out-packets": "458",
+          "out-octets": "50229",
+          "out-mirror-octets": "0",
+          "out-unicast-packets": "327",
+          "out-broadcast-packets": "8",
+          "out-multicast-packets": "123",
+          "out-discarded-packets": "0",
+          "out-error-packets": "0",
+          "out-mirror-packets": "0",
+          "carrier-transitions": "0"
+        },
+        "traffic-rate": {
+          "in-bps": "141",
+          "out-bps": "144"
+        },
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": true,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "lacp-port-priority": 32768,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:01",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          },
+          "hold-time": {
+            "up": 0,
+            "down": 0
+          },
+          "statistics": {
+            "in-mac-pause-frames": "0",
+            "in-oversize-frames": "0",
+            "in-jabber-frames": "0",
+            "in-fragment-frames": "0",
+            "in-crc-error-frames": "0",
+            "out-mac-pause-frames": "0",
+            "in-64b-frames": "6",
+            "in-65b-to-127b-frames": "290",
+            "in-128b-to-255b-frames": "147",
+            "in-256b-to-511b-frames": "0",
+            "in-512b-to-1023b-frames": "0",
+            "in-1024b-to-1518b-frames": "0",
+            "in-1519b-or-longer-frames": "0",
+            "out-64b-frames": "9",
+            "out-65b-to-127b-frames": "304",
+            "out-128b-to-255b-frames": "145",
+            "out-256b-to-511b-frames": "0",
+            "out-512b-to-1023b-frames": "0",
+            "out-1024b-to-1518b-frames": "0",
+            "out-1519b-or-longer-frames": "0"
+          },
+          "srl_nokia-dot1x:dot1x": {
+            "srl_nokia-dot1x-tunneling:tunnel": {
+              "tunnel-all": false,
+              "oper-rule": "trap-to-cpu-untagged"
+            }
+          },
+          "srl_nokia-interfaces-l2cp:l2cp-transparency": {
+            "tunnel-all-l2cp": false,
+            "lldp": {
+              "tunnel": false,
+              "oper-rule": "trap-to-cpu-untagged"
+            },
+            "lacp": {
+              "tunnel": false,
+              "oper-rule": "trap-to-cpu-untagged"
+            },
+            "xstp": {
+              "tunnel": false,
+              "oper-rule": "drop-tagged-and-untagged"
+            },
+            "ptp": {
+              "tunnel": false,
+              "oper-rule": "drop-tagged-and-untagged"
+            }
+          }
+        },
+        "subinterface": [
+          {
+            "index": 0,
+            "type": "srl_nokia-interfaces:routed",
+            "admin-state": "enable",
+            "ip-mtu": 1500,
+            "name": "ethernet-1/1.0",
+            "ifindex": 1,
+            "oper-state": "up",
+            "last-change": "2026-06-12T14:43:49.686Z",
+            "ipv4": {
+              "admin-state": "enable",
+              "allow-directed-broadcast": false,
+              "address": [
+                {
+                  "ip-prefix": "10.0.0.1/30",
+                  "origin": "static",
+                  "primary": [
+                    null
+                  ],
+                  "status": "preferred"
+                }
+              ],
+              "unnumbered": {
+                "admin-state": "disable"
+              },
+              "srl_nokia-interfaces-nbr:arp": {
+                "duplicate-address-detection": true,
+                "timeout": 14400,
+                "learn-unsolicited": false,
+                "proxy-arp": false,
+                "neighbor": [
+                  {
+                    "ipv4-address": "10.0.0.2",
+                    "link-layer-address": "1A:35:01:FF:00:01",
+                    "origin": "dynamic",
+                    "expiration-time": "2026-06-12T18:44:00.256Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ]
+              }
+            },
+            "ipv6": {
+              "admin-state": "enable",
+              "address": [
+                {
+                  "ip-prefix": "2001:db8:0:1::1/64",
+                  "type": "global-unicast",
+                  "origin": "static",
+                  "primary": [
+                    null
+                  ],
+                  "status": "preferred"
+                },
+                {
+                  "ip-prefix": "fe80::189a:ff:feff:1/64",
+                  "type": "link-local-unicast",
+                  "origin": "link-layer",
+                  "status": "preferred"
+                }
+              ],
+              "srl_nokia-interfaces-nbr:neighbor-discovery": {
+                "duplicate-address-detection": true,
+                "reachable-time": 30,
+                "stale-time": 14400,
+                "learn-unsolicited": "none",
+                "proxy-nd": false,
+                "neighbor": [
+                  {
+                    "ipv6-address": "2001:db8:0:1::2",
+                    "link-layer-address": "1A:35:01:FF:00:01",
+                    "origin": "dynamic",
+                    "is-router": true,
+                    "current-state": "reachable",
+                    "next-state-time": "2026-06-12T16:30:14.225Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  },
+                  {
+                    "ipv6-address": "fe80::1835:1ff:feff:1",
+                    "link-layer-address": "1A:35:01:FF:00:01",
+                    "origin": "dynamic",
+                    "is-router": true,
+                    "current-state": "reachable",
+                    "next-state-time": "2026-06-12T16:30:08.789Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ],
+                "limit": {
+                  "log-only": false,
+                  "warning-threshold-pct": 90
+                }
+              },
+              "srl_nokia-interfaces-router-adv:router-advertisement": {
+                "router-role": {
+                  "admin-state": "disable",
+                  "current-hop-limit": 64,
+                  "managed-configuration-flag": false,
+                  "other-configuration-flag": false,
+                  "max-advertisement-interval": 600,
+                  "min-advertisement-interval": 200,
+                  "reachable-time": 0,
+                  "retransmit-time": 0,
+                  "router-lifetime": 1800
+                }
+              }
+            },
+            "statistics": {
+              "in-packets": "322",
+              "in-octets": "27441",
+              "in-discarded-packets": "322",
+              "in-forwarded-packets": "0",
+              "in-forwarded-octets": "0",
+              "in-matched-ra-packets": "0",
+              "out-forwarded-packets": "0",
+              "out-forwarded-octets": "0",
+              "out-originated-packets": "335",
+              "out-originated-octets": "27679",
+              "out-discarded-packets": "0",
+              "out-packets": "335",
+              "out-octets": "27679"
+            }
+          }
+        ],
+        "sflow": {
+          "admin-state": "enable"
+        }
+      },
+      {
+        "name": "ethernet-1/2",
+        "admin-state": "enable",
+        "mtu": 9232,
+        "loopback-mode": "none",
+        "ifindex": 49150,
+        "oper-state": "up",
+        "last-change": "2026-06-12T14:43:32.349Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "srl_nokia-interfaces-vlans:vlan-tagging": false,
+        "srl_nokia-interfaces-vlans:tpid": "srl_nokia-interfaces-vlans:TPID_0X8100",
+        "phy-group-members": [
+          "ethernet-1/1",
+          "ethernet-1/2",
+          "ethernet-1/3",
+          "ethernet-1/6"
+        ],
+        "statistics": {
+          "in-packets": "147",
+          "in-octets": "23620",
+          "in-unicast-packets": "12",
+          "in-broadcast-packets": "5",
+          "in-multicast-packets": "124",
+          "in-discarded-packets": "6",
+          "in-error-packets": "0",
+          "in-fcs-error-packets": "0",
+          "out-packets": "141",
+          "out-octets": "23844",
+          "out-mirror-octets": "0",
+          "out-unicast-packets": "11",
+          "out-broadcast-packets": "6",
+          "out-multicast-packets": "124",
+          "out-discarded-packets": "0",
+          "out-error-packets": "0",
+          "out-mirror-packets": "0",
+          "carrier-transitions": "0"
+        },
+        "traffic-rate": {
+          "in-bps": "141",
+          "out-bps": "144"
+        },
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": true,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "lacp-port-priority": 32768,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:02",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          },
+          "hold-time": {
+            "up": 0,
+            "down": 0
+          },
+          "statistics": {
+            "in-mac-pause-frames": "0",
+            "in-oversize-frames": "0",
+            "in-jabber-frames": "0",
+            "in-fragment-frames": "0",
+            "in-crc-error-frames": "0",
+            "out-mac-pause-frames": "0",
+            "in-64b-frames": "6",
+            "in-65b-to-127b-frames": "14",
+            "in-128b-to-255b-frames": "127",
+            "in-256b-to-511b-frames": "0",
+            "in-512b-to-1023b-frames": "0",
+            "in-1024b-to-1518b-frames": "0",
+            "in-1519b-or-longer-frames": "0",
+            "out-64b-frames": "6",
+            "out-65b-to-127b-frames": "7",
+            "out-128b-to-255b-frames": "128",
+            "out-256b-to-511b-frames": "0",
+            "out-512b-to-1023b-frames": "0",
+            "out-1024b-to-1518b-frames": "0",
+            "out-1519b-or-longer-frames": "0"
+          },
+          "srl_nokia-dot1x:dot1x": {
+            "srl_nokia-dot1x-tunneling:tunnel": {
+              "tunnel-all": false,
+              "oper-rule": "trap-to-cpu-untagged"
+            }
+          },
+          "srl_nokia-interfaces-l2cp:l2cp-transparency": {
+            "tunnel-all-l2cp": false,
+            "lldp": {
+              "tunnel": false,
+              "oper-rule": "trap-to-cpu-untagged"
+            },
+            "lacp": {
+              "tunnel": false,
+              "oper-rule": "trap-to-cpu-untagged"
+            },
+            "xstp": {
+              "tunnel": false,
+              "oper-rule": "drop-tagged-and-untagged"
+            },
+            "ptp": {
+              "tunnel": false,
+              "oper-rule": "drop-tagged-and-untagged"
+            }
+          }
+        },
+        "subinterface": [
+          {
+            "index": 0,
+            "type": "srl_nokia-interfaces:routed",
+            "admin-state": "enable",
+            "ip-mtu": 1500,
+            "name": "ethernet-1/2.0",
+            "ifindex": 32769,
+            "oper-state": "up",
+            "last-change": "2026-06-12T14:43:49.686Z",
+            "ipv4": {
+              "admin-state": "enable",
+              "allow-directed-broadcast": false,
+              "address": [
+                {
+                  "ip-prefix": "10.0.1.1/30",
+                  "origin": "static",
+                  "primary": [
+                    null
+                  ],
+                  "status": "preferred"
+                }
+              ],
+              "unnumbered": {
+                "admin-state": "disable"
+              },
+              "srl_nokia-interfaces-nbr:arp": {
+                "duplicate-address-detection": true,
+                "timeout": 14400,
+                "learn-unsolicited": false,
+                "proxy-arp": false,
+                "neighbor": [
+                  {
+                    "ipv4-address": "10.0.1.2",
+                    "link-layer-address": "1A:35:01:FF:00:02",
+                    "origin": "dynamic",
+                    "expiration-time": "2026-06-12T18:46:36.080Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ]
+              }
+            },
+            "ipv6": {
+              "admin-state": "enable",
+              "address": [
+                {
+                  "ip-prefix": "2001:db8:0:2::1/64",
+                  "type": "global-unicast",
+                  "origin": "static",
+                  "primary": [
+                    null
+                  ],
+                  "status": "preferred"
+                },
+                {
+                  "ip-prefix": "fe80::189a:ff:feff:2/64",
+                  "type": "link-local-unicast",
+                  "origin": "link-layer",
+                  "status": "preferred"
+                }
+              ],
+              "srl_nokia-interfaces-nbr:neighbor-discovery": {
+                "duplicate-address-detection": true,
+                "reachable-time": 30,
+                "stale-time": 14400,
+                "learn-unsolicited": "none",
+                "proxy-nd": false,
+                "neighbor": [
+                  {
+                    "ipv6-address": "2001:db8:0:2::2",
+                    "link-layer-address": "1A:35:01:FF:00:02",
+                    "origin": "dynamic",
+                    "is-router": true,
+                    "current-state": "stale",
+                    "next-state-time": "2026-06-12T20:29:55.599Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  },
+                  {
+                    "ipv6-address": "fe80::1835:1ff:feff:2",
+                    "link-layer-address": "1A:35:01:FF:00:02",
+                    "origin": "dynamic",
+                    "is-router": true,
+                    "current-state": "reachable",
+                    "next-state-time": "2026-06-12T16:30:21.188Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ],
+                "limit": {
+                  "log-only": false,
+                  "warning-threshold-pct": 90
+                }
+              },
+              "srl_nokia-interfaces-router-adv:router-advertisement": {
+                "router-role": {
+                  "admin-state": "disable",
+                  "current-hop-limit": 64,
+                  "managed-configuration-flag": false,
+                  "other-configuration-flag": false,
+                  "max-advertisement-interval": 600,
+                  "min-advertisement-interval": 200,
+                  "reachable-time": 0,
+                  "retransmit-time": 0,
+                  "router-lifetime": 1800
+                }
+              }
+            },
+            "statistics": {
+              "in-packets": "26",
+              "in-octets": "3012",
+              "in-discarded-packets": "26",
+              "in-forwarded-packets": "0",
+              "in-forwarded-octets": "0",
+              "in-matched-ra-packets": "0",
+              "out-forwarded-packets": "0",
+              "out-forwarded-octets": "0",
+              "out-originated-packets": "21",
+              "out-originated-octets": "2742",
+              "out-discarded-packets": "0",
+              "out-packets": "21",
+              "out-octets": "2742"
+            }
+          }
+        ],
+        "sflow": {
+          "admin-state": "enable"
+        }
+      },
+      {
+        "name": "ethernet-1/3",
+        "admin-state": "enable",
+        "mtu": 9232,
+        "loopback-mode": "none",
+        "ifindex": 81918,
+        "oper-state": "up",
+        "last-change": "2026-06-12T14:43:32.349Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "srl_nokia-interfaces-vlans:vlan-tagging": false,
+        "srl_nokia-interfaces-vlans:tpid": "srl_nokia-interfaces-vlans:TPID_0X8100",
+        "phy-group-members": [
+          "ethernet-1/1",
+          "ethernet-1/2",
+          "ethernet-1/3",
+          "ethernet-1/6"
+        ],
+        "statistics": {
+          "in-packets": "135",
+          "in-octets": "21508",
+          "in-unicast-packets": "0",
+          "in-broadcast-packets": "14",
+          "in-multicast-packets": "121",
+          "in-discarded-packets": "0",
+          "in-error-packets": "0",
+          "in-fcs-error-packets": "0",
+          "out-packets": "114",
+          "out-octets": "20634",
+          "out-mirror-octets": "0",
+          "out-unicast-packets": "0",
+          "out-broadcast-packets": "0",
+          "out-multicast-packets": "114",
+          "out-discarded-packets": "0",
+          "out-error-packets": "0",
+          "out-mirror-packets": "0",
+          "carrier-transitions": "0"
+        },
+        "traffic-rate": {
+          "in-bps": "141",
+          "out-bps": "144"
+        },
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": true,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "lacp-port-priority": 32768,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:03",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          },
+          "hold-time": {
+            "up": 0,
+            "down": 0
+          },
+          "statistics": {
+            "in-mac-pause-frames": "0",
+            "in-oversize-frames": "0",
+            "in-jabber-frames": "0",
+            "in-fragment-frames": "0",
+            "in-crc-error-frames": "0",
+            "out-mac-pause-frames": "0",
+            "in-64b-frames": "14",
+            "in-65b-to-127b-frames": "7",
+            "in-128b-to-255b-frames": "114",
+            "in-256b-to-511b-frames": "0",
+            "in-512b-to-1023b-frames": "0",
+            "in-1024b-to-1518b-frames": "0",
+            "in-1519b-or-longer-frames": "0",
+            "out-64b-frames": "0",
+            "out-65b-to-127b-frames": "0",
+            "out-128b-to-255b-frames": "114",
+            "out-256b-to-511b-frames": "0",
+            "out-512b-to-1023b-frames": "0",
+            "out-1024b-to-1518b-frames": "0",
+            "out-1519b-or-longer-frames": "0"
+          },
+          "srl_nokia-dot1x:dot1x": {
+            "srl_nokia-dot1x-tunneling:tunnel": {
+              "tunnel-all": false,
+              "oper-rule": "trap-to-cpu-untagged"
+            }
+          },
+          "srl_nokia-interfaces-l2cp:l2cp-transparency": {
+            "tunnel-all-l2cp": false,
+            "lldp": {
+              "tunnel": false,
+              "oper-rule": "trap-to-cpu-untagged"
+            },
+            "lacp": {
+              "tunnel": false,
+              "oper-rule": "trap-to-cpu-untagged"
+            },
+            "xstp": {
+              "tunnel": false,
+              "oper-rule": "drop-tagged-and-untagged"
+            },
+            "ptp": {
+              "tunnel": false,
+              "oper-rule": "drop-tagged-and-untagged"
+            }
+          }
+        },
+        "subinterface": [
+          {
+            "index": 0,
+            "type": "srl_nokia-interfaces:bridged",
+            "admin-state": "enable",
+            "l2-mtu": 9232,
+            "name": "ethernet-1/3.0",
+            "ifindex": 65537,
+            "oper-state": "up",
+            "last-change": "2026-06-12T14:43:49.686Z",
+            "ipv4": {
+              "admin-state": "disable",
+              "allow-directed-broadcast": false,
+              "unnumbered": {
+                "admin-state": "disable"
+              },
+              "srl_nokia-interfaces-nbr:arp": {
+                "duplicate-address-detection": true,
+                "timeout": 14400,
+                "learn-unsolicited": false,
+                "proxy-arp": false
+              }
+            },
+            "ipv6": {
+              "admin-state": "disable",
+              "srl_nokia-interfaces-nbr:neighbor-discovery": {
+                "duplicate-address-detection": true,
+                "reachable-time": 30,
+                "stale-time": 14400,
+                "learn-unsolicited": "none",
+                "proxy-nd": false,
+                "limit": {
+                  "log-only": false,
+                  "warning-threshold-pct": 90
+                }
+              },
+              "srl_nokia-interfaces-router-adv:router-advertisement": {
+                "router-role": {
+                  "admin-state": "disable",
+                  "current-hop-limit": 64,
+                  "managed-configuration-flag": false,
+                  "other-configuration-flag": false,
+                  "max-advertisement-interval": 600,
+                  "min-advertisement-interval": 200,
+                  "reachable-time": 0,
+                  "retransmit-time": 0,
+                  "router-lifetime": 1800
+                }
+              }
+            },
+            "statistics": {
+              "in-packets": "20",
+              "in-octets": "1260",
+              "in-discarded-packets": "0",
+              "in-forwarded-packets": "20",
+              "in-forwarded-octets": "1260",
+              "in-matched-ra-packets": "0",
+              "out-forwarded-packets": "0",
+              "out-forwarded-octets": "0",
+              "out-originated-packets": "0",
+              "out-originated-octets": "0",
+              "out-discarded-packets": "0",
+              "out-packets": "0",
+              "out-octets": "0"
+            },
+            "bridge-table": {
+              "discard-unknown-src-mac": false,
+              "mac-limit": {
+                "maximum-entries": 250,
+                "warning-threshold-pct": 95
+              },
+              "mac-learning": {
+                "admin-state": "enable",
+                "aging": {
+                  "admin-state": "enable"
+                },
+                "srl_nokia-interfaces-bridge-table-mac-learning-entries:learnt-entries": {
+                  "mac": [
+                    {
+                      "address": "1A:35:01:FF:00:03",
+                      "last-update": "2026-06-12T16:29:47.000Z",
+                      "aging": "85"
+                    }
+                  ]
+                }
+              },
+              "mac-duplication": {
+                "action": "use-net-instance-action",
+                "srl_nokia-interfaces-bridge-table-mac-duplication-entries:duplicate-entries": {}
+              },
+              "srl_nokia-interfaces-bridge-table-mac-table:mac-table": {
+                "mac": [
+                  {
+                    "address": "1A:35:01:FF:00:03",
+                    "type": "learnt",
+                    "last-update": "2026-06-12T16:25:35.000Z"
+                  }
+                ]
+              },
+              "srl_nokia-interfaces-bridge-table-statistics:statistics": {
+                "active-entries": "1",
+                "total-entries": "1",
+                "failed-entries": "0",
+                "mac-type": [
+                  {
+                    "type": "static",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "duplicate",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "learnt",
+                    "active-entries": "1",
+                    "total-entries": "1",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "evpn",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "evpn-static",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  },
+                  {
+                    "type": "eth-cfm",
+                    "active-entries": "0",
+                    "total-entries": "0",
+                    "failed-entries": "0"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "sflow": {
+          "admin-state": "enable"
+        }
+      },
+      {
+        "name": "ethernet-1/4",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 114686,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.827Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/4",
+          "ethernet-1/5",
+          "ethernet-1/7",
+          "ethernet-1/9"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:04",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/5",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 147454,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/4",
+          "ethernet-1/5",
+          "ethernet-1/7",
+          "ethernet-1/9"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:05",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/6",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 180222,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/1",
+          "ethernet-1/2",
+          "ethernet-1/3",
+          "ethernet-1/6"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:06",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/7",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 212990,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/4",
+          "ethernet-1/5",
+          "ethernet-1/7",
+          "ethernet-1/9"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:07",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/8",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 245758,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.827Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/8",
+          "ethernet-1/10",
+          "ethernet-1/11",
+          "ethernet-1/12"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:08",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/9",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 278526,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/4",
+          "ethernet-1/5",
+          "ethernet-1/7",
+          "ethernet-1/9"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:09",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/10",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 311294,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/8",
+          "ethernet-1/10",
+          "ethernet-1/11",
+          "ethernet-1/12"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:0A",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/11",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 344062,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/8",
+          "ethernet-1/10",
+          "ethernet-1/11",
+          "ethernet-1/12"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:0B",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/12",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 376830,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/8",
+          "ethernet-1/10",
+          "ethernet-1/11",
+          "ethernet-1/12"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:0C",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/13",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 409598,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/13",
+          "ethernet-1/14",
+          "ethernet-1/15",
+          "ethernet-1/18"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:0D",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/14",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 442366,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/13",
+          "ethernet-1/14",
+          "ethernet-1/15",
+          "ethernet-1/18"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:0E",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/15",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 475134,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/13",
+          "ethernet-1/14",
+          "ethernet-1/15",
+          "ethernet-1/18"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:0F",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/16",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 507902,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/16",
+          "ethernet-1/17",
+          "ethernet-1/19",
+          "ethernet-1/21"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:10",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/17",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 540670,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/16",
+          "ethernet-1/17",
+          "ethernet-1/19",
+          "ethernet-1/21"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:11",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/18",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 573438,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/13",
+          "ethernet-1/14",
+          "ethernet-1/15",
+          "ethernet-1/18"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:12",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/19",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 606206,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/16",
+          "ethernet-1/17",
+          "ethernet-1/19",
+          "ethernet-1/21"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:13",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/20",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 638974,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.828Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/20",
+          "ethernet-1/22",
+          "ethernet-1/23",
+          "ethernet-1/24"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:14",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/21",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 671742,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/16",
+          "ethernet-1/17",
+          "ethernet-1/19",
+          "ethernet-1/21"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:15",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/22",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 704510,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/20",
+          "ethernet-1/22",
+          "ethernet-1/23",
+          "ethernet-1/24"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:16",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/23",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 737278,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/20",
+          "ethernet-1/22",
+          "ethernet-1/23",
+          "ethernet-1/24"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:17",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/24",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 770046,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/20",
+          "ethernet-1/22",
+          "ethernet-1/23",
+          "ethernet-1/24"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:18",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/25",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 802814,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/25",
+          "ethernet-1/26",
+          "ethernet-1/27",
+          "ethernet-1/30"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:19",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/26",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 835582,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/25",
+          "ethernet-1/26",
+          "ethernet-1/27",
+          "ethernet-1/30"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:1A",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/27",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 868350,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/25",
+          "ethernet-1/26",
+          "ethernet-1/27",
+          "ethernet-1/30"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:1B",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/28",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 901118,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/28",
+          "ethernet-1/29",
+          "ethernet-1/31",
+          "ethernet-1/33"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:1C",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/29",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 933886,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/28",
+          "ethernet-1/29",
+          "ethernet-1/31",
+          "ethernet-1/33"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:1D",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/30",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 966654,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/25",
+          "ethernet-1/26",
+          "ethernet-1/27",
+          "ethernet-1/30"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:1E",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/31",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 999422,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/28",
+          "ethernet-1/29",
+          "ethernet-1/31",
+          "ethernet-1/33"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:1F",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/32",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1032190,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/32",
+          "ethernet-1/34",
+          "ethernet-1/35",
+          "ethernet-1/36"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:20",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/33",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1064958,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/28",
+          "ethernet-1/29",
+          "ethernet-1/31",
+          "ethernet-1/33"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:21",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/34",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1097726,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/32",
+          "ethernet-1/34",
+          "ethernet-1/35",
+          "ethernet-1/36"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:22",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/35",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1130494,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/32",
+          "ethernet-1/34",
+          "ethernet-1/35",
+          "ethernet-1/36"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:23",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/36",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1163262,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.829Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/32",
+          "ethernet-1/34",
+          "ethernet-1/35",
+          "ethernet-1/36"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:24",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/37",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1196030,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/37",
+          "ethernet-1/38",
+          "ethernet-1/39",
+          "ethernet-1/42"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:25",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/38",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1228798,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/37",
+          "ethernet-1/38",
+          "ethernet-1/39",
+          "ethernet-1/42"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:26",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/39",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1261566,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/37",
+          "ethernet-1/38",
+          "ethernet-1/39",
+          "ethernet-1/42"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:27",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/40",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1294334,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/40",
+          "ethernet-1/41",
+          "ethernet-1/43",
+          "ethernet-1/45"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:28",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/41",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1327102,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/40",
+          "ethernet-1/41",
+          "ethernet-1/43",
+          "ethernet-1/45"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:29",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/42",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1359870,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/37",
+          "ethernet-1/38",
+          "ethernet-1/39",
+          "ethernet-1/42"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:2A",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/43",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1392638,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/40",
+          "ethernet-1/41",
+          "ethernet-1/43",
+          "ethernet-1/45"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:2B",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/44",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1425406,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/44",
+          "ethernet-1/46",
+          "ethernet-1/47",
+          "ethernet-1/48"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:2C",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/45",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1458174,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/40",
+          "ethernet-1/41",
+          "ethernet-1/43",
+          "ethernet-1/45"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:2D",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/46",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1490942,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/44",
+          "ethernet-1/46",
+          "ethernet-1/47",
+          "ethernet-1/48"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:2E",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/47",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1523710,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/44",
+          "ethernet-1/46",
+          "ethernet-1/47",
+          "ethernet-1/48"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:2F",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/48",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1556478,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.830Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "phy-group-members": [
+          "ethernet-1/44",
+          "ethernet-1/46",
+          "ethernet-1/47",
+          "ethernet-1/48"
+        ],
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "25G",
+          "hw-mac-address": "1A:9A:00:FF:00:30",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/49",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1589246,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "100G",
+          "hw-mac-address": "1A:9A:00:FF:00:31",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/50",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1622014,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "100G",
+          "hw-mac-address": "1A:9A:00:FF:00:32",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/51",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1654782,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "100G",
+          "hw-mac-address": "1A:9A:00:FF:00:33",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/52",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1687550,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "100G",
+          "hw-mac-address": "1A:9A:00:FF:00:34",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/53",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1720318,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "100G",
+          "hw-mac-address": "1A:9A:00:FF:00:35",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/54",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1753086,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "100G",
+          "hw-mac-address": "1A:9A:00:FF:00:36",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/55",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1785854,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "100G",
+          "hw-mac-address": "1A:9A:00:FF:00:37",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/56",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1818622,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "100G",
+          "hw-mac-address": "1A:9A:00:FF:00:38",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/57",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1851390,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "10G",
+          "hw-mac-address": "1A:9A:00:FF:00:39",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "ethernet-1/58",
+        "admin-state": "disable",
+        "loopback-mode": "none",
+        "ifindex": 1884158,
+        "oper-state": "down",
+        "oper-down-reason": "port-admin-disabled",
+        "last-change": "2026-06-12T14:43:22.831Z",
+        "linecard": 1,
+        "forwarding-complex": "0",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {},
+        "traffic-rate": {},
+        "transceiver": {
+          "tx-laser": false,
+          "oper-state": "down",
+          "oper-down-reason": "not-present",
+          "ddm-events": false,
+          "srl_nokia-platform-healthz:healthz": {
+            "status": "unspecified"
+          }
+        },
+        "ethernet": {
+          "dac-link-training": false,
+          "port-speed": "10G",
+          "hw-mac-address": "1A:9A:00:FF:00:3A",
+          "flow-control": {
+            "receive": false
+          },
+          "forward-error-correction": {
+            "operational-host-if-fec": "disabled"
+          }
+        },
+        "sflow": {
+          "admin-state": "disable"
+        }
+      },
+      {
+        "name": "mgmt0",
+        "admin-state": "enable",
+        "mtu": 1514,
+        "ifindex": 1077952510,
+        "oper-state": "up",
+        "last-change": "2026-06-12T14:43:22.818Z",
+        "forwarding-mode": "store-and-forward",
+        "statistics": {
+          "in-packets": "1260",
+          "in-octets": "199551",
+          "in-unicast-packets": "920",
+          "in-broadcast-packets": "6",
+          "in-multicast-packets": "16",
+          "in-discarded-packets": "317",
+          "in-error-packets": "1",
+          "in-fcs-error-packets": "0",
+          "out-packets": "935",
+          "out-octets": "267343",
+          "out-mirror-octets": "0",
+          "out-unicast-packets": "911",
+          "out-broadcast-packets": "6",
+          "out-multicast-packets": "18",
+          "out-discarded-packets": "0",
+          "out-error-packets": "0",
+          "out-mirror-packets": "0",
+          "carrier-transitions": "1"
+        },
+        "traffic-rate": {
+          "in-bps": "0",
+          "out-bps": "0"
+        },
+        "ethernet": {
+          "port-speed": "1G",
+          "hw-mac-address": "22:A3:E3:5A:A6:1E",
+          "flow-control": {
+            "receive": false
+          },
+          "hold-time": {
+            "up": 0,
+            "down": 0
+          },
+          "statistics": {
+            "in-mac-pause-frames": "0",
+            "in-oversize-frames": "0",
+            "in-jabber-frames": "0",
+            "in-fragment-frames": "0",
+            "in-crc-error-frames": "0",
+            "out-mac-pause-frames": "0",
+            "in-64b-frames": "6",
+            "in-65b-to-127b-frames": "741",
+            "in-128b-to-255b-frames": "338",
+            "in-256b-to-511b-frames": "135",
+            "in-512b-to-1023b-frames": "7",
+            "in-1024b-to-1518b-frames": "8",
+            "in-1519b-or-longer-frames": "6",
+            "out-64b-frames": "21",
+            "out-65b-to-127b-frames": "611",
+            "out-128b-to-255b-frames": "30",
+            "out-256b-to-511b-frames": "148",
+            "out-512b-to-1023b-frames": "18",
+            "out-1024b-to-1518b-frames": "107",
+            "out-1519b-or-longer-frames": "0"
+          }
+        },
+        "subinterface": [
+          {
+            "index": 0,
+            "admin-state": "enable",
+            "ip-mtu": 1500,
+            "name": "mgmt0.0",
+            "ifindex": 1077936129,
+            "oper-state": "up",
+            "last-change": "2026-06-12T14:43:22.818Z",
+            "ipv4": {
+              "admin-state": "enable",
+              "allow-directed-broadcast": false,
+              "address": [
+                {
+                  "ip-prefix": "172.20.21.11/24",
+                  "origin": "dhcp",
+                  "status": "preferred"
+                }
+              ],
+              "unnumbered": {
+                "admin-state": "disable"
+              },
+              "srl_nokia-interfaces-ip-dhcp:dhcp-client": {},
+              "srl_nokia-interfaces-nbr:arp": {
+                "duplicate-address-detection": true,
+                "timeout": 14400,
+                "learn-unsolicited": false,
+                "proxy-arp": false,
+                "neighbor": [
+                  {
+                    "ipv4-address": "172.20.21.1",
+                    "link-layer-address": "3E:78:AD:72:1F:05",
+                    "origin": "dynamic",
+                    "expiration-time": "2026-06-12T20:22:57.942Z",
+                    "datapath-programming": {
+                      "status": "success"
+                    }
+                  }
+                ]
+              }
+            },
+            "ipv6": {
+              "admin-state": "enable",
+              "address": [
+                {
+                  "ip-prefix": "fe80::20a3:e3ff:fe5a:a61e/64",
+                  "type": "link-local-unicast",
+                  "origin": "link-layer",
+                  "status": "preferred"
+                }
+              ],
+              "srl_nokia-interfaces-ip-dhcp:dhcp-client": {},
+              "srl_nokia-interfaces-nbr:neighbor-discovery": {
+                "duplicate-address-detection": true,
+                "reachable-time": 30,
+                "stale-time": 14400,
+                "learn-unsolicited": "none",
+                "proxy-nd": false,
+                "limit": {
+                  "log-only": false,
+                  "warning-threshold-pct": 90
+                }
+              },
+              "srl_nokia-interfaces-router-adv:router-advertisement": {
+                "router-role": {
+                  "admin-state": "disable",
+                  "current-hop-limit": 64,
+                  "managed-configuration-flag": false,
+                  "other-configuration-flag": false,
+                  "max-advertisement-interval": 600,
+                  "min-advertisement-interval": 200,
+                  "reachable-time": 0,
+                  "retransmit-time": 0,
+                  "router-lifetime": 1800
+                }
+              }
+            },
+            "statistics": {
+              "in-packets": "1238",
+              "in-octets": "198519",
+              "in-discarded-packets": "1238",
+              "in-forwarded-packets": "0",
+              "in-forwarded-octets": "0",
+              "in-matched-ra-packets": "0",
+              "out-forwarded-packets": "0",
+              "out-forwarded-octets": "0",
+              "out-originated-packets": "914",
+              "out-originated-octets": "262343",
+              "out-discarded-packets": "0",
+              "out-packets": "914",
+              "out-octets": "262343"
+            }
+          }
+        ],
+        "sflow": {
+          "admin-state": "disable"
+        }
+      }
+    ]
+  },
+  {
+    "contact": "netops",
+    "location": "lab",
+    "description": "SRLinux-v25.3.2-312-ga0c5002f15 7220 IXR-D2L Copyright (c) 2000-2025 Nokia. Kernel 6.17.0-35-generic #35~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue May 26 19:30:42 UTC 2",
+    "current-datetime": "2026-06-12T16:29:57.399Z",
+    "last-booted": "2026-06-12T14:43:22.583Z",
+    "version": "v25.3.2-312-ga0c5002f15"
+  }
+]

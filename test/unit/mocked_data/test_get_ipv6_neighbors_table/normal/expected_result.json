@@ -1,1 +1,30 @@
-[{"interface": "ethernet-1/1.1", "mac": "02:B1:6F:FF:00:00", "ip": "2001:1::192:168:12:2", "age": 1621362533.793, "state": "stale"}, {"interface": "ethernet-1/1.1", "mac": "02:B1:6F:FF:00:00", "ip": "fe80::b1:6fff:feff:0", "age": 1621362535.996, "state": "stale"}]
+[
+  {
+    "interface": "ethernet-1/1.0",
+    "mac": "1A:35:01:FF:00:01",
+    "ip": "2001:db8:0:1::2",
+    "age": 1781281814.225,
+    "state": "reachable"
+  },
+  {
+    "interface": "ethernet-1/1.0",
+    "mac": "1A:35:01:FF:00:01",
+    "ip": "fe80::1835:1ff:feff:1",
+    "age": 1781281808.789,
+    "state": "reachable"
+  },
+  {
+    "interface": "ethernet-1/2.0",
+    "mac": "1A:35:01:FF:00:02",
+    "ip": "2001:db8:0:2::2",
+    "age": 1781296195.599,
+    "state": "stale"
+  },
+  {
+    "interface": "ethernet-1/2.0",
+    "mac": "1A:35:01:FF:00:02",
+    "ip": "fe80::1835:1ff:feff:2",
+    "age": 1781281821.188,
+    "state": "reachable"
+  }
+]

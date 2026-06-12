@@ -1,0 +1,1844 @@
+[
+  {
+    "trust": {
+      "srl_nokia-platform-tpm:tpm": {
+        "control": [
+          {
+            "slot": "A",
+            "oper-state": "down"
+          }
+        ]
+      }
+    },
+    "srl_nokia-platform-chassis:chassis": {
+      "type": "7220 IXR-D2L",
+      "last-boot-type": "normal",
+      "hw-mac-address": "1A:9A:00:FF:00:00",
+      "slots": 1,
+      "oper-state": "up",
+      "last-booted": "2026-06-12T14:43:17.170Z",
+      "last-change": "2026-06-12T14:43:17.170Z",
+      "part-number": "Sim Part No.",
+      "removable": false,
+      "clei-code": "Sim CLEI",
+      "serial-number": "Sim Serial No.",
+      "environment": {
+        "orientation": "horizontal"
+      },
+      "power": {
+        "total": {}
+      },
+      "srl_nokia-platform-healthz:healthz": {
+        "status": "healthy"
+      }
+    },
+    "srl_nokia-platform-control:control": [
+      {
+        "slot": "A",
+        "type": "imm48-25g-sfp28+8-100g-qsfp28+2-10g-sfpp",
+        "oper-state": "up",
+        "last-booted": "2026-06-12T14:43:17.170Z",
+        "last-change": "2026-06-12T14:43:17.170Z",
+        "part-number": "Sim Part No.",
+        "removable": false,
+        "clei-code": "Sim CLEI",
+        "serial-number": "Sim Serial No.",
+        "software-version": "v25.3.2-312-ga0c5002f15",
+        "locator-state": "inactive",
+        "bootloader": {
+          "manufacturer": "GNU",
+          "software-version": "Sim bootloader"
+        },
+        "bios": {
+          "manufacturer": "LENOVO",
+          "software-version": "R1MET61W (1.31 )"
+        },
+        "power": {},
+        "temperature": {
+          "instant": 50,
+          "maximum": 50,
+          "maximum-time": "2026-06-12T14:43:19.841Z",
+          "alarm-status": false,
+          "margin": 25
+        },
+        "srl_nokia-platform-control-fp:forwarding-plane": {
+          "fib-table": {
+            "srl_nokia-ip-route-tables:programming-progress": {
+              "ip-routes": {
+                "entries-remaining-to-add": "0",
+                "entries-remaining-to-modify": "0",
+                "last-sync-time": "2026-06-12T16:29:39.862Z"
+              },
+              "next-hop-groups": {
+                "entries-remaining-to-add": "0",
+                "entries-remaining-to-modify": "0",
+                "last-sync-time": "2026-06-12T16:29:39.862Z"
+              }
+            }
+          }
+        },
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "healthy"
+        },
+        "srl_nokia-platform-cpu:cpu": [
+          {
+            "index": "all",
+            "architecture": "x86_64",
+            "type": "AMD Ryzen 5 PRO 5650U with Radeon Graphics",
+            "speed": "4.29",
+            "total": {
+              "instant": 9,
+              "average-1": 7,
+              "average-5": 8,
+              "average-15": 8
+            },
+            "user": {
+              "instant": 4,
+              "average-1": 3,
+              "average-5": 4,
+              "average-15": 3
+            },
+            "system": {
+              "instant": 2,
+              "average-1": 2,
+              "average-5": 2,
+              "average-15": 2
+            },
+            "nice": {
+              "instant": 0,
+              "average-1": 0,
+              "average-5": 0,
+              "average-15": 0
+            },
+            "idle": {
+              "instant": 91,
+              "average-1": 93,
+              "average-5": 92,
+              "average-15": 92
+            },
+            "iowait": {
+              "instant": 0,
+              "average-1": 0,
+              "average-5": 0,
+              "average-15": 0
+            },
+            "hardware-interrupt": {
+              "instant": 0,
+              "average-1": 0,
+              "average-5": 0,
+              "average-15": 0
+            },
+            "software-interrupt": {
+              "instant": 1,
+              "average-1": 0,
+              "average-5": 0,
+              "average-15": 0
+            }
+          }
+        ],
+        "srl_nokia-platform-cpu:process": [
+          {
+            "pid": "1",
+            "name": "tini",
+            "start-time": "2026-06-12T14:43:11.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "1032192",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "7",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:11.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "4149248",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "108",
+            "name": "sshd",
+            "start-time": "2026-06-12T14:43:12.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "3325952",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1337",
+            "name": "sr_supportd",
+            "start-time": "2026-06-12T14:43:14.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "36810752",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1501",
+            "name": "top",
+            "start-time": "2026-06-12T14:43:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "10940416",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1586",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "1773568",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1587",
+            "name": "sr_linux",
+            "start-time": "2026-06-12T14:43:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "3694592",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1596",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "4182016",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1597",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "1634304",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1598",
+            "name": "runuser",
+            "start-time": "2026-06-12T14:43:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "7417856",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1647",
+            "name": "sr_linux",
+            "start-time": "2026-06-12T14:43:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "3620864",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1827",
+            "name": "sr_app_mgr",
+            "start-time": "2026-06-12T14:43:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "103800832",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1891",
+            "name": "sr_device_mgr",
+            "start-time": "2026-06-12T14:43:16.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "171216896",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "1974",
+            "name": "sr_idb_server",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "77824000",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2011",
+            "name": "sr_log_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "99700736",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2035",
+            "name": "sr_evpn_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "111521792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2075",
+            "name": "sr_mcid_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "103399424",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2109",
+            "name": "sr_net_inst_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "109019136",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2141",
+            "name": "sr_dhcp_client_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "103100416",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2177",
+            "name": "sr_bfd_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "113455104",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2219",
+            "name": "sr_license_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "100724736",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2257",
+            "name": "sr_arp_nd_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "143732736",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2294",
+            "name": "sr_fib_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "116166656",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2327",
+            "name": "sr_sflow_sample_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "111271936",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2354",
+            "name": "sr_lag_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "106106880",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2413",
+            "name": "sr_linux_mgr",
+            "start-time": "2026-06-12T14:43:17.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "114995200",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2448",
+            "name": "sr_aaa_mgr",
+            "start-time": "2026-06-12T14:43:18.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "118132736",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2498",
+            "name": "sr_radius_mgr",
+            "start-time": "2026-06-12T14:43:18.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "110628864",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2543",
+            "name": "sr_mfib_mgr",
+            "start-time": "2026-06-12T14:43:18.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "104251392",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2570",
+            "name": "sr_l2_mac_learn_mgr",
+            "start-time": "2026-06-12T14:43:18.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "104099840",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2603",
+            "name": "sr_mgmt_server",
+            "start-time": "2026-06-12T14:43:18.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "175378432",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2641",
+            "name": "sr_xdp_lc",
+            "start-time": "2026-06-12T14:43:18.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "659877888",
+            "memory-utilization": 1
+          },
+          {
+            "pid": "2670",
+            "name": "sr_acl_mgr",
+            "start-time": "2026-06-12T14:43:18.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "110768128",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2721",
+            "name": "sr_l2_mac_mgr",
+            "start-time": "2026-06-12T14:43:18.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "106909696",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "2764",
+            "name": "sr_chassis_mgr",
+            "start-time": "2026-06-12T14:43:18.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "120086528",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3080",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:22.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "8646656",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3090",
+            "name": "sr_plcy_mgr",
+            "start-time": "2026-06-12T14:43:22.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "113721344",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3108",
+            "name": "sr_qos_mgr",
+            "start-time": "2026-06-12T14:43:22.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "110612480",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3117",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:22.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "1974272",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3118",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:22.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "8814592",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3145",
+            "name": "sr_vxlan_mgr",
+            "start-time": "2026-06-12T14:43:22.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "104124416",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3186",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:22.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "2146304",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3187",
+            "name": "sr_grpc_server",
+            "start-time": "2026-06-12T14:43:22.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "129695744",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3573",
+            "name": "rsyslogd",
+            "start-time": "2026-06-12T14:43:23.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "9445376",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "3640",
+            "name": "sshd",
+            "start-time": "2026-06-12T14:43:24.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "3346432",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4782",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "8654848",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4792",
+            "name": "sr_lldp_mgr",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "115052544",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4810",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "8626176",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4811",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "2048000",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4814",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "8511488",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4840",
+            "name": "sr_oc_mgmt_server",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "190492672",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4852",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "1925120",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4854",
+            "name": "sr_json_rpc",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "104472576",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4860",
+            "name": "sr_sdk_mgr",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "107843584",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4863",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "1875968",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4865",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "8667136",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4937",
+            "name": "sudo",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "1855488",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "4938",
+            "name": "sr_netconf_mgr",
+            "start-time": "2026-06-12T14:43:30.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "118853632",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "5051",
+            "name": "sr_json_rpc",
+            "start-time": "2026-06-12T14:43:32.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "13860864",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "5052",
+            "name": "python3",
+            "start-time": "2026-06-12T14:43:32.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "78618624",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "5369",
+            "name": "sr_json_rpc",
+            "start-time": "2026-06-12T14:43:33.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "13873152",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "5371",
+            "name": "python3",
+            "start-time": "2026-06-12T14:43:33.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "78540800",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "5455",
+            "name": "dnsmasq",
+            "start-time": "2026-06-12T14:43:33.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "2256896",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "5487",
+            "name": "sshd",
+            "start-time": "2026-06-12T14:43:33.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "3334144",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "5525",
+            "name": "sr_snmp_server",
+            "start-time": "2026-06-12T14:43:33.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "40153088",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "7043",
+            "name": "sr_bgp_mgr",
+            "start-time": "2026-06-12T14:43:49.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "154832896",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "7184",
+            "name": "chronyd",
+            "start-time": "2026-06-12T14:43:50.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "2543616",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13504",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:14.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "73068544",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13505",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:14.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65404928",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13506",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "73703424",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13507",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "66048000",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13512",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65437696",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13513",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13522",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13570",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13571",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65404928",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13584",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13585",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "73711616",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13586",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "66048000",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13587",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13588",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "72470528",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13589",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13590",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "72732672",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13591",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13592",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13593",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          },
+          {
+            "pid": "13594",
+            "name": "python3",
+            "start-time": "2026-06-12T15:46:15.000Z",
+            "cpu-utilization": 0,
+            "memory-usage": "65441792",
+            "memory-utilization": 0
+          }
+        ],
+        "srl_nokia-platform-disk:disk": [
+          {
+            "name": "/dev/nvme0n1",
+            "model-number": "",
+            "serial-number": "",
+            "size": "512110190592",
+            "partition": [
+              {
+                "name": "/dev/nvme0n1p1",
+                "uuid": "",
+                "mount-point": "",
+                "label": "",
+                "size": "1127219200",
+                "used": "0",
+                "free": "0",
+                "percent-used": 0
+              },
+              {
+                "name": "/dev/nvme0n1p2",
+                "uuid": "",
+                "mount-point": "",
+                "label": "",
+                "size": "2147483648",
+                "used": "0",
+                "free": "0",
+                "percent-used": 0
+              },
+              {
+                "name": "/dev/nvme0n1p3",
+                "uuid": "",
+                "mount-point": "",
+                "label": "",
+                "size": "508833038336",
+                "used": "0",
+                "free": "0",
+                "percent-used": 0
+              }
+            ]
+          }
+        ],
+        "srl_nokia-platform-memory:memory": {
+          "physical": "49270095872",
+          "reserved": "20123807744",
+          "free": "29146288128",
+          "utilization": 40
+        }
+      }
+    ],
+    "srl_nokia-platform-fan:fan-tray": [
+      {
+        "id": 1,
+        "oper-state": "empty",
+        "removable": true,
+        "locator-state": "inactive",
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "unspecified"
+        }
+      },
+      {
+        "id": 2,
+        "oper-state": "empty",
+        "removable": true,
+        "locator-state": "inactive",
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "unspecified"
+        }
+      },
+      {
+        "id": 3,
+        "oper-state": "empty",
+        "removable": true,
+        "locator-state": "inactive",
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "unspecified"
+        }
+      },
+      {
+        "id": 4,
+        "oper-state": "empty",
+        "removable": true,
+        "locator-state": "inactive",
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "unspecified"
+        }
+      },
+      {
+        "id": 5,
+        "oper-state": "empty",
+        "removable": true,
+        "locator-state": "inactive",
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "unspecified"
+        }
+      },
+      {
+        "id": 6,
+        "oper-state": "empty",
+        "removable": true,
+        "locator-state": "inactive",
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "unspecified"
+        }
+      }
+    ],
+    "srl_nokia-platform-lc:linecard": [
+      {
+        "slot": 1,
+        "oper-state": "up",
+        "last-booted": "2026-06-12T14:43:22.832Z",
+        "last-change": "2026-06-12T14:43:22.832Z",
+        "part-number": "Sim Part No.",
+        "removable": false,
+        "clei-code": "Sim CLEI",
+        "serial-number": "Sim Serial No.",
+        "type": "imm48-25g-sfp28+8-100g-qsfp28+2-10g-sfpp",
+        "software-version": "v25.3.2-312-ga0c5002f15",
+        "bios": {
+          "manufacturer": "LENOVO",
+          "software-version": "R1MET61W (1.31 )"
+        },
+        "forwarding-complex": [
+          {
+            "name": "0",
+            "oper-state": "up",
+            "last-booted": "2026-06-12T14:43:22.832Z",
+            "last-change": "2026-06-12T14:43:22.832Z",
+            "part-number": "Unknown",
+            "removable": false,
+            "interfaces": [
+              "ethernet-1/1",
+              "ethernet-1/2",
+              "ethernet-1/3",
+              "ethernet-1/4",
+              "ethernet-1/5",
+              "ethernet-1/6",
+              "ethernet-1/7",
+              "ethernet-1/8",
+              "ethernet-1/9",
+              "ethernet-1/10",
+              "ethernet-1/11",
+              "ethernet-1/12",
+              "ethernet-1/13",
+              "ethernet-1/14",
+              "ethernet-1/15",
+              "ethernet-1/16",
+              "ethernet-1/17",
+              "ethernet-1/18",
+              "ethernet-1/19",
+              "ethernet-1/20",
+              "ethernet-1/21",
+              "ethernet-1/22",
+              "ethernet-1/23",
+              "ethernet-1/24",
+              "ethernet-1/25",
+              "ethernet-1/26",
+              "ethernet-1/27",
+              "ethernet-1/28",
+              "ethernet-1/29",
+              "ethernet-1/30",
+              "ethernet-1/31",
+              "ethernet-1/32",
+              "ethernet-1/33",
+              "ethernet-1/34",
+              "ethernet-1/35",
+              "ethernet-1/36",
+              "ethernet-1/37",
+              "ethernet-1/38",
+              "ethernet-1/39",
+              "ethernet-1/40",
+              "ethernet-1/41",
+              "ethernet-1/42",
+              "ethernet-1/43",
+              "ethernet-1/44",
+              "ethernet-1/45",
+              "ethernet-1/46",
+              "ethernet-1/47",
+              "ethernet-1/48",
+              "ethernet-1/49",
+              "ethernet-1/50",
+              "ethernet-1/51",
+              "ethernet-1/52",
+              "ethernet-1/53",
+              "ethernet-1/54",
+              "ethernet-1/55",
+              "ethernet-1/56",
+              "ethernet-1/57",
+              "ethernet-1/58"
+            ],
+            "srl_nokia-platform-acl:acl": {
+              "resource": [
+                {
+                  "name": "srl_nokia-platform-acl:if-output-cpm-stats"
+                },
+                {
+                  "name": "srl_nokia-platform-acl:input-acl-ipv4-policers"
+                },
+                {
+                  "name": "srl_nokia-platform-acl:input-acl-ipv6-policers"
+                },
+                {
+                  "name": "srl_nokia-platform-acl:input-ipv4-filter-instances-bridged",
+                  "used": 0,
+                  "free": 7
+                },
+                {
+                  "name": "srl_nokia-platform-acl:input-ipv4-filter-instances-routed",
+                  "used": 0,
+                  "free": 63
+                },
+                {
+                  "name": "srl_nokia-platform-acl:input-ipv6-filter-instances-bridged",
+                  "used": 0,
+                  "free": 7
+                },
+                {
+                  "name": "srl_nokia-platform-acl:input-ipv6-filter-instances-routed",
+                  "used": 0,
+                  "free": 63
+                },
+                {
+                  "name": "srl_nokia-platform-acl:input-qos-template-policers"
+                }
+              ]
+            },
+            "srl_nokia-platform-datapath-resources:datapath": {
+              "xdp": {
+                "resource": [
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:arp-nd-entries",
+                    "used-percent": 0,
+                    "used-entries": 7,
+                    "free-entries": 40952
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:direct-ip-next-hops",
+                    "used-percent": 0,
+                    "used-entries": 2,
+                    "free-entries": 16382
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:ecmp-groups",
+                    "used-percent": 0,
+                    "used-entries": 0,
+                    "free-entries": 32766
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:ecmp-members",
+                    "used-percent": 0,
+                    "used-entries": 0,
+                    "free-entries": 138750
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:egress-next-hops"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:indirect-ip-next-hops",
+                    "used-percent": 0,
+                    "used-entries": 1,
+                    "free-entries": 16383
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:ip-hosts"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:ip-lpm-routes"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:lag-groups"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:lag-members"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:mac-addresses",
+                    "used-percent": 0,
+                    "used-entries": 1,
+                    "free-entries": 155999
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:originating-tunnels",
+                    "used-percent": 0,
+                    "used-entries": 0,
+                    "free-entries": 3840
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:tunnel-next-hops",
+                    "used-percent": 0,
+                    "used-entries": 0,
+                    "free-entries": 16384
+                  }
+                ]
+              },
+              "asic": {
+                "resource": [
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:dgpp-module-ids"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:egress-vlan-translate-egress-vnis"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:egress-vlan-translate-local-bias-pairs",
+                    "used-percent": 0,
+                    "used-entries": 0,
+                    "free-entries": 16384
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:ip-lpm-ipv4-routes"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:ip-lpm-ipv6-longer-routes"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:ip-lpm-ipv6-shorter-routes"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:overlay-ecmp-groups",
+                    "used-percent": 0,
+                    "used-entries": 0,
+                    "free-entries": 16383
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:overlay-ecmp-members",
+                    "used-percent": 0,
+                    "used-entries": 0,
+                    "free-entries": 71423
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:overlay-egress-next-hops"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:underlay-ecmp-groups",
+                    "used-percent": 0,
+                    "used-entries": 0,
+                    "free-entries": 16383
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:underlay-ecmp-members",
+                    "used-percent": 0,
+                    "used-entries": 0,
+                    "free-entries": 67327
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:underlay-egress-next-hops"
+                  },
+                  {
+                    "name": "srl_nokia-platform-datapath-resources:vp-lag-groups"
+                  }
+                ]
+              }
+            },
+            "srl_nokia-platform-healthz:healthz": {
+              "status": "healthy"
+            },
+            "srl_nokia-platform-linecard-fib:fib-table": {
+              "next-hop-group": [
+                {
+                  "index": "16357608989",
+                  "oper-state": "down",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608989",
+                      "oper-state": "down"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608990",
+                  "oper-state": "down",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608990",
+                      "oper-state": "down"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608991",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608991",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608992",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "3",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608993",
+                  "oper-state": "down",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608992",
+                      "oper-state": "down"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608994",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608993",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608995",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608994",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608996",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608995",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608997",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "3",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608998",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608996",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357608999",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608997",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357609000",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "3",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357609002",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357608999",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357609003",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357609000",
+                      "oper-state": "up"
+                    }
+                  ]
+                },
+                {
+                  "index": "16357609005",
+                  "oper-state": "up",
+                  "backup-next-hop-group": "0",
+                  "backup-active": false,
+                  "next-hop": [
+                    {
+                      "id": 0,
+                      "next-hop": "16357609002",
+                      "oper-state": "up"
+                    }
+                  ]
+                }
+              ],
+              "srl_nokia-ip-route-tables:programming-progress": {
+                "ip-routes": {
+                  "entries-remaining-to-add": "0",
+                  "entries-remaining-to-modify": "0",
+                  "last-sync-time": "2026-06-12T16:29:39.862Z"
+                },
+                "next-hop-groups": {
+                  "entries-remaining-to-add": "0",
+                  "entries-remaining-to-modify": "0",
+                  "last-sync-time": "2026-06-12T16:29:39.862Z"
+                }
+              }
+            },
+            "srl_nokia-platform-qos:qos": {
+              "resource": [
+                {
+                  "name": "srl_nokia-platform-qos:dot1p-classifier-policies",
+                  "used": 1,
+                  "free": 127
+                },
+                {
+                  "name": "srl_nokia-platform-qos:dot1p-rewrite-policies"
+                },
+                {
+                  "name": "srl_nokia-platform-qos:dscp-classifier-policies",
+                  "used": 1,
+                  "free": 127
+                },
+                {
+                  "name": "srl_nokia-platform-qos:dscp-rewrite-policies",
+                  "used": 0,
+                  "free": 256
+                }
+              ]
+            },
+            "srl_nokia-platform-qos:buffer-memory": {
+              "used": "0",
+              "free": "0",
+              "reserved": "0"
+            },
+            "srl_nokia-platform-tcam:tcam": {
+              "resource": [
+                {
+                  "name": "srl_nokia-platform-tcam:if-input-ipv4",
+                  "free-static": 6912,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:if-input-ipv4-qos",
+                  "free-static": 6912,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:if-input-ipv6",
+                  "free-static": 2304,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:if-input-ipv6-qos",
+                  "free-static": 2304,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:if-input-mac",
+                  "free-static": 2304,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:if-input-policer",
+                  "free-static": 1536,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:if-output-cpm-ipv4",
+                  "free-static": 1536,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:if-output-cpm-ipv6",
+                  "free-static": 512,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:if-output-cpm-mac",
+                  "free-static": 1536,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:if-output-evpn-mh-multicast-non-df",
+                  "free-static": 1536,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:mrouter-mfib-redirect",
+                  "free-static": 13824,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:policy-forwarding-nhg-ipv4"
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:policy-forwarding-nhg-ipv6"
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:system-capture-ipv4",
+                  "free-static": 768,
+                  "reserved": 0,
+                  "programmed": 0
+                },
+                {
+                  "name": "srl_nokia-platform-tcam:system-capture-ipv6",
+                  "free-static": 384,
+                  "reserved": 0,
+                  "programmed": 0
+                }
+              ]
+            }
+          }
+        ],
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "healthy"
+        }
+      }
+    ],
+    "srl_nokia-platform-psu:power-supply": [
+      {
+        "id": 1,
+        "oper-state": "empty",
+        "removable": true,
+        "input": {},
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "unspecified"
+        }
+      },
+      {
+        "id": 2,
+        "oper-state": "empty",
+        "removable": true,
+        "input": {},
+        "srl_nokia-platform-healthz:healthz": {
+          "status": "unspecified"
+        }
+      }
+    ],
+    "srl_nokia-platform-resource-mgmt:resource-management": {
+      "unified-forwarding-resources": {
+        "xdp-restart-required": false,
+        "alpm": "disabled",
+        "requested-extra-ip-host-entries": 131072,
+        "allocated-extra-ip-host-entries": 131072,
+        "allocated-extra-mac-entries": 131072,
+        "ipv6-128bit-lpm-entries": 2048
+      }
+    },
+    "srl_nokia-platform-resource-monitoring:resource-monitoring": {
+      "srl_nokia-platform-acl:acl": {
+        "resource": [
+          {
+            "name": "srl_nokia-platform-acl:if-output-cpm-stats",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-acl:input-acl-ipv4-policers",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-acl:input-acl-ipv6-policers",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-acl:input-ipv4-filter-instances-bridged",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-acl:input-ipv4-filter-instances-routed",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-acl:input-ipv6-filter-instances-bridged",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-acl:input-ipv6-filter-instances-routed",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-acl:input-qos-template-policers",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          }
+        ]
+      },
+      "srl_nokia-platform-datapath-resources:datapath": {
+        "xdp": {
+          "resource": [
+            {
+              "name": "srl_nokia-platform-datapath-resources:arp-nd-entries",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:direct-ip-next-hops",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:ecmp-groups",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:ecmp-members",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:egress-next-hops",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:indirect-ip-next-hops",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:ip-hosts",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:ip-lpm-routes",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:lag-groups",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:lag-members",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:mac-addresses",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:originating-tunnels",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:tunnel-next-hops",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            }
+          ]
+        },
+        "asic": {
+          "resource": [
+            {
+              "name": "srl_nokia-platform-datapath-resources:dgpp-module-ids",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:egress-vlan-translate-egress-vnis",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:egress-vlan-translate-local-bias-pairs",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:ip-lpm-ipv4-routes",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:ip-lpm-ipv6-longer-routes",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:ip-lpm-ipv6-shorter-routes",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:overlay-ecmp-groups",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:overlay-ecmp-members",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:overlay-egress-next-hops",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:underlay-ecmp-groups",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:underlay-ecmp-members",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:underlay-egress-next-hops",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            },
+            {
+              "name": "srl_nokia-platform-datapath-resources:vp-lag-groups",
+              "upper-threshold-set": 90,
+              "upper-threshold-clear": 70
+            }
+          ]
+        }
+      },
+      "srl_nokia-platform-qos:qos": {
+        "resource": [
+          {
+            "name": "srl_nokia-platform-qos:dot1p-classifier-policies",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-qos:dot1p-rewrite-policies",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-qos:dscp-classifier-policies",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-qos:dscp-rewrite-policies",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          }
+        ]
+      },
+      "srl_nokia-platform-tcam:tcam": {
+        "resource": [
+          {
+            "name": "srl_nokia-platform-tcam:if-input-ipv4",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:if-input-ipv4-qos",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:if-input-ipv6",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:if-input-ipv6-qos",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:if-input-mac",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:if-input-policer",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:if-output-cpm-ipv4",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:if-output-cpm-ipv6",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:if-output-cpm-mac",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:if-output-evpn-mh-multicast-non-df",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:mrouter-mfib-redirect",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:policy-forwarding-nhg-ipv4",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:policy-forwarding-nhg-ipv6",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:system-capture-ipv4",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          },
+          {
+            "name": "srl_nokia-platform-tcam:system-capture-ipv6",
+            "rising-threshold-log": 90,
+            "falling-threshold-log": 70
+          }
+        ]
+      }
+    }
+  }
+]
