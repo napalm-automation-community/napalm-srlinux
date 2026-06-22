@@ -99,6 +99,8 @@ link = "https://pypi.org/project/napalm-srlinux/"
 permalink = true
 [project.markdown_extensions.pymdownx.betterem]
 [project.markdown_extensions.pymdownx.blocks.admonition]
+[project.markdown_extensions.pymdownx.blocks.tab]
+alternate_style = true
 [project.markdown_extensions.pymdownx.blocks.details]
 [project.markdown_extensions.pymdownx.caret]
 [project.markdown_extensions.pymdownx.details]
@@ -119,9 +121,7 @@ pygments_lang_class = true
 custom_fences = [
     { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
 ]
-[project.markdown_extensions.pymdownx.tabbed]
-alternate_style = true
-combine_header_slug = true
+
 [project.markdown_extensions.pymdownx.tasklist]
 custom_checkbox = true
 [project.markdown_extensions.pymdownx.tilde]

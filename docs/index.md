@@ -17,7 +17,7 @@ with driver("192.0.2.1", "admin", "NokiaSrl1!",
 
 <div class="grid cards" markdown>
 
--   :material-database-search:{ .lg .middle } **26 getters**
+- :material-database-search:{ .lg .middle } **26 getters**
 
     ---
 
@@ -25,7 +25,7 @@ with driver("192.0.2.1", "admin", "NokiaSrl1!",
 
     [:octicons-arrow-right-24: Capabilities](reference/index.md)
 
--   :material-file-replace-outline:{ .lg .middle } **Full config workflow**
+- :material-file-replace-outline:{ .lg .middle } **Full config workflow**
 
     ---
 
@@ -33,7 +33,7 @@ with driver("192.0.2.1", "admin", "NokiaSrl1!",
 
     [:octicons-arrow-right-24: Configuration management](guide/config-management.md)
 
--   :material-timer-check-outline:{ .lg .middle } **Commit confirm**
+- :material-timer-check-outline:{ .lg .middle } **Commit confirm**
 
     ---
 
@@ -41,7 +41,7 @@ with driver("192.0.2.1", "admin", "NokiaSrl1!",
 
     [:octicons-arrow-right-24: Commit confirm](guide/commit-confirm.md)
 
--   :material-certificate-outline:{ .lg .middle } **TLS done right**
+- :material-certificate-outline:{ .lg .middle } **TLS done right**
 
     ---
 
@@ -53,9 +53,27 @@ with driver("192.0.2.1", "admin", "NokiaSrl1!",
 
 ## Install
 
+/// tab | uv via repo
+
+```bash
+uv add https://github.com/napalm-automation-community/napalm-srlinux/archive/refs/heads/main.zip
+```
+
+///
+/// tab | uv via pip
+
+```bash
+uv add napalm-srlinux
+```
+
+///
+/// tab | pip
+
 ```bash
 pip install napalm-srlinux
 ```
+
+///
 
 Requires Python ≥ 3.10 and napalm ≥ 5. Head over to the [installation guide](install.md) to enable the JSON-RPC server on your node, then run through the [quickstart](quickstart.md) — it takes you from zero to `get_facts()` against a containerlab node in about two minutes.
 

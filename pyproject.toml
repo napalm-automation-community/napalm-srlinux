@@ -9,10 +9,7 @@ description = "NAPALM driver for Nokia SR Linux (JSON-RPC)"
 readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.10"
-dependencies = [
-    "napalm>=5.0.0,<6",
-    "httpx>=0.27.0",
-]
+dependencies = ["napalm>=5.0.0,<6", "httpx>=0.27.0"]
 classifiers = [
     "Topic :: System :: Networking",
     "Programming Language :: Python :: 3",
@@ -34,14 +31,8 @@ authors = [
 "Bug Tracker" = "https://github.com/napalm-automation-community/napalm-srlinux/issues"
 
 [dependency-groups]
-dev = [
-    "pytest>=8.0",
-    "ruff>=0.8",
-    "rich",
-]
-docs = [
-    "zensical>=0.0.45",
-]
+dev = ["pytest>=8.0", "ruff>=0.8", "rich"]
+docs = ["zensical>=0.0.45"]
 
 [tool.setuptools]
 packages = ["napalm_srlinux"]
