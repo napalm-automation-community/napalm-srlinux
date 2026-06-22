@@ -1,1 +1,15 @@
-[{"remote": "138.120.105.64", "referenceid": "", "synchronized": false, "stratum": 16, "type": "", "when": "", "hostpoll": 1024, "reachability": -1, "delay": -1.0, "offset": 0.0, "jitter": 0.0}]
+[
+  {
+    "remote": "172.20.21.1",
+    "referenceid": "",
+    "synchronized": false,
+    "stratum": -1,
+    "type": "",
+    "when": "",
+    "hostpoll": -1,
+    "reachability": -1,
+    "delay": -1.0,
+    "offset": -1.0,
+    "jitter": -1.0
+  }
+]

@@ -1,1 +1,0 @@
-{"srl_nokia-system:system": {"srl_nokia-system-info:information": {"location": "india"}}}

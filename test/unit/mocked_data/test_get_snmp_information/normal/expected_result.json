@@ -1,1 +1,6 @@
-{"chassis_id": "", "community": {}, "contact": "syed", "location": "india"}
+{
+  "chassis_id": "",
+  "community": {},
+  "contact": "netops",
+  "location": "lab"
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "srl_nokia-network-instance:network-instance": [
+      {
+        "name": "default",
+        "type": "srl_nokia-network-instance:default",
+        "interface": [
+          {
+            "name": "ethernet-1/1.0"
+          }
+        ]
+      },
+      {
+        "name": "bridge1",
+        "type": "srl_nokia-network-instance:mac-vrf",
+        "interface": [
+          {
+            "name": "ethernet-1/3.100"
+          },
+          {
+            "name": "ethernet-1/4.100"
+          },
+          {
+            "name": "ethernet-1/5.0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "srl_nokia-interfaces:interface": [
+      {
+        "name": "ethernet-1/1",
+        "subinterface": [
+          {
+            "index": 0,
+            "type": "srl_nokia-interfaces:routed",
+            "name": "ethernet-1/1.0",
+            "oper-state": "up"
+          }
+        ]
+      },
+      {
+        "name": "ethernet-1/3",
+        "subinterface": [
+          {
+            "index": 100,
+            "type": "srl_nokia-interfaces:bridged",
+            "name": "ethernet-1/3.100",
+            "oper-state": "up",
+            "srl_nokia-interfaces-vlans:vlan": {
+              "encap": {
+                "single-tagged": {
+                  "vlan-id": 100
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "ethernet-1/4",
+        "subinterface": [
+          {
+            "index": 100,
+            "type": "srl_nokia-interfaces:bridged",
+            "name": "ethernet-1/4.100",
+            "oper-state": "up",
+            "srl_nokia-interfaces-vlans:vlan": {
+              "encap": {
+                "single-tagged": {
+                  "vlan-id": 100
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "ethernet-1/5",
+        "subinterface": [
+          {
+            "index": 0,
+            "type": "srl_nokia-interfaces:bridged",
+            "name": "ethernet-1/5.0",
+            "oper-state": "up"
+          }
+        ]
+      }
+    ]
+  }
+]

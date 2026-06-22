@@ -1,0 +1,15 @@
+[
+  {
+    "admin-state": "enable",
+    "oper-state": "up",
+    "synchronized": "unsynchronized",
+    "network-instance": "mgmt",
+    "server": [
+      {
+        "address": "172.20.21.1",
+        "iburst": false,
+        "prefer": true
+      }
+    ]
+  }
+]

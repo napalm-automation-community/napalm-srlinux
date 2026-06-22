@@ -1,1 +1,68 @@
-{"ebgp": {"type": "external", "description": "", "apply_groups": [], "multihop_ttl": -1, "multipath": true, "local_address": "", "local_as": 65000, "remote_as": 65005, "import_policy": "", "export_policy": "loopback", "remove_private_as": false, "prefix_limit": {"inet": {"unicast": {"limit": 4294967295, "teardown": {"threshold": 90, "timeout": -1}}}, "inet6": {"unicast": {"limit": 4294967295, "teardown": {"threshold": 90, "timeout": -1}}}}, "neighbors": {"10.1.1.2": {"description": "", "import_policy": "", "export_policy": "loopback", "local_address": "10.1.1.1", "local_as": 65000, "remote_as": 65005, "authentication_key": "", "prefix_limit": {"inet": {"unicast": {"limit": 4294967295, "teardown": {"threshold": 90, "timeout": -1}}}, "inet6": {"unicast": {"limit": 4294967295, "teardown": {"threshold": 90, "timeout": -1}}}}, "route_reflector_client": false, "nhs": false}, "88.1.1.1": {"description": "", "import_policy": "", "export_policy": "", "local_address": "0.0.0.0", "local_as": 4096, "remote_as": 86400, "authentication_key": "", "prefix_limit": {"inet": {"unicast": {"limit": -1, "teardown": {"threshold": 90, "timeout": -1}}}, "inet6": {"unicast": {"limit": -1, "teardown": {"threshold": 90, "timeout": -1}}}}, "route_reflector_client": true, "nhs": false}}}, "second-mozaman": {"type": "external", "description": "", "apply_groups": [], "multihop_ttl": -1, "multipath": true, "local_address": "", "local_as": 65101, "remote_as": 65005, "import_policy": "", "export_policy": "", "remove_private_as": false, "prefix_limit": {"inet": {"unicast": {"limit": 4294967295, "teardown": {"threshold": 90, "timeout": -1}}}, "inet6": {"unicast": {"limit": 4294967295, "teardown": {"threshold": 90, "timeout": -1}}}}, "neighbors": {"11.1.1.2": {"description": "", "import_policy": "", "export_policy": "", "local_address": "11.1.1.1", "local_as": 65101, "remote_as": 65005, "authentication_key": "", "prefix_limit": {"inet": {"unicast": {"limit": 4294967295, "teardown": {"threshold": 90, "timeout": -1}}}, "inet6": {"unicast": {"limit": 4294967295, "teardown": {"threshold": 90, "timeout": -1}}}}, "route_reflector_client": false, "nhs": false}}}}
+{
+  "ebgp": {
+    "type": "external",
+    "description": "eBGP to srl2",
+    "apply_groups": [],
+    "multihop_ttl": -1,
+    "multipath": false,
+    "local_address": "",
+    "local_as": 65001,
+    "remote_as": 65002,
+    "import_policy": "['all']",
+    "export_policy": "['all']",
+    "remove_private_as": false,
+    "prefix_limit": {
+      "inet": {
+        "unicast": {
+          "limit": -1,
+          "teardown": {
+            "threshold": -1,
+            "timeout": -1
+          }
+        }
+      },
+      "inet6": {
+        "unicast": {
+          "limit": -1,
+          "teardown": {
+            "threshold": -1,
+            "timeout": -1
+          }
+        }
+      }
+    },
+    "neighbors": {
+      "10.0.0.2": {
+        "description": "srl2",
+        "import_policy": "['all']",
+        "export_policy": "['all']",
+        "local_address": "10.0.0.1",
+        "local_as": 65001,
+        "remote_as": 65002,
+        "authentication_key": "",
+        "prefix_limit": {
+          "inet": {
+            "unicast": {
+              "limit": -1,
+              "teardown": {
+                "threshold": -1,
+                "timeout": -1
+              }
+            }
+          },
+          "inet6": {
+            "unicast": {
+              "limit": -1,
+              "teardown": {
+                "threshold": -1,
+                "timeout": -1
+              }
+            }
+          }
+        },
+        "route_reflector_client": false,
+        "nhs": false
+      }
+    }
+  }
+}

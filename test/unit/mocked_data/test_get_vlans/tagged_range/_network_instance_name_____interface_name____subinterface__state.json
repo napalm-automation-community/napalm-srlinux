@@ -1,0 +1,42 @@
+[
+  {
+    "srl_nokia-network-instance:network-instance": [
+      {
+        "name": "bridge2",
+        "type": "srl_nokia-network-instance:mac-vrf",
+        "interface": [
+          {
+            "name": "ethernet-1/6.1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "srl_nokia-interfaces:interface": [
+      {
+        "name": "ethernet-1/6",
+        "subinterface": [
+          {
+            "index": 1,
+            "type": "srl_nokia-interfaces:bridged",
+            "name": "ethernet-1/6.1",
+            "oper-state": "up",
+            "srl_nokia-interfaces-vlans:vlan": {
+              "encap": {
+                "single-tagged-range": {
+                  "low-vlan-id": [
+                    {
+                      "range-low-vlan-id": 200,
+                      "high-vlan-id": 202
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

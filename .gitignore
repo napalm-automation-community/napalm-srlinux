@@ -63,3 +63,12 @@ target/
 .ipynb_checkpoints
 venv
 .idea
+
+# uv virtualenv
+.venv/
+
+# containerlab runtime artifacts
+.clab/clab-*/
+
+# zensical docs build (cache goes to .cache/, already ignored above)
+site/

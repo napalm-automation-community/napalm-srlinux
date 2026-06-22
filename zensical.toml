@@ -1,0 +1,126 @@
+[project]
+site_name = "NAPALM SR Linux"
+site_description = "Community NAPALM driver for the Nokia SR Linux network OS, built on the JSON-RPC management interface."
+site_author = "napalm-srlinux contributors"
+site_url = "https://napalm-automation-community.github.io/napalm-srlinux/"
+repo_url = "https://github.com/napalm-automation-community/napalm-srlinux"
+edit_uri = "edit/main/docs/"
+copyright = "Copyright &copy; napalm-srlinux contributors"
+
+extra_css = ["stylesheets/extra.css"]
+
+nav = [
+    { "Home" = "index.md" },
+    { "Getting Started" = [
+        { "Installation" = "install.md" },
+        { "Quickstart" = "quickstart.md" },
+    ] },
+    { "User Guide" = [
+        { "Connection & TLS" = "guide/connection.md" },
+        { "Configuration management" = "guide/config-management.md" },
+        { "Commit confirm" = "guide/commit-confirm.md" },
+    ] },
+    { "Reference" = [
+        "reference/index.md",
+        { "Facts & system" = "reference/system.md" },
+        { "Interfaces & L2" = "reference/interfaces.md" },
+        { "Routing" = "reference/routing.md" },
+        { "Config & tools" = "reference/tools.md" },
+    ] },
+    { "Migration from 1.x" = "migration.md" },
+    { "Development" = "development.md" },
+]
+
+[project.theme]
+language = "en"
+features = [
+    "announce.dismiss",
+    "content.action.edit",
+    "content.action.view",
+    "content.code.annotate",
+    "content.code.copy",
+    "content.code.select",
+    "content.footnote.tooltips",
+    "content.tabs.link",
+    "content.tooltips",
+    "navigation.footer",
+    "navigation.indexes",
+    "navigation.instant",
+    "navigation.instant.prefetch",
+    "navigation.tabs",
+    "navigation.top",
+    "navigation.tracking",
+    "search.highlight",
+    "search.suggest",
+    "toc.follow",
+]
+
+[project.theme.icon]
+logo = "material/router-network"
+repo = "fontawesome/brands/github"
+
+[project.theme.font]
+text = "Inter"
+code = "JetBrains Mono"
+
+# containerlab.dev-style palette: white/cyan light, black/cyan dark
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "white"
+accent = "cyan"
+toggle.icon = "material/weather-night"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "black"
+accent = "cyan"
+toggle.icon = "material/weather-sunny"
+toggle.name = "Switch to light mode"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/napalm-automation-community/napalm-srlinux"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/python"
+link = "https://pypi.org/project/napalm-srlinux/"
+
+[project.markdown_extensions.abbr]
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.attr_list]
+[project.markdown_extensions.def_list]
+[project.markdown_extensions.footnotes]
+[project.markdown_extensions.md_in_html]
+[project.markdown_extensions.toc]
+permalink = true
+[project.markdown_extensions.pymdownx.betterem]
+[project.markdown_extensions.pymdownx.blocks.admonition]
+[project.markdown_extensions.pymdownx.blocks.details]
+[project.markdown_extensions.pymdownx.caret]
+[project.markdown_extensions.pymdownx.details]
+[project.markdown_extensions.pymdownx.emoji]
+emoji_generator = "zensical.extensions.emoji.to_svg"
+emoji_index = "zensical.extensions.emoji.twemoji"
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+line_spans = "__span"
+pygments_lang_class = true
+[project.markdown_extensions.pymdownx.inlinehilite]
+[project.markdown_extensions.pymdownx.keys]
+[project.markdown_extensions.pymdownx.magiclink]
+[project.markdown_extensions.pymdownx.mark]
+[project.markdown_extensions.pymdownx.smartsymbols]
+[project.markdown_extensions.pymdownx.snippets]
+[project.markdown_extensions.pymdownx.superfences]
+custom_fences = [
+    { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+[project.markdown_extensions.pymdownx.tabbed]
+alternate_style = true
+combine_header_slug = true
+[project.markdown_extensions.pymdownx.tasklist]
+custom_checkbox = true
+[project.markdown_extensions.pymdownx.tilde]

@@ -1,0 +1,14 @@
+{
+  "200": {
+    "name": "bridge2",
+    "interfaces": ["ethernet-1/6.1"]
+  },
+  "201": {
+    "name": "bridge2",
+    "interfaces": ["ethernet-1/6.1"]
+  },
+  "202": {
+    "name": "bridge2",
+    "interfaces": ["ethernet-1/6.1"]
+  }
+}

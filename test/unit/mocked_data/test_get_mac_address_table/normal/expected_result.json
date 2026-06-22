@@ -1,1 +1,11 @@
-[{"mac": "00:01:03:FF:00:41", "interface": "irb", "vlan": -1, "active": false, "static": true, "moves": -1, "last_move": -1.0}, {"mac": "46:BE:45:62:0A:E4", "interface": "ethernet-1/2.0", "vlan": 1, "active": false, "static": false, "moves": -1, "last_move": -1.0}]
+[
+  {
+    "mac": "1A:35:01:FF:00:03",
+    "interface": "ethernet-1/3.0",
+    "vlan": -1,
+    "active": true,
+    "static": false,
+    "moves": -1,
+    "last_move": -1.0
+  }
+]

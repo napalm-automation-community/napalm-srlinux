@@ -1,0 +1,33 @@
+/* cyan brand accents on top of the white/black + cyan palette */
+
+:root {
+  --md-accent-fg-color: #00bcd4;
+}
+
+/* links in body copy pick up the accent on hover only, keep text readable */
+.md-typeset a {
+  color: var(--md-accent-fg-color);
+}
+
+[data-md-color-scheme="slate"] {
+  --md-typeset-a-color: #4dd0e1;
+}
+
+[data-md-color-scheme="default"] {
+  --md-typeset-a-color: #0097a7;
+}
+
+/* landing page: slightly larger lead paragraph */
+.md-content article > p:first-of-type {
+  font-size: 0.85rem;
+}
+
+/* grid cards: subtle hover lift, cyan border accent */
+.md-typeset .grid.cards > ul > li {
+  transition: border-color 125ms, box-shadow 125ms;
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.1);
+}
