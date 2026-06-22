@@ -1,5 +1,5 @@
 [project]
-site_name = "NAPALM SR Linux"
+site_name = "NAPALM driver for SR Linux"
 site_description = "Community NAPALM driver for the Nokia SR Linux network OS, built on the JSON-RPC management interface."
 site_author = "napalm-srlinux contributors"
 site_url = "https://napalm-automation-community.github.io/napalm-srlinux/"
@@ -33,6 +33,8 @@ nav = [
 
 [project.theme]
 language = "en"
+favicon = "assets/flame.svg"
+logo = "assets/flame.svg"
 features = [
     "announce.dismiss",
     "content.action.edit",
@@ -56,7 +58,6 @@ features = [
 ]
 
 [project.theme.icon]
-logo = "material/router-network"
 repo = "fontawesome/brands/github"
 
 [project.theme.font]

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Animated flame logo</title>
+  <desc id="desc">An upward flame with an orange and red gradient.</desc>
+  <defs>
+    <linearGradient id="flame-gradient" x1="32" x2="32" y1="62" y2="4" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb000" />
+      <stop offset="0.48" stop-color="#ff5a1f" />
+      <stop offset="1" stop-color="#d71920" />
+      <animate attributeName="y1" values="62;54;62" dur="1.8s" repeatCount="indefinite" />
+      <animate attributeName="y2" values="12;2;12" dur="1.8s" repeatCount="indefinite" />
+    </linearGradient>
+    <filter id="flame-glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="1.8" result="blur" />
+      <feColorMatrix
+        in="blur"
+        result="glow"
+        type="matrix"
+        values="1 0 0 0 0.95  0 0.45 0 0 0.18  0 0 0.08 0 0  0 0 0 0.65 0"
+      />
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#flame-glow)">
+    <path
+      fill="url(#flame-gradient)"
+      d="M32 61c-11.1 0-20-8.3-20-19 0-8.6 5.6-14.8 11.3-20.8 4.2-4.4 7.9-8.9 8.5-16.2.1-1.2 1.6-1.7 2.4-.8 7.8 8.7 17.8 19.1 17.8 32.5C52 50.4 42.7 61 32 61Z"
+    >
+      <animateTransform
+        attributeName="transform"
+        type="translate"
+        values="0 2;0 -3;0 1;0 -2;0 2"
+        dur="1.6s"
+        repeatCount="indefinite"
+      />
+    </path>
+    <path
+      fill="#ffd166"
+      d="M32.3 55c-5.5 0-9.8-4.1-9.8-9.5 0-4.4 2.8-7.4 5.6-10.5 2-2.2 3.9-4.5 4.3-8 .1-1 1.3-1.3 2-.6 3.8 4.4 8.4 9.5 8.4 16.1C42.8 49.8 38.1 55 32.3 55Z"
+      opacity="0.9"
+    >
+      <animate attributeName="opacity" values="0.75;1;0.82;1;0.75" dur="1.2s" repeatCount="indefinite" />
+      <animateTransform
+        attributeName="transform"
+        type="translate"
+        values="0 1;0 -2;0 1"
+        dur="1.2s"
+        repeatCount="indefinite"
+      />
+    </path>
+  </g>
+</svg>
