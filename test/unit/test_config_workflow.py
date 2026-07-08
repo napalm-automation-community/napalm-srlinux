@@ -137,8 +137,10 @@ class TestLoadCandidate:
             {"action": "update", "path": "/", "value": json.loads(JSON_CONFIG)},
             {"action": "update", "path": "/", "value": json.loads(JSON_CONFIG_2)},
         ]
-        # each load validated its own fragment on the device
+        # the second load re-validates the full accumulated candidate, i.e.
+        # exactly what commit_config would send
         assert [c[0] for c in driver.device.calls] == ["validate", "validate"]
+        assert driver.device.calls[1][1] == driver._candidate["commands"]
 
     def test_merge_then_merge_cli_accumulates(self, driver):
         driver.load_merge_candidate(config=CLI_CONFIG)
@@ -148,12 +150,31 @@ class TestLoadCandidate:
         # CLI candidates never touch the device on load
         assert driver.device.calls == []
 
+    def test_merge_validates_combined_candidate(self, driver):
+        # a merge may depend on config staged by the replace baseline, so the
+        # merge-time validation must carry the baseline as well
+        driver.load_replace_candidate(config=JSON_CONFIG)
+        driver.load_merge_candidate(config=JSON_CONFIG_2)
+        validates = [c for c in driver.device.calls if c[0] == "validate"]
+        assert validates[-1][1] == [
+            {"action": "replace", "path": "/", "value": json.loads(JSON_CONFIG)},
+            {"action": "update", "path": "/", "value": json.loads(JSON_CONFIG_2)},
+        ]
+
     def test_replace_after_merge_resets(self, driver):
         driver.load_merge_candidate(config=JSON_CONFIG)
         driver.load_replace_candidate(config=JSON_CONFIG_2)
         assert driver._candidate["commands"] == [
             {"action": "replace", "path": "/", "value": json.loads(JSON_CONFIG_2)}
         ]
+        assert driver._candidate["replace"] is True
+
+    def test_replace_resets_across_formats(self, driver):
+        # a replace may use a different format than the pending candidate,
+        # since it discards it and starts fresh
+        driver.load_merge_candidate(config=CLI_CONFIG)
+        driver.load_replace_candidate(config=JSON_CONFIG)
+        assert driver._candidate["mode"] == "json"
         assert driver._candidate["replace"] is True
 
     def test_merge_cli_into_json_candidate_raises(self, driver):
@@ -168,6 +189,9 @@ class TestLoadCandidate:
         with pytest.raises(MergeConfigException, match="discard"):
             driver.load_merge_candidate(config=JSON_CONFIG)
         assert driver._candidate["mode"] == "cli"
+        # the format mismatch is detected before the fragment is validated,
+        # so the failed load makes no device call
+        assert driver.device.calls == []
 
     def test_failed_validation_on_second_load_keeps_first(self, driver):
         driver.load_merge_candidate(config=JSON_CONFIG)

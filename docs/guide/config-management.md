@@ -99,11 +99,11 @@ set / system banner login-banner "managed by NAPALM"
 
 ///
 
-JSON candidates are validated on the device at load time, so a malformed change fails in `load_*_candidate()` rather than in `commit_config()`. CLI candidates are validated when they are diffed or committed.
+JSON candidates are validated on the device at load time, so a malformed change fails in `load_*_candidate()` rather than in `commit_config()`. A merge onto a pending candidate validates the full accumulated candidate - exactly what `commit_config()` would send - so a merge may reference config staged by an earlier load. CLI candidates are validated when they are diffed or committed.
 
 /// note
 
-Consecutive loads accumulate into one candidate: a `load_merge_candidate()` layers onto whatever is already pending, while a `load_replace_candidate()` starts a fresh baseline (discarding any prior accumulation). Mixing CLI and JSON formats in the same candidate is rejected - `discard_config()` first.
+Consecutive loads accumulate into one candidate: a `load_merge_candidate()` layers onto whatever is already pending, while a `load_replace_candidate()` starts a fresh baseline (discarding any prior accumulation). A `load_merge_candidate()` in a different format (CLI vs JSON) than the pending candidate is rejected - `discard_config()` first. A `load_replace_candidate()` may use any format, since it starts fresh.
 
 ///
 
