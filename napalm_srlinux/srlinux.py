@@ -15,7 +15,7 @@
 
 """NAPALM driver for Nokia SR Linux, using the JSON-RPC management interface.
 
-Read https://napalm.readthedocs.io for more information.
+Read https://napalm.readthedocs.io and https://napalm.srlinux.dev for more information.
 """
 
 # annotations must stay lazy: some napalm.base.models names differ across the
