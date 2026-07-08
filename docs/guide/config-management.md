@@ -107,4 +107,4 @@ device.commit_config(message="change ticket #1234")
 - The `message` is recorded as the checkpoint comment (and the commit comment for CLI candidates).
 - With the [`commit_save`](connection.md#all-optional-arguments) optional argument, commits use `commit save` / `save startup`, so the change also persists into the startup configuration.
 - `commit_config(revert_in=...)` starts a [confirmed commit](commit-confirm.md) with an automatic revert timer.
-- Loading a second candidate while one is pending raises an error — `commit_config()` or `discard_config()` first.
+- Consecutive loads accumulate into one candidate: a `load_merge_candidate()` layers onto whatever is already pending, while a `load_replace_candidate()` starts a fresh baseline (discarding any prior accumulation). Mixing CLI and JSON formats in the same candidate is rejected — `discard_config()` first.

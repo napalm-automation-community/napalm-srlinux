@@ -29,6 +29,8 @@ GNMI_STYLE_CONFIG = json.dumps(
     }
 )
 CLI_CONFIG = "set / system information location lab\nset / system information contact ops"
+JSON_CONFIG_2 = json.dumps({"system": {"information": {"contact": "ops"}}})
+CLI_CONFIG_2 = "set / system information contact ops2"
 
 
 class RecordingDevice:
@@ -52,9 +54,7 @@ class RecordingDevice:
         for path in paths:
             if path.startswith("/system/configuration/commit"):
                 status = "unconfirmed" if self.pending else "complete"
-                results.append(
-                    {"srl_nokia-configuration:commit": [{"id": 1, "status": status}]}
-                )
+                results.append({"srl_nokia-configuration:commit": [{"id": 1, "status": status}]})
             else:
                 results.append({})
         return results
@@ -91,9 +91,7 @@ class TestLoadCandidate:
         kinds = [c[0] for c in driver.device.calls]
         assert kinds == ["validate"]
         commands = driver.device.calls[0][1]
-        assert commands == [
-            {"action": "update", "path": "/", "value": json.loads(JSON_CONFIG)}
-        ]
+        assert commands == [{"action": "update", "path": "/", "value": json.loads(JSON_CONFIG)}]
 
     def test_load_replace_json_uses_replace_action(self, driver):
         driver.load_replace_candidate(config=JSON_CONFIG)
@@ -127,14 +125,110 @@ class TestLoadCandidate:
         assert driver._candidate["mode"] == "cli"
         assert len(driver._candidate["lines"]) == 2
 
-    def test_second_load_without_discard_raises(self, driver):
-        driver.load_merge_candidate(config=CLI_CONFIG)
-        with pytest.raises(MergeConfigException, match="already loaded"):
-            driver.load_merge_candidate(config=CLI_CONFIG)
-
     def test_load_without_config_or_filename_raises(self, driver):
         with pytest.raises(MergeConfigException):
             driver.load_merge_candidate()
+
+    def test_merge_then_merge_json_accumulates(self, driver):
+        driver.load_merge_candidate(config=JSON_CONFIG)
+        driver.load_merge_candidate(config=JSON_CONFIG_2)
+        assert driver._candidate["mode"] == "json"
+        assert driver._candidate["commands"] == [
+            {"action": "update", "path": "/", "value": json.loads(JSON_CONFIG)},
+            {"action": "update", "path": "/", "value": json.loads(JSON_CONFIG_2)},
+        ]
+        # each load validated its own fragment on the device
+        assert [c[0] for c in driver.device.calls] == ["validate", "validate"]
+
+    def test_merge_then_merge_cli_accumulates(self, driver):
+        driver.load_merge_candidate(config=CLI_CONFIG)
+        driver.load_merge_candidate(config=CLI_CONFIG_2)
+        assert driver._candidate["mode"] == "cli"
+        assert driver._candidate["lines"] == (CLI_CONFIG.splitlines() + CLI_CONFIG_2.splitlines())
+        # CLI candidates never touch the device on load
+        assert driver.device.calls == []
+
+    def test_replace_after_merge_resets(self, driver):
+        driver.load_merge_candidate(config=JSON_CONFIG)
+        driver.load_replace_candidate(config=JSON_CONFIG_2)
+        assert driver._candidate["commands"] == [
+            {"action": "replace", "path": "/", "value": json.loads(JSON_CONFIG_2)}
+        ]
+        assert driver._candidate["replace"] is True
+
+    def test_merge_cli_into_json_candidate_raises(self, driver):
+        driver.load_merge_candidate(config=JSON_CONFIG)
+        with pytest.raises(MergeConfigException, match="discard"):
+            driver.load_merge_candidate(config=CLI_CONFIG)
+        # the pending JSON candidate is left intact
+        assert driver._candidate["mode"] == "json"
+
+    def test_merge_json_into_cli_candidate_raises(self, driver):
+        driver.load_merge_candidate(config=CLI_CONFIG)
+        with pytest.raises(MergeConfigException, match="discard"):
+            driver.load_merge_candidate(config=JSON_CONFIG)
+        assert driver._candidate["mode"] == "cli"
+
+    def test_failed_validation_on_second_load_keeps_first(self, driver):
+        driver.load_merge_candidate(config=JSON_CONFIG)
+        driver.device.validate_error = CommandErrorException("invalid path")
+        with pytest.raises(MergeConfigException, match="invalid path"):
+            driver.load_merge_candidate(config=JSON_CONFIG_2)
+        # the first candidate survives a failed second load unchanged
+        assert driver._candidate["commands"] == [
+            {"action": "update", "path": "/", "value": json.loads(JSON_CONFIG)}
+        ]
+
+
+class TestIssue66:
+    """Regression for issue #66: consecutive loads must accumulate, not raise.
+
+    https://github.com/napalm-automation-community/napalm-srlinux/issues/66
+
+    The reported sequence ``load_replace -> compare_config -> load_merge`` with
+    no ``discard_config()`` in between used to fail with "A candidate config is
+    already loaded; discard it first".
+    """
+
+    def test_replace_compare_merge_json(self, driver):
+        driver.load_replace_candidate(config=JSON_CONFIG)
+        driver.compare_config()
+        driver.load_merge_candidate(config=JSON_CONFIG_2)  # no discard: used to raise
+
+        commands = driver._candidate["commands"]
+        assert commands[0] == {
+            "action": "replace",
+            "path": "/",
+            "value": json.loads(JSON_CONFIG),
+        }
+        assert commands[-1] == {
+            "action": "update",
+            "path": "/",
+            "value": json.loads(JSON_CONFIG_2),
+        }
+        assert driver._candidate["replace"] is True
+
+        driver.commit_config()
+        # the final set request carries the replace baseline plus the merge
+        set_call = [c for c in driver.device.calls if c[0] == "set"][-1]
+        assert set_call[1] == commands
+        assert driver._candidate is None
+
+    def test_replace_compare_merge_cli(self, driver):
+        driver.load_replace_candidate(config=CLI_CONFIG)
+        driver.compare_config()
+        driver.load_merge_candidate(config=CLI_CONFIG_2)  # no discard: used to raise
+
+        assert driver._candidate["replace"] is True
+        assert driver._candidate["lines"] == (CLI_CONFIG.splitlines() + CLI_CONFIG_2.splitlines())
+
+        driver.commit_config()
+        commit_cmds = driver.device.calls[-1][1]
+        first_set = CLI_CONFIG.splitlines()[0]
+        last_set = CLI_CONFIG_2.splitlines()[0]
+        # delete / (replace baseline) applied before both loads' set commands
+        assert commit_cmds.index("delete /") < commit_cmds.index(first_set)
+        assert commit_cmds.index(first_set) < commit_cmds.index(last_set)
 
 
 class TestCompareConfig:

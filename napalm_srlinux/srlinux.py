@@ -132,9 +132,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
             uptime = helpers.seconds_between(current_time, boot_time)
 
         hostname = hostname_data if isinstance(hostname_data, str) else ""
-        interface_list = [
-            i["name"] for i in helpers.value_at(interfaces, "interface", default=[])
-        ]
+        interface_list = [i["name"] for i in helpers.value_at(interfaces, "interface", default=[])]
 
         return {
             "uptime": uptime,
@@ -197,12 +195,8 @@ class NokiaSRLinuxDriver(NetworkDriver):
                 counters[subinterface["name"]] = {
                     "tx_errors": convert(int, sub_stats.get("out-error-packets"), default=-1),
                     "rx_errors": convert(int, sub_stats.get("in-error-packets"), default=-1),
-                    "tx_discards": convert(
-                        int, sub_stats.get("out-discarded-packets"), default=-1
-                    ),
-                    "rx_discards": convert(
-                        int, sub_stats.get("in-discarded-packets"), default=-1
-                    ),
+                    "tx_discards": convert(int, sub_stats.get("out-discarded-packets"), default=-1),
+                    "rx_discards": convert(int, sub_stats.get("in-discarded-packets"), default=-1),
                     "tx_octets": convert(int, sub_stats.get("out-octets"), default=-1),
                     "rx_octets": convert(int, sub_stats.get("in-octets"), default=-1),
                     "tx_unicast_packets": convert(
@@ -240,9 +234,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
             for subinterface in interface.get("subinterface", []):
                 addresses: dict = {}
                 for version in ("ipv4", "ipv6"):
-                    for address in helpers.value_at(
-                        subinterface, version, "address", default=[]
-                    ):
+                    for address in helpers.value_at(subinterface, version, "address", default=[]):
                         ip, prefix_length = address["ip-prefix"].split("/")
                         addresses.setdefault(version, {})[ip] = {
                             "prefix_length": int(prefix_length)
@@ -489,13 +481,9 @@ class NokiaSRLinuxDriver(NetworkDriver):
                         int, timers.get("negotiated-keepalive-interval"), default=-1
                     ),
                     "active_prefix_count": convert(int, afi.get("active-routes"), default=-1),
-                    "received_prefix_count": convert(
-                        int, afi.get("received-routes"), default=-1
-                    ),
+                    "received_prefix_count": convert(int, afi.get("received-routes"), default=-1),
                     "accepted_prefix_count": convert(int, afi.get("active-routes"), default=-1),
-                    "suppressed_prefix_count": convert(
-                        int, afi.get("rejected-routes"), default=-1
-                    ),
+                    "suppressed_prefix_count": convert(int, afi.get("rejected-routes"), default=-1),
                     "advertised_prefix_count": convert(int, afi.get("sent-routes"), default=-1),
                     "flap_count": -1,  # not supported in SR Linux
                 }
@@ -514,9 +502,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
         def prefix_limit(afi: dict) -> dict:
             return {
-                "limit": helpers.value_at(
-                    afi, "prefix-limit", "max-received-routes", default=-1
-                ),
+                "limit": helpers.value_at(afi, "prefix-limit", "max-received-routes", default=-1),
                 "teardown": {
                     "threshold": helpers.value_at(
                         afi, "prefix-limit", "warning-threshold-pct", default=-1
@@ -747,8 +733,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
                 },
                 "interfaces": {
                     "interface": {
-                        member.get("name", ""): {}
-                        for member in instance.get("interface", [])
+                        member.get("name", ""): {} for member in instance.get("interface", [])
                     }
                 },
             }
@@ -908,9 +893,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         (ntp,) = self.device.get_paths(["/system/ntp"], Datastore.STATE)
 
         return {
-            server["address"]: {}
-            for server in (ntp or {}).get("server", [])
-            if "address" in server
+            server["address"]: {} for server in (ntp or {}).get("server", []) if "address" in server
         }
 
     def get_ntp_stats(self) -> list[models.NTPStats]:
@@ -976,9 +959,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
                             "state": {
                                 "input_power": channel_state(channel, "input-power"),
                                 "output_power": channel_state(channel, "output-power"),
-                                "laser_bias_current": channel_state(
-                                    channel, "laser-bias-current"
-                                ),
+                                "laser_bias_current": channel_state(channel, "laser-bias-current"),
                             },
                         }
                         for channel in channels
@@ -1069,12 +1050,12 @@ class NokiaSRLinuxDriver(NetworkDriver):
                 Datastore.STATE,
             )
             for instance in helpers.value_at(protocols_data, "network-instance", default=[]):
-                protocol_details.setdefault(instance.get("name"), {})["protocols"] = (
-                    instance.get("protocols", {})
+                protocol_details.setdefault(instance.get("name"), {})["protocols"] = instance.get(
+                    "protocols", {}
                 )
             for instance in helpers.value_at(rib_data, "network-instance", default=[]):
-                protocol_details.setdefault(instance.get("name"), {})["bgp-rib"] = (
-                    helpers.value_at(instance, "bgp-rib", default={})
+                protocol_details.setdefault(instance.get("name"), {})["bgp-rib"] = helpers.value_at(
+                    instance, "bgp-rib", default={}
                 )
 
         route_data: dict = {}
@@ -1094,9 +1075,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
                 age = -1
                 if current_time and route.get("last-app-update"):
-                    age = int(
-                        helpers.seconds_between(current_time, route["last-app-update"])
-                    )
+                    age = int(helpers.seconds_between(current_time, route["last-app-update"]))
 
                 group = next(
                     (g for g in next_hop_groups if g.get("index") == route["next-hop-group"]),
@@ -1123,13 +1102,9 @@ class NokiaSRLinuxDriver(NetworkDriver):
 
                     details = protocol_details.get(instance_name, {})
                     if "bgp" in owner:
-                        attributes = self._bgp_route_attributes(
-                            details, prefix, ip_address
-                        )
+                        attributes = self._bgp_route_attributes(details, prefix, ip_address)
                         if attributes:
-                            attributes["metric"] = convert(
-                                int, route.get("metric"), default=-1
-                            )
+                            attributes["metric"] = convert(int, route.get("metric"), default=-1)
                             entry["protocol_attributes"] = attributes
                     elif "isis" in owner:
                         level = helpers.value_at(
@@ -1200,9 +1175,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
             return {}
 
         attr_sets = helpers.value_at(rib, "attr-sets", "attr-set", default=[])
-        attr_set = next(
-            (a for a in attr_sets if a.get("index") == rib_route.get("attr-id")), {}
-        )
+        attr_set = next((a for a in attr_sets if a.get("index") == rib_route.get("attr-id")), {})
 
         return {
             "local_as": bgp.get("autonomous-system", -1),
@@ -1350,22 +1323,45 @@ class NokiaSRLinuxDriver(NetworkDriver):
     def _load_candidate(self, filename, config, is_replace: bool) -> None:
         exception = ReplaceConfigException if is_replace else MergeConfigException
 
-        if self._candidate is not None:
-            raise exception("A candidate config is already loaded; discard it first")
-
         if filename:
             with open(filename) as f:
                 config = f.read()
         if not config:
             raise exception("Either 'filename' or 'config' argument must be provided")
 
+        # Parse and validate the new change before touching self._candidate, so a
+        # failed second load leaves any previously loaded candidate intact.
+        fragment = self._build_candidate_fragment(config, is_replace, exception)
+
+        # load_replace starts a fresh candidate (a replace is a new baseline,
+        # as with EOS 'rollback clean-config' and Junos 'overwrite'); load_merge
+        # accumulates onto any candidate already loaded in this session.
+        if is_replace or self._candidate is None:
+            self._candidate = fragment
+            return
+
+        if self._candidate["mode"] != fragment["mode"]:
+            raise exception(
+                f"cannot merge {fragment['mode']} config into a pending "
+                f"{self._candidate['mode']} candidate; discard it first"
+            )
+        if fragment["mode"] == "json":
+            self._candidate["commands"] += fragment["commands"]
+        else:
+            self._candidate["lines"] += fragment["lines"]
+
+    def _build_candidate_fragment(self, config, is_replace: bool, exception) -> dict:
+        """Parse a config string into a candidate fragment without mutating state.
+
+        JSON fragments are validated on the device at this point; CLI fragments
+        are validated when they are diffed or committed.
+        """
         try:
             cfg = json.loads(config)
         except json.JSONDecodeError:
             # not JSON: treat as CLI commands
             lines = [line.strip() for line in config.splitlines() if line.strip()]
-            self._candidate = {"mode": "cli", "replace": is_replace, "lines": lines}
-            return
+            return {"mode": "cli", "replace": is_replace, "lines": lines}
 
         if isinstance(cfg, dict) and ("deletes" in cfg or "replaces" in cfg or "updates" in cfg):
             if is_replace and ("deletes" in cfg or "updates" in cfg):
@@ -1400,7 +1396,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         except CommandErrorException as exc:
             raise exception(f"Candidate config failed validation: {exc}") from exc
 
-        self._candidate = {"mode": "json", "replace": is_replace, "commands": commands}
+        return {"mode": "json", "replace": is_replace, "commands": commands}
 
     def compare_config(self) -> str:
         """
@@ -1413,9 +1409,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         if self._candidate["mode"] == "json":
             results = self.device.diff_paths(self._candidate["commands"])
             return "\n".join(
-                r.get("text", "") if isinstance(r, dict) else str(r)
-                for r in results
-                if r
+                r.get("text", "") if isinstance(r, dict) else str(r) for r in results if r
             ).strip()
 
         # CLI mode: load the commands into a throwaway named candidate on the
@@ -1520,9 +1514,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         Returns True when a confirmed commit is awaiting confirmation on the
         device (regardless of which session started it).
         """
-        (data,) = self.device.get_paths(
-            ["/system/configuration/commit[id=*]"], Datastore.STATE
-        )
+        (data,) = self.device.get_paths(["/system/configuration/commit[id=*]"], Datastore.STATE)
         commits = helpers.value_at(data, "commit", default=[])
         if isinstance(commits, dict):
             commits = [commits]
@@ -1580,9 +1572,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         """
         if self.has_pending_commit():
             try:
-                self.device.run_cli_commands(
-                    ["/tools system configuration confirmed-reject"]
-                )
+                self.device.run_cli_commands(["/tools system configuration confirmed-reject"])
             except CommandErrorException as exc:
                 raise CommitError(f"Rollback (confirmed-reject) failed: {exc}") from exc
             self._close_pending_cli_candidate()
