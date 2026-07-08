@@ -4,18 +4,20 @@
 
 Install `napalm-srlinux` from PyPI into the environment where you run NAPALM:
 
-=== "pip"
+/// tab | pip
 
-    ```bash
-    pip install napalm-srlinux
-    ```
+```bash
+pip install napalm-srlinux
+```
 
-=== "uv"
+///
+/// tab | uv
 
-    ```bash
-    uv add napalm-srlinux
-    ```
+```bash
+uv add napalm-srlinux
+```
 
+///
 The driver requires:
 
 - Python ≥ 3.10

@@ -6,49 +6,52 @@ The driver connects to the SR Linux JSON-RPC server over HTTP(S). Everything abo
 
 Pick exactly one of the four modes below.
 
-=== "Plain HTTP (labs)"
+/// tab | Plain HTTP (labs)
 
-    No TLS at all - the JSON-RPC server's `http` endpoint on port 80. Use this in containerlab and other throwaway labs, never in production.
+No TLS at all - the JSON-RPC server's `http` endpoint on port 80. Use this in containerlab and other throwaway labs, never in production.
 
-    ```python
-    optional_args = {
-        "insecure": True,
-    }
-    ```
+```python
+optional_args = {
+    "insecure": True,
+}
+```
 
-=== "HTTPS, unverified"
+///
+/// tab | HTTPS, unverified
 
-    TLS encryption without certificate verification. The traffic is encrypted, but you are not protected against a man-in-the-middle.
+TLS encryption without certificate verification. The traffic is encrypted, but you are not protected against a man-in-the-middle.
 
-    ```python
-    optional_args = {
-        "skip_verify": True,
-    }
-    ```
+```python
+optional_args = {
+    "skip_verify": True,
+}
+```
 
-=== "HTTPS, CA-verified"
+///
+/// tab | HTTPS, CA-verified
 
-    The recommended production mode: the server certificate is verified against the CA bundle you provide.
+The recommended production mode: the server certificate is verified against the CA bundle you provide.
 
-    ```python
-    optional_args = {
-        "tls_ca": "/path/to/ca.pem",
-    }
-    ```
+```python
+optional_args = {
+    "tls_ca": "/path/to/ca.pem",
+}
+```
 
-=== "Mutual TLS"
+/// tab | Mutual TLS
 
-    On top of server verification, the driver presents a client certificate. Both `tls_cert_path` and `tls_key_path` are required; add `tls_key_password` if the key is encrypted.
+On top of server verification, the driver presents a client certificate. Both `tls_cert_path` and `tls_key_path` are required; add `tls_key_password` if the key is encrypted.
 
-    ```python
-    optional_args = {
-        "tls_ca": "/path/to/ca.pem",
-        "tls_cert_path": "/path/to/client.pem",
-        "tls_key_path": "/path/to/client.key",
-        "tls_key_password": "s3cr3t",  # only for encrypted keys
-    }
-    ```
+```python
+optional_args = {
+    "tls_ca": "/path/to/ca.pem",
+    "tls_cert_path": "/path/to/client.pem",
+    "tls_key_path": "/path/to/client.key",
+    "tls_key_password": "s3cr3t",  # only for encrypted keys
+}
+```
 
+///
 With no TLS-related arguments at all, the driver uses HTTPS and verifies the server certificate against the system CA store.
 
 ## All optional arguments

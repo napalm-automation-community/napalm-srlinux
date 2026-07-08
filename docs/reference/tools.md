@@ -41,20 +41,22 @@ device.cli(commands, encoding="text")
 
 Runs arbitrary CLI commands through the JSON-RPC `cli` method and returns the output per command:
 
-=== "text"
+/// tab | text
 
-    ```python
-    >>> device.cli(["show version"])
-    {"show version": "--------------------------------------\nHostname  : srl1\nChassis Type : 7220 IXR-D2L\n..."}
-    ```
+```python
+>>> device.cli(["show version"])
+{"show version": "--------------------------------------\nHostname  : srl1\nChassis Type : 7220 IXR-D2L\n..."}
+```
 
-=== "json"
+///
+/// tab | json
 
-    ```python
-    >>> device.cli(["show version"], encoding="json")
-    {"show version": {"basic system info": {"Hostname": "srl1", "Chassis Type": "7220 IXR-D2L", ...}}}
-    ```
+```python
+>>> device.cli(["show version"], encoding="json")
+{"show version": {"basic system info": {"Hostname": "srl1", "Chassis Type": "7220 IXR-D2L", ...}}}
+```
 
+///
 With `encoding="json"` you get SR Linux's structured output instead of rendered text - usually much nicer to post-process than parsing CLI screens. Each command is sent as its own request, so the per-command mapping in the result is always exact.
 
 ## `ping`
