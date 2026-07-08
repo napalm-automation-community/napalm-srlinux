@@ -54,47 +54,49 @@ Because the candidate is client-side, no lock is held on the device. Concurrent 
 
 /// tab | Native SR Linux JSON
 
-    A JSON document as found in the running config. A merge is interpreted as `update /`, a replace as `replace /`.
+A JSON document as found in the running config. A merge is interpreted as `update /`, a replace as `replace /`.
 
-    ```python
-    device.load_merge_candidate(config="""
-    {
-      "system": {
-        "information": {"location": "lab"}
-      }
-    }
-    """)
-    ```
+```python
+device.load_merge_candidate(config="""
+{
+  "system": {
+    "information": {"location": "lab"}
+  }
+}
+""")
+```
+
 ///
 /// tab | gNMI-style envelope
 
-    A JSON object with `updates`, `replaces` and/or `deletes` lists, each entry carrying a `path` and (except deletes) a `value`. This gives you path-level control in a single candidate.
+A JSON object with `updates`, `replaces` and/or `deletes` lists, each entry carrying a `path` and (except deletes) a `value`. This gives you path-level control in a single candidate.
 
-    ```python
-    device.load_merge_candidate(config="""
-    {
-      "updates": [
-        {"path": "/system/information", "value": {"location": "lab"}}
-      ],
-      "deletes": [
-        {"path": "/system/banner"}
-      ]
-    }
-    """)
-    ```
+```python
+device.load_merge_candidate(config="""
+{
+  "updates": [
+    {"path": "/system/information", "value": {"location": "lab"}}
+  ],
+  "deletes": [
+    {"path": "/system/banner"}
+  ]
+}
+""")
+```
 
-    `load_replace_candidate()` accepts only `replaces` in this format.
+`load_replace_candidate()` accepts only `replaces` in this format.
 ///
 /// tab | SR Linux CLI
 
-    Plain CLI commands, one per line - anything that is not valid JSON is treated as CLI.
+Plain CLI commands, one per line - anything that is not valid JSON is treated as CLI.
 
-    ```python
-    device.load_merge_candidate(config="""
-    set / system information location "lab"
-    set / system banner login-banner "managed by NAPALM"
-    """)
-    ```
+```python
+device.load_merge_candidate(config="""
+set / system information location "lab"
+set / system banner login-banner "managed by NAPALM"
+""")
+```
+
 ///
 
 JSON candidates are validated on the device at load time, so a malformed change fails in `load_*_candidate()` rather than in `commit_config()`. CLI candidates are validated when they are diffed or committed.
