@@ -27,6 +27,7 @@ Identity and inventory of the node: model, serial number, OS version, uptime in 
     "interface_list": ["ethernet-1/1", "ethernet-1/2", ..., "mgmt0"]
 }
 ```
+
 ///
 
 ## `get_environment`
@@ -54,6 +55,7 @@ Hardware health: fan and power-supply status, temperature sensors, memory and CP
     "cpu": {"all": {"%usage": 9.0}}
 }
 ```
+
 ///
 
 ## `get_users`
@@ -86,6 +88,7 @@ Locally configured users with their hashed passwords and SSH public keys. The ad
     }
 }
 ```
+
 ///
 
 ## `get_snmp_information`
@@ -107,6 +110,7 @@ SNMP contact and location from the system configuration. SR Linux's SNMP framewo
     "location": "lab"
 }
 ```
+
 ///
 
 ## `get_ntp_servers`
@@ -123,6 +127,7 @@ The configured NTP servers, as a dict keyed by server address (the values are em
 ```python
 {"172.20.21.1": {}}
 ```
+
 ///
 
 ## `get_ntp_stats`
@@ -153,6 +158,7 @@ Synchronization state per configured NTP server. SR Linux exposes whether the cl
     }
 ]
 ```
+
 ///
 
 ## `is_alive`
@@ -161,7 +167,7 @@ Synchronization state per configured NTP server. SR Linux exposes whether the cl
 device.is_alive()
 ```
 
-Checks that the JSON-RPC endpoint still answers (an HTTP `HEAD` request). Because JSON-RPC is stateless there is no session that could "die" — this genuinely re-tests reachability on every call.
+Checks that the JSON-RPC endpoint still answers (an HTTP `HEAD` request). Because JSON-RPC is stateless there is no session that could "die" - this genuinely re-tests reachability on every call.
 
 /// details | Example output
     type: example
@@ -169,4 +175,5 @@ Checks that the JSON-RPC endpoint still answers (an HTTP `HEAD` request). Becaus
 ```python
 {"is_alive": true}
 ```
+
 ///

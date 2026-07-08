@@ -1,8 +1,8 @@
 # NAPALM driver for Nokia SR Linux
 
-`napalm-srlinux` is the community [NAPALM](https://napalm.readthedocs.io) driver for the [Nokia SR Linux](https://learn.srlinux.dev) network OS. It speaks to SR Linux over its **JSON-RPC** management interface — no gNMI stack, no protobuf toolchain, no platform-specific wheels. The only runtime dependencies are `napalm` and `httpx`.
+`napalm-srlinux` is the community [NAPALM](https://napalm.readthedocs.io) driver for the [Nokia SR Linux](https://learn.srlinux.dev) network OS. It speaks to SR Linux over its **JSON-RPC** management interface - no gNMI stack, no protobuf toolchain, no platform-specific wheels. The only runtime dependencies are `napalm` and `httpx`.
 
-If you already automate with NAPALM — directly, through Nornir, Ansible, or Salt — SR Linux becomes just another platform string:
+If you already automate with NAPALM - directly, through Nornir, Ansible, or Salt - SR Linux becomes just another platform string:
 
 ```python
 from napalm import get_network_driver
@@ -13,7 +13,7 @@ with driver("192.0.2.1", "admin", "NokiaSrl1!",
     print(device.get_facts())
 ```
 
-1. `insecure: True` uses plain HTTP — perfect for [containerlab](https://containerlab.dev) labs, not for production. See [Connection & TLS](guide/connection.md) for the HTTPS modes.
+1. `insecure: True` uses plain HTTP - perfect for [containerlab](https://containerlab.dev) labs, not for production. See [Connection & TLS](guide/connection.md) for the HTTPS modes.
 
 <div class="grid cards" markdown>
 
@@ -21,7 +21,7 @@ with driver("192.0.2.1", "admin", "NokiaSrl1!",
 
     ---
 
-    Every standard NAPALM getter with an SR Linux equivalent is implemented — facts, interfaces, BGP, LLDP, routes, MAC tables, optics and more.
+    Every standard NAPALM getter with an SR Linux equivalent is implemented - facts, interfaces, BGP, LLDP, routes, MAC tables, optics and more.
 
     [:octicons-arrow-right-24: Capabilities](reference/index.md)
 
@@ -29,7 +29,7 @@ with driver("192.0.2.1", "admin", "NokiaSrl1!",
 
     ---
 
-    Merge or replace candidates from native JSON, gNMI-style payloads, or plain SR Linux CLI — with diff, commit, checkpoint-based rollback.
+    Merge or replace candidates from native JSON, gNMI-style payloads, or plain SR Linux CLI - with diff, commit, checkpoint-based rollback.
 
     [:octicons-arrow-right-24: Configuration management](guide/config-management.md)
 
@@ -75,6 +75,6 @@ pip install napalm-srlinux
 
 ///
 
-Requires Python ≥ 3.10 and napalm ≥ 5. Head over to the [installation guide](install.md) to enable the JSON-RPC server on your node, then run through the [quickstart](quickstart.md) — it takes you from zero to `get_facts()` against a containerlab node in about two minutes.
+Requires Python ≥ 3.10 and napalm ≥ 5. Head over to the [installation guide](install.md) to enable the JSON-RPC server on your node, then run through the [quickstart](quickstart.md) - it takes you from zero to `get_facts()` against a containerlab node in about two minutes.
 
 Coming from the older gNMI-based 1.x driver? The [migration guide](migration.md) covers everything that changed.
