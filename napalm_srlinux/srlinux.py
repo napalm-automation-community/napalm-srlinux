@@ -1295,6 +1295,9 @@ class NokiaSRLinuxDriver(NetworkDriver):
         """
         Accepts either a native JSON formatted config, a gNMI-style JSON config
         containing only 'replaces', or SR Linux CLI commands.
+
+        Starts a fresh candidate: any previously loaded (not yet committed)
+        candidate is discarded, as a replace is a new configuration baseline.
         """
         try:
             self._load_candidate(filename, config, is_replace=True)
@@ -1310,6 +1313,10 @@ class NokiaSRLinuxDriver(NetworkDriver):
         Accepts either a native JSON formatted config (interpreted as 'update /'),
         a gNMI-style JSON config containing any number of 'deletes', 'replaces'
         and 'updates', or SR Linux CLI commands.
+
+        Merges onto any candidate already loaded in this session: consecutive
+        loads accumulate and are committed as one transaction. The merged
+        config must use the same format (JSON or CLI) as the pending candidate.
         """
         try:
             self._load_candidate(filename, config, is_replace=False)
@@ -1329,32 +1336,43 @@ class NokiaSRLinuxDriver(NetworkDriver):
         if not config:
             raise exception("Either 'filename' or 'config' argument must be provided")
 
-        # Parse and validate the new change before touching self._candidate, so a
-        # failed second load leaves any previously loaded candidate intact.
-        fragment = self._build_candidate_fragment(config, is_replace, exception)
+        # Parse the new change before touching self._candidate, so a failed
+        # second load leaves any previously loaded candidate intact.
+        fragment = self._parse_candidate_fragment(config, is_replace, exception)
 
         # load_replace starts a fresh candidate (a replace is a new baseline,
         # as with EOS 'rollback clean-config' and Junos 'overwrite'); load_merge
         # accumulates onto any candidate already loaded in this session.
-        if is_replace or self._candidate is None:
-            self._candidate = fragment
-            return
+        merging = not is_replace and self._candidate is not None
 
-        if self._candidate["mode"] != fragment["mode"]:
+        if merging and self._candidate["mode"] != fragment["mode"]:
             raise exception(
                 f"cannot merge {fragment['mode']} config into a pending "
                 f"{self._candidate['mode']} candidate; discard it first"
             )
+
         if fragment["mode"] == "json":
+            # Validate what commit_config would send: the accumulated commands,
+            # not the fragment alone — a merge may reference config that only
+            # exists in an earlier staged load. CLI candidates are validated
+            # when they are diffed or committed.
+            commands = (self._candidate["commands"] if merging else []) + fragment["commands"]
+            try:
+                self.device.validate_paths(commands)
+            except CommandErrorException as exc:
+                raise exception(f"Candidate config failed validation: {exc}") from exc
+
+        if not merging:
+            self._candidate = fragment
+        elif fragment["mode"] == "json":
             self._candidate["commands"] += fragment["commands"]
         else:
             self._candidate["lines"] += fragment["lines"]
 
-    def _build_candidate_fragment(self, config, is_replace: bool, exception) -> dict:
-        """Parse a config string into a candidate fragment without mutating state.
+    def _parse_candidate_fragment(self, config, is_replace: bool, exception) -> dict:
+        """Parse a config string into a candidate fragment.
 
-        JSON fragments are validated on the device at this point; CLI fragments
-        are validated when they are diffed or committed.
+        Does not mutate driver state and does not touch the device.
         """
         try:
             cfg = json.loads(config)
@@ -1389,12 +1407,6 @@ class NokiaSRLinuxDriver(NetworkDriver):
         else:
             action = RPCAction.REPLACE if is_replace else RPCAction.UPDATE
             commands = [{"action": action.value, "path": "/", "value": cfg}]
-
-        # validate on the device without applying
-        try:
-            self.device.validate_paths(commands)
-        except CommandErrorException as exc:
-            raise exception(f"Candidate config failed validation: {exc}") from exc
 
         return {"mode": "json", "replace": is_replace, "commands": commands}
 
