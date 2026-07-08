@@ -1,6 +1,6 @@
 # Development
 
-The project is managed with [uv](https://docs.astral.sh/uv/) — clone the repository and you're one command away from a working environment:
+The project is managed with [uv](https://docs.astral.sh/uv/) - clone the repository and you're one command away from a working environment:
 
 ```bash
 uv sync                  # create the venv and install all dependencies
@@ -10,7 +10,7 @@ uv run ruff check napalm_srlinux test tools examples
 
 ## Unit tests
 
-The unit tests run NAPALM's standard getter test framework against verbatim JSON-RPC responses recorded from a real lab — no device needed. The fixtures live under `test/unit/mocked_data/`, one directory per scenario.
+The unit tests run NAPALM's standard getter test framework against verbatim JSON-RPC responses recorded from a real lab - no device needed. The fixtures live under `test/unit/mocked_data/`, one directory per scenario.
 
 ```bash
 uv run pytest test/unit
@@ -45,7 +45,7 @@ make destroy-clab-record
 ```
 
 /// warning | Review before committing
-Re-recorded fixtures are a snapshot of live device state. Review the resulting `git diff` carefully before committing — unrelated state changes (timestamps, counters) are expected, but structural changes deserve a close look.
+Re-recorded fixtures are a snapshot of live device state. Review the resulting `git diff` carefully before committing - unrelated state changes (timestamps, counters) are expected, but structural changes deserve a close look.
 ///
 
 ## Documentation
@@ -61,4 +61,4 @@ The site is published to GitHub Pages automatically when a release is published.
 
 ## Contributing
 
-Contributions are welcome — the general [NAPALM contribution guidelines](https://napalm.readthedocs.io/en/latest/contributing/index.html) apply. Open an issue or pull request on [GitHub](https://github.com/napalm-automation-community/napalm-srlinux).
+Contributions are welcome - the general [NAPALM contribution guidelines](https://napalm.readthedocs.io/en/latest/contributing/index.html) apply. Open an issue or pull request on [GitHub](https://github.com/napalm-automation-community/napalm-srlinux).

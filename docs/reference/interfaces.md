@@ -12,7 +12,7 @@ In SR Linux, IP addresses and traffic counters live on **subinterfaces** (`ether
 device.get_interfaces()
 ```
 
-Admin/oper state, description, last flap, speed, MTU and MAC address for every physical interface. Speeds are reported in Mbit/s — a 25G port returns `25000.0`.
+Admin/oper state, description, last flap, speed, MTU and MAC address for every physical interface. Speeds are reported in Mbit/s - a 25G port returns `25000.0`.
 
 /// details | Example output
     type: example
@@ -40,6 +40,7 @@ Admin/oper state, description, last flap, speed, MTU and MAC address for every p
     }
 }
 ```
+
 ///
 
 ## `get_interfaces_counters`
@@ -48,7 +49,7 @@ Admin/oper state, description, last flap, speed, MTU and MAC address for every p
 device.get_interfaces_counters()
 ```
 
-Octet, unicast/multicast/broadcast packet, and discard counters — keyed by **subinterface**. SR Linux does not break errors out per direction, so `tx_errors`/`rx_errors` are `-1`.
+Octet, unicast/multicast/broadcast packet, and discard counters - keyed by **subinterface**. SR Linux does not break errors out per direction, so `tx_errors`/`rx_errors` are `-1`.
 
 /// details | Example output
     type: example
@@ -72,6 +73,7 @@ Octet, unicast/multicast/broadcast packet, and discard counters — keyed by **s
     "mgmt0.0": {...}
 }
 ```
+
 ///
 
 ## `get_interfaces_ip`
@@ -80,7 +82,7 @@ Octet, unicast/multicast/broadcast packet, and discard counters — keyed by **s
 device.get_interfaces_ip()
 ```
 
-All IPv4 and IPv6 addresses with prefix lengths — keyed by **subinterface**. Link-local addresses are included.
+All IPv4 and IPv6 addresses with prefix lengths - keyed by **subinterface**. Link-local addresses are included.
 
 /// details | Example output
     type: example
@@ -101,6 +103,7 @@ All IPv4 and IPv6 addresses with prefix lengths — keyed by **subinterface**. L
     }
 }
 ```
+
 ///
 
 ## `get_optics`
@@ -109,7 +112,7 @@ All IPv4 and IPv6 addresses with prefix lengths — keyed by **subinterface**. L
 device.get_optics()
 ```
 
-Per-channel transceiver diagnostics from `/interface/transceiver`: instant RX/TX power and laser bias current. Ports without a transceiver (including all ports on virtual nodes) are omitted, and SR Linux only exposes instant values — `avg`/`min`/`max` are `-1.0`.
+Per-channel transceiver diagnostics from `/interface/transceiver`: instant RX/TX power and laser bias current. Ports without a transceiver (including all ports on virtual nodes) are omitted, and SR Linux only exposes instant values - `avg`/`min`/`max` are `-1.0`.
 
 /// details | Example output
     type: example
@@ -132,6 +135,7 @@ Per-channel transceiver diagnostics from `/interface/transceiver`: instant RX/TX
     }
 }
 ```
+
 ///
 
 ## `get_lldp_neighbors`
@@ -140,7 +144,7 @@ Per-channel transceiver diagnostics from `/interface/transceiver`: instant RX/TX
 device.get_lldp_neighbors()
 ```
 
-LLDP neighbors per local interface — hostname and remote port only. Use [`get_lldp_neighbors_detail()`](#get_lldp_neighbors_detail) for the full TLV set.
+LLDP neighbors per local interface - hostname and remote port only. Use [`get_lldp_neighbors_detail()`](#get_lldp_neighbors_detail) for the full TLV set.
 
 /// details | Example output
     type: example
@@ -152,6 +156,7 @@ LLDP neighbors per local interface — hostname and remote port only. Use [`get_
     "ethernet-1/3": [{"hostname": "srl2", "port": "ethernet-1/3"}]
 }
 ```
+
 ///
 
 ## `get_lldp_neighbors_detail`
@@ -182,6 +187,7 @@ Everything LLDP knows about each neighbor: chassis ID, system description, capab
     ...
 }
 ```
+
 ///
 
 ## `get_vlans`
@@ -190,7 +196,7 @@ Everything LLDP knows about each neighbor: chassis ID, system description, capab
 device.get_vlans()
 ```
 
-SR Linux has no global VLAN table — bridging happens in **mac-vrf** network instances. `get_vlans()` therefore reports the single-tagged encapsulations of bridged subinterfaces attached to mac-vrfs:
+SR Linux has no global VLAN table - bridging happens in **mac-vrf** network instances. `get_vlans()` therefore reports the single-tagged encapsulations of bridged subinterfaces attached to mac-vrfs:
 
 - the VLAN ID is the subinterface's `vlan encap single-tagged vlan-id`
 - the VLAN name is the mac-vrf's name
@@ -207,6 +213,7 @@ SR Linux has no global VLAN table — bridging happens in **mac-vrf** network in
     }
 }
 ```
+
 ///
 
 ## `get_mac_address_table`
@@ -215,7 +222,7 @@ SR Linux has no global VLAN table — bridging happens in **mac-vrf** network in
 device.get_mac_address_table()
 ```
 
-Learned and static MAC addresses from all mac-vrf network instances. SR Linux does not track per-MAC move counters, and the VLAN association lives on the subinterface — so `vlan`, `moves` and `last_move` are reported as `-1`.
+Learned and static MAC addresses from all mac-vrf network instances. SR Linux does not track per-MAC move counters, and the VLAN association lives on the subinterface - so `vlan`, `moves` and `last_move` are reported as `-1`.
 
 /// details | Example output
     type: example
@@ -233,4 +240,5 @@ Learned and static MAC addresses from all mac-vrf network instances. SR Linux do
     }
 ]
 ```
+
 ///

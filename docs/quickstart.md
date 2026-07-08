@@ -35,7 +35,7 @@ from napalm import get_network_driver
 driver = get_network_driver("srlinux")
 
 optional_args = {
-    "insecure": True,  # plain http — labs only (1)
+    "insecure": True,  # plain http - labs only (1)
 }
 
 with driver("srl", "admin", "NokiaSrl1!", optional_args=optional_args) as device:
@@ -65,7 +65,7 @@ python quickstart.py
 
 ## 3. Explore the API
 
-Everything NAPALM offers works the same way — a few to try:
+Everything NAPALM offers works the same way - a few to try:
 
 ```python
 device.get_interfaces()                # admin/oper state, speed, MAC, MTU
@@ -74,7 +74,7 @@ device.get_route_to("192.0.2.0/24")    # RIB lookup
 device.cli(["show version"])           # raw CLI, text or json encoding
 ```
 
-And the configuration workflow — load, diff, commit, roll back:
+And the configuration workflow - load, diff, commit, roll back:
 
 ```python
 device.load_merge_candidate(config='set / system information location "lab"')
@@ -93,6 +93,6 @@ clab destroy -c -t srlinux.dev/clab-srl
 
 ## Where to next
 
-- [Connection & TLS](guide/connection.md) — HTTPS, certificate verification, mTLS, ports
-- [Capabilities](reference/index.md) — every supported method, with real example output
-- [Configuration management](guide/config-management.md) — how the candidate workflow maps onto JSON-RPC
+- [Connection & TLS](guide/connection.md) - HTTPS, certificate verification, mTLS, ports
+- [Capabilities](reference/index.md) - every supported method, with real example output
+- [Configuration management](guide/config-management.md) - how the candidate workflow maps onto JSON-RPC

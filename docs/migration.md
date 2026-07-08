@@ -4,7 +4,7 @@ The 1.x driver spoke gNMI; the current driver speaks JSON-RPC. For most users mi
 
 ## Checklist
 
-- [ ] Switch the driver name: `get_network_driver("srlinux")` — it was `"srl"`
+- [ ] Switch the driver name: `get_network_driver("srlinux")` - it was `"srl"`
 - [ ] Update imports if you used the package directly: `napalm_srlinux` (was `napalm_srl`)
 - [ ] Enable the [JSON-RPC server](install.md#enable-the-json-rpc-server-on-sr-linux) on your nodes (gNMI alone is no longer enough)
 - [ ] Replace the removed gNMI optional arguments (table below)
@@ -17,12 +17,12 @@ The gNMI transport and its options are gone:
 | 1.x argument | now |
 |---|---|
 | `gnmi_port` | `jsonrpc_port` (default 443, or 80 with `insecure`) |
-| `target_name` | removed — use `skip_verify` or a proper `tls_ca` |
-| `encoding` | removed — JSON-RPC is always JSON |
+| `target_name` | removed - use `skip_verify` or a proper `tls_ca` |
+| `encoding` | removed - JSON-RPC is always JSON |
 | `tls_cert` | `tls_cert_path` |
 | `tls_key` | `tls_key_path` (+ optional `tls_key_password`) |
 | `insecure` | kept, but now means plain HTTP instead of an unverified gNMI channel |
-| `skip_verify` | unchanged — HTTPS without certificate verification |
+| `skip_verify` | unchanged - HTTPS without certificate verification |
 
 See [Connection & TLS](guide/connection.md) for the full current list.
 
@@ -30,7 +30,7 @@ See [Connection & TLS](guide/connection.md) for the full current list.
 
 These were bugs in 1.x that your code may have worked around:
 
-- **Interface speeds** are now correctly reported in Mbit/s — a 1G port returns `1000.0` (1.x returned `1.0`).
+- **Interface speeds** are now correctly reported in Mbit/s - a 1G port returns `1000.0` (1.x returned `1.0`).
 - **`get_users()`** returns SSH keys under the standard NAPALM key `sshkeys` (was the non-standard `ssh-keys`).
 - **BGP and interface uptimes** are no longer truncated to less than a day.
 

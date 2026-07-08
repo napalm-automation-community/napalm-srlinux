@@ -1,6 +1,6 @@
 # Capabilities
 
-Every NAPALM method the driver supports, at a glance. All state getters read from the SR Linux `state` datastore over JSON-RPC — structured data straight from the device, no screen scraping. Click through for per-method details and real example output.
+Every NAPALM method the driver supports, at a glance. All state getters read from the SR Linux `state` datastore over JSON-RPC - structured data straight from the device, no screen scraping. Click through for per-method details and real example output.
 
 ## State getters
 
@@ -34,7 +34,7 @@ Every NAPALM method the driver supports, at a glance. All state getters read fro
 | method | does |
 |---|---|
 | [`get_config()`](tools.md#get_config) | running config as JSON or flat CLI |
-| [`load_merge_candidate()`](../guide/config-management.md) | stage a merge — native JSON, gNMI-style, or CLI |
+| [`load_merge_candidate()`](../guide/config-management.md) | stage a merge - native JSON, gNMI-style, or CLI |
 | [`load_replace_candidate()`](../guide/config-management.md) | stage a full replace |
 | [`compare_config()`](../guide/config-management.md) | diff the staged change against running |
 | [`commit_config()`](../guide/config-management.md#committing) | checkpoint, then apply in one transaction |
@@ -44,7 +44,7 @@ Every NAPALM method the driver supports, at a glance. All state getters read fro
 | [`discard_config()`](../guide/config-management.md) | drop the staged change (client-side only) |
 | [`rollback()`](../guide/config-management.md) | restore the pre-commit checkpoint, or reject a pending confirm |
 
-The candidate workflow is emulated client-side on top of SR Linux's transactional JSON-RPC `set` — the [configuration management guide](../guide/config-management.md) explains exactly how.
+The candidate workflow is emulated client-side on top of SR Linux's transactional JSON-RPC `set` - the [configuration management guide](../guide/config-management.md) explains exactly how.
 
 ## Tools
 
@@ -58,12 +58,12 @@ The candidate workflow is emulated client-side on top of SR Linux's transactiona
 
 SR Linux has no equivalent for these; they raise `NotImplementedError`:
 
-- `get_probes_config()` / `get_probes_results()` — no RPM/SLA probe infrastructure
-- `get_firewall_policies()` — no zone-based firewall
-- `get_ntp_peers()` — SR Linux only supports NTP servers, not symmetric peers
+- `get_probes_config()` / `get_probes_results()` - no RPM/SLA probe infrastructure
+- `get_firewall_policies()` - no zone-based firewall
+- `get_ntp_peers()` - SR Linux only supports NTP servers, not symmetric peers
 - `get_route_to(longer=True)`
 
 Two `get_config()` targets always return empty strings rather than raising:
 
-- `retrieve="candidate"` — the candidate exists only [client-side](../guide/config-management.md)
-- `retrieve="startup"` — the startup config is not retrievable via JSON-RPC
+- `retrieve="candidate"` - the candidate exists only [client-side](../guide/config-management.md)
+- `retrieve="startup"` - the startup config is not retrievable via JSON-RPC

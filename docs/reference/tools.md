@@ -8,14 +8,14 @@ Reading the configuration, raw CLI access, and on-device reachability tools.
 device.get_config(retrieve="all", sanitized=False, format="text")
 ```
 
-Returns the running configuration — by default as a JSON document, straight from the `running` datastore:
+Returns the running configuration - by default as a JSON document, straight from the `running` datastore:
 
 ```python
 device.get_config(retrieve="running")                  # JSON string
 device.get_config(retrieve="running", sanitized=True)  # aaa/tls subtrees removed
 ```
 
-Prefer flat CLI commands? Pass `format="cli"` per call, or set the [`running_format`](../guide/connection.md#all-optional-arguments) optional argument to make it the default — the output is then equivalent to `info flat`:
+Prefer flat CLI commands? Pass `format="cli"` per call, or set the [`running_format`](../guide/connection.md#all-optional-arguments) optional argument to make it the default - the output is then equivalent to `info flat`:
 
 ```python
 device.get_config(retrieve="running", format="cli")
@@ -31,7 +31,7 @@ set / interface ethernet-1/1 subinterface 0 ipv4 address 10.0.0.1/30
 Two notes:
 
 - `sanitized=True` (strips `aaa` and `tls` secrets) is only available with the JSON format.
-- `retrieve="candidate"` and `retrieve="startup"` return `""` — the candidate exists only [client-side](../guide/config-management.md), and the startup config is not exposed via JSON-RPC.
+- `retrieve="candidate"` and `retrieve="startup"` return `""` - the candidate exists only [client-side](../guide/config-management.md), and the startup config is not exposed via JSON-RPC.
 
 ## `cli`
 
@@ -55,7 +55,7 @@ Runs arbitrary CLI commands through the JSON-RPC `cli` method and returns the ou
     {"show version": {"basic system info": {"Hostname": "srl1", "Chassis Type": "7220 IXR-D2L", ...}}}
     ```
 
-With `encoding="json"` you get SR Linux's structured output instead of rendered text — usually much nicer to post-process than parsing CLI screens. Each command is sent as its own request, so the per-command mapping in the result is always exact.
+With `encoding="json"` you get SR Linux's structured output instead of rendered text - usually much nicer to post-process than parsing CLI screens. Each command is sent as its own request, so the per-command mapping in the result is always exact.
 
 ## `ping`
 
@@ -64,7 +64,7 @@ device.ping(destination, source="", ttl=255, timeout=2,
             size=100, count=5, vrf="", source_interface="")
 ```
 
-Pings from the device. `vrf` selects the network-instance the ping runs in — for management-network targets that's typically `vrf="mgmt"`.
+Pings from the device. `vrf` selects the network-instance the ping runs in - for management-network targets that's typically `vrf="mgmt"`.
 
 ```python
 device.ping("172.20.20.1", vrf="mgmt")
@@ -92,6 +92,7 @@ device.ping("172.20.20.1", vrf="mgmt")
     }
 }
 ```
+
 ///
 
 ## `traceroute`
@@ -118,11 +119,12 @@ Traceroute from the device, per network-instance via `vrf`. SR Linux's tracerout
     }
 }
 ```
+
 ///
 
 ## Changing configuration
 
-Everything about writing config — the candidate workflow, accepted formats, commit, rollback, and confirmed commits — lives in the user guide:
+Everything about writing config - the candidate workflow, accepted formats, commit, rollback, and confirmed commits - lives in the user guide:
 
 - [Configuration management](../guide/config-management.md)
 - [Commit confirm](../guide/commit-confirm.md)

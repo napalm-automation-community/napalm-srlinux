@@ -2,7 +2,7 @@
 
 Community [NAPALM](https://napalm.readthedocs.io) driver for the [Nokia SR Linux](https://learn.srlinux.dev) network OS, built on the **JSON-RPC** management interface; the only runtime dependencies are `napalm` and `httpx`.
 
-**Documentation: https://napalm-automation-community.github.io/napalm-srlinux/**
+**Documentation: <https://napalm-automation-community.github.io/napalm-srlinux/>**
 
 ## Installation
 
@@ -29,7 +29,7 @@ from napalm import get_network_driver
 driver = get_network_driver("srlinux")
 optional_args = {
     # pick one of the TLS modes below:
-    "insecure": True,        # plain http on port 80 — labs only
+    "insecure": True,        # plain http on port 80 - labs only
     # "skip_verify": True,   # https, certificate not verified
     # "tls_ca": "ca.pem",    # https, verified against this CA
 }
@@ -55,7 +55,7 @@ A runnable example against a containerlab node is in [examples/example.py](examp
 ## Supported methods
 
 All standard NAPALM getters that have an SR Linux equivalent are implemented:
-`get_facts`, `get_interfaces`, `get_interfaces_counters`*, `get_interfaces_ip`*, `get_arp_table`, `get_ipv6_neighbors_table`, `get_bgp_neighbors`, `get_bgp_neighbors_detail`, `get_bgp_config`, `get_environment`, `get_lldp_neighbors`, `get_lldp_neighbors_detail`, `get_network_instances`, `get_users`, `get_snmp_information`, `get_config`, `get_ntp_servers`, `get_ntp_stats`, `get_optics`, `get_mac_address_table`, `get_route_to`, `get_vlans`**, `is_alive`, `ping`, `traceroute`, `cli` (`text` and `json` encodings), plus the full candidate-config workflow (`load_merge_candidate`, `load_replace_candidate`, `compare_config`, `commit_config` — including commit-confirm via `revert_in` —, `confirm_commit`, `has_pending_commit`, `discard_config`, `rollback`).
+`get_facts`, `get_interfaces`, `get_interfaces_counters`*, `get_interfaces_ip`*, `get_arp_table`, `get_ipv6_neighbors_table`, `get_bgp_neighbors`, `get_bgp_neighbors_detail`, `get_bgp_config`, `get_environment`, `get_lldp_neighbors`, `get_lldp_neighbors_detail`, `get_network_instances`, `get_users`, `get_snmp_information`, `get_config`, `get_ntp_servers`, `get_ntp_stats`, `get_optics`, `get_mac_address_table`, `get_route_to`, `get_vlans`**, `is_alive`, `ping`, `traceroute`, `cli` (`text` and `json` encodings), plus the full candidate-config workflow (`load_merge_candidate`, `load_replace_candidate`, `compare_config`, `commit_config` - including commit-confirm via `revert_in` -, `confirm_commit`, `has_pending_commit`, `discard_config`, `rollback`).
 
 \* keyed by subinterface name (e.g. `ethernet-1/1.0`), since IP/counter state lives on subinterfaces in SR Linux.
 
@@ -65,20 +65,20 @@ Not supported by SR Linux (raise `NotImplementedError`): `get_probes_config/resu
 
 ### Candidate-config semantics
 
-The JSON-RPC interface has no persistent candidate datastore across requests — a `set` request against the candidate datastore is transactional and commits on success. The NAPALM candidate workflow is therefore emulated client-side:
+The JSON-RPC interface has no persistent candidate datastore across requests - a `set` request against the candidate datastore is transactional and commits on success. The NAPALM candidate workflow is therefore emulated client-side:
 
 - `load_merge_candidate()` / `load_replace_candidate()` store the intended change **in the driver** and (for JSON configs) validate it on the device via the `validate` method. Accepted formats: native SR Linux JSON, a gNMI-style envelope (`updates`/`replaces`/`deletes`), or SR Linux CLI commands.
 - `compare_config()` uses the JSON-RPC `diff` method (JSON configs) or a throwaway named candidate on the device (CLI configs).
 - `commit_config()` first creates a named checkpoint (`NAPALM-<session>-<n>`, unique per driver instance) as the rollback anchor, then applies everything in one transactional request.
 - `discard_config()` only clears the client-side state; it never touches the device.
-- `rollback()` restores the checkpoint created by the last `commit_config()`. Checkpoints contain the **entire** configuration tree — any change made after the checkpoint is reverted too.
-- `get_config(retrieve="candidate")` returns `""` — the candidate only exists client-side.
+- `rollback()` restores the checkpoint created by the last `commit_config()`. Checkpoints contain the **entire** configuration tree - any change made after the checkpoint is reverted too.
+- `get_config(retrieve="candidate")` returns `""` - the candidate only exists client-side.
 
 #### Commit confirm
 
 `commit_config(revert_in=<seconds>)` starts a confirmed commit: the change is applied, but the device reverts it automatically unless it is confirmed in time (JSON configs use the JSON-RPC `confirm-timeout` parameter, available since SR Linux 23.3.2; CLI configs use `commit confirmed timeout <seconds>`).
 
-- `has_pending_commit()` reports whether a confirmed commit is awaiting confirmation — device-side state, visible to every session.
+- `has_pending_commit()` reports whether a confirmed commit is awaiting confirmation - device-side state, visible to every session.
 - `confirm_commit()` accepts the pending commit and cancels the revert timer. With `commit_save`, the `save startup` is deferred until this point, so the startup config never holds a change that may still auto-revert.
 - `rollback()` called while a confirm is pending rejects it immediately (`confirmed-reject`) instead of loading a checkpoint.
 - `commit_config()` refuses to run while another confirmed commit is pending.
@@ -88,7 +88,7 @@ Because the candidate is client-side, no lock is held on the device; concurrent 
 ## Migrating from 1.x
 
 - The driver name changed: `get_network_driver("srlinux")` instead of `"srl"`; the package is `napalm_srlinux` (was `napalm_srl`).
-- gNMI is gone — the optional arguments `gnmi_port`, `target_name`, `encoding`, `tls_cert`, and `tls_key` no longer exist. Client certificates are configured with `tls_cert_path`/`tls_key_path`.
+- gNMI is gone - the optional arguments `gnmi_port`, `target_name`, `encoding`, `tls_cert`, and `tls_key` no longer exist. Client certificates are configured with `tls_cert_path`/`tls_key_path`.
 - `get_interfaces()` speeds are now correctly reported in Mbit/s (e.g. `1G` → `1000.0`).
 - `get_users()` returns the standard `sshkeys` key (was `ssh-keys`).
 - BGP/interface uptimes are no longer truncated to less than a day.
@@ -125,4 +125,4 @@ Review the resulting `git diff` before committing re-recorded fixtures.
 
 ## License
 
-Apache 2.0 — see [LICENSE](LICENSE).
+Apache 2.0 - see [LICENSE](LICENSE).

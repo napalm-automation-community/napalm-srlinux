@@ -8,7 +8,7 @@ BGP, RIB lookups, neighbor tables, and network-instances.
 device.get_bgp_neighbors()
 ```
 
-BGP sessions grouped per network-instance (VRF) — the `default` network-instance is reported as `global`, per the NAPALM convention. For each peer: session state, AS numbers, and received/accepted/sent prefix counts per address family.
+BGP sessions grouped per network-instance (VRF) - the `default` network-instance is reported as `global`, per the NAPALM convention. For each peer: session state, AS numbers, and received/accepted/sent prefix counts per address family.
 
 /// details | Example output
     type: example
@@ -43,6 +43,7 @@ BGP sessions grouped per network-instance (VRF) — the `default` network-instan
     }
 }
 ```
+
 ///
 
 ## `get_bgp_neighbors_detail`
@@ -101,6 +102,7 @@ The full session view: addresses and ports, timers (configured and negotiated), 
     }
 }
 ```
+
 ///
 
 ## `get_bgp_config`
@@ -146,6 +148,7 @@ The BGP **configuration** (as opposed to the session state above): peer groups w
     }
 }
 ```
+
 ///
 
 ## `get_route_to`
@@ -154,7 +157,7 @@ The BGP **configuration** (as opposed to the session state above): peer groups w
 device.get_route_to(destination="", protocol="")
 ```
 
-RIB lookup across all network-instances. Filter by `destination` (a prefix or host address) and/or `protocol`. BGP routes carry full protocol attributes — AS path, communities, local preference — resolved from the BGP RIB.
+RIB lookup across all network-instances. Filter by `destination` (a prefix or host address) and/or `protocol`. BGP routes carry full protocol attributes - AS path, communities, local preference - resolved from the BGP RIB.
 
 `longer=True` (prefix-tree expansion) is not supported and raises `NotImplementedError`.
 
@@ -190,6 +193,7 @@ RIB lookup across all network-instances. Filter by `destination` (a prefix or ho
     ]
 }
 ```
+
 ///
 
 ## `get_arp_table`
@@ -198,7 +202,7 @@ RIB lookup across all network-instances. Filter by `destination` (a prefix or ho
 device.get_arp_table(vrf="")
 ```
 
-IPv4 ARP entries from all subinterfaces — and, despite the name, the IPv6 neighbor entries too, so dual-stack neighbors show up with all their addresses. Pass `vrf` to restrict to one network-instance. `age` reflects the subinterface's configured ARP timeout (IPv4) or ND reachable-time (IPv6).
+IPv4 ARP entries from all subinterfaces - and, despite the name, the IPv6 neighbor entries too, so dual-stack neighbors show up with all their addresses. Pass `vrf` to restrict to one network-instance. `age` reflects the subinterface's configured ARP timeout (IPv4) or ND reachable-time (IPv6).
 
 /// details | Example output
     type: example
@@ -225,6 +229,7 @@ IPv4 ARP entries from all subinterfaces — and, despite the name, the IPv6 neig
     }
 ]
 ```
+
 ///
 
 ## `get_ipv6_neighbors_table`
@@ -256,6 +261,7 @@ The IPv6 neighbor-discovery table, including the neighbor state (`reachable`, `s
     }
 ]
 ```
+
 ///
 
 ## `get_network_instances`
@@ -264,7 +270,7 @@ The IPv6 neighbor-discovery table, including the neighbor state (`reachable`, `s
 device.get_network_instances(name="")
 ```
 
-All network-instances (SR Linux's VRFs) with their type — `default`, `ip-vrf`, or `mac-vrf` — and attached subinterfaces. Pass `name` to fetch a single instance.
+All network-instances (SR Linux's VRFs) with their type - `default`, `ip-vrf`, or `mac-vrf` - and attached subinterfaces. Pass `name` to fetch a single instance.
 
 /// details | Example output
     type: example
@@ -297,4 +303,5 @@ All network-instances (SR Linux's VRFs) with their type — `default`, `ip-vrf`,
     }
 }
 ```
+
 ///

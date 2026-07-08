@@ -21,7 +21,7 @@ The driver requires:
 - Python ≥ 3.10
 - napalm ≥ 5 (installed automatically as a dependency)
 
-That's the whole footprint — besides NAPALM itself, the only dependency is [`httpx`](https://www.python-httpx.org/). There is no gNMI/protobuf stack to build.
+That's the whole footprint - besides NAPALM itself, the only dependency is [`httpx`](https://www.python-httpx.org/). There is no gNMI/protobuf stack to build.
 
 ## Enable the JSON-RPC server on SR Linux
 
@@ -35,14 +35,14 @@ set / system json-rpc-server network-instance mgmt https tls-profile <profile>
 ```
 
 /// note | containerlab has you covered
-In [containerlab](https://containerlab.dev) labs the JSON-RPC server is enabled by default, with both HTTP and HTTPS endpoints up — no extra configuration needed. Deploy a node and connect.
+In [containerlab](https://containerlab.dev) labs the JSON-RPC server is enabled by default, with both HTTP and HTTPS endpoints up - no extra configuration needed. Deploy a node and connect.
 ///
 
 Only enable the endpoints you intend to use: `https` for [verified TLS or mTLS](guide/connection.md), `http` if you plan to connect with `insecure: True` in a lab.
 
 ## Verify
 
-Check that the JSON-RPC server answers — for a containerlab node named `srl`:
+Check that the JSON-RPC server answers - for a containerlab node named `srl`:
 
 ```bash
 curl -k -u admin:NokiaSrl1! https://srl/jsonrpc -d '{

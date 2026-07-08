@@ -8,7 +8,7 @@ Pick exactly one of the four modes below.
 
 === "Plain HTTP (labs)"
 
-    No TLS at all — the JSON-RPC server's `http` endpoint on port 80. Use this in containerlab and other throwaway labs, never in production.
+    No TLS at all - the JSON-RPC server's `http` endpoint on port 80. Use this in containerlab and other throwaway labs, never in production.
 
     ```python
     optional_args = {
@@ -62,7 +62,7 @@ With no TLS-related arguments at all, the driver uses HTTPS and verifies the ser
 | `tls_cert_path` / `tls_key_path` | `""` | client certificate and key (both required for mTLS) |
 | `tls_key_password` | `""` | passphrase of the client key |
 | `running_format` | `"json"` | [`get_config()`](../reference/tools.md#get_config) running-config format: `json` or `cli` (`info flat`) |
-| `commit_save` | `False` | commits use `commit save` / `save startup` so the config persists — see [configuration management](config-management.md) |
+| `commit_save` | `False` | commits use `commit save` / `save startup` so the config persists - see [configuration management](config-management.md) |
 
 /// warning | Mismatched port and mode
 `insecure: True` together with port 443, or HTTPS against port 80, almost certainly points at the wrong endpoint. The driver logs a warning when it sees either combination.
@@ -90,4 +90,4 @@ with device:
 
 1. `timeout` (seconds) applies to every JSON-RPC request the driver makes.
 
-`open()` creates the HTTP client and verifies the endpoint is reachable; `is_alive()` re-checks reachability at any time. Because JSON-RPC is stateless, there is no long-lived session on the device — each NAPALM call maps to one or more independent HTTP requests.
+`open()` creates the HTTP client and verifies the endpoint is reachable; `is_alive()` re-checks reachability at any time. Because JSON-RPC is stateless, there is no long-lived session on the device - each NAPALM call maps to one or more independent HTTP requests.
