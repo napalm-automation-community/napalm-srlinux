@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "napalm-srlinux"
-version = "0.3.0"
+version = "0.3.1"
 description = "NAPALM driver for Nokia SR Linux (JSON-RPC)"
 readme = "README.md"
 license = { text = "Apache-2.0" }
