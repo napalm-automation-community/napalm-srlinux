@@ -61,6 +61,8 @@ class RecordingDevice:
 
     def run_cli_commands(self, commands, output_format="text"):
         self.calls.append(("cli", commands))
+        # one result per command, positionally aligned, so a test can assert
+        # compare_config reads the diff from the right position (last, not first)
         return [{"text": f"output of {c}"} for c in commands]
 
     def set_paths(self, commands, datastore=None, confirm_timeout=None):
@@ -278,8 +280,8 @@ class TestCompareConfig:
         assert diff[-1] == "diff"
         assert CLI_CONFIG.splitlines()[0] in diff
         assert cleanup == [enter, "discard now"]
-        # the returned diff is the "diff" command's own result, not the
-        # "enter candidate ..." command's (which is always first and empty)
+        # the returned diff is the "diff" command's own (last) result, not the
+        # "enter candidate ..." command's, which is always first
         assert result == "output of diff"
 
     def test_cli_replace_mode_deletes_first(self, driver):
