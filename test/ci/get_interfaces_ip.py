@@ -1,34 +1,47 @@
 #!/usr/bin/python3
 
-# Regression test: get_interfaces_ip() must not fail on subinterfaces without
-# any IP addresses.
+"""Regression test: get_interfaces_ip() must not fail on subinterfaces without
+any IP addresses.
 
-import logging
-import sys
+Run via pytest (clean output) or as a plain script (used by `make run-tests`):
 
+    uv run pytest test/ci/get_interfaces_ip.py
+    uv run test/ci/get_interfaces_ip.py
+"""
+
+import pytest
 from napalm import get_network_driver
 
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+HOST = "clab-napalm-ci_cd-srl"
 
-driver = get_network_driver("srlinux")
-optional_args = {"insecure": True}
-
-device = driver("clab-napalm-ci_cd-srl", "admin", "NokiaSrl1!", 10, optional_args)
-device.open()
-
-# Add system0 interface with subinterface 0 and no ip addresses
-cfg = """
+# a system0 subinterface with no IP addresses configured
+NO_IP_CONFIG = """
 set / interface system0
 set / interface system0 admin-state enable
 set / interface system0 subinterface 0
 """
 
-device.load_merge_candidate(config=cfg)
-device.commit_config()
 
-# get_interfaces_ip() should not fail when no ip addresses are present
-ip_addresses = device.get_interfaces_ip()
-assert ip_addresses is not None
-assert ip_addresses.get("system0.0") == {}
+@pytest.fixture(scope="module")
+def device():
+    dev = get_network_driver("srlinux")(HOST, "admin", "NokiaSrl1!", 10, {"insecure": True})
+    dev.open()
+    try:
+        yield dev
+    finally:
+        dev.close()
 
-device.close()
+
+def test_get_interfaces_ip_without_addresses(device):
+    device.load_merge_candidate(config=NO_IP_CONFIG)
+    device.commit_config()
+    try:
+        ip_addresses = device.get_interfaces_ip()
+        assert ip_addresses is not None
+        assert ip_addresses.get("system0.0") == {}
+    finally:
+        device.rollback()
+
+
+if __name__ == "__main__":
+    raise SystemExit(pytest.main([__file__]))

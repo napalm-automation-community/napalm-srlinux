@@ -1,14 +1,18 @@
 #!/usr/bin/python3
 
-# Smoke test: call every implemented getter against a real node and assert a
-# sane, non-None result. Cheap full-parity check for the JSON-RPC driver.
+"""Smoke test: call every implemented getter against a real node and assert a
+sane, non-None result. Cheap full-parity check for the JSON-RPC driver.
 
-import logging
-import sys
+Run via pytest (clean output) or as a plain script (used by `make run-tests`):
 
+    uv run pytest test/ci/getters_smoke.py
+    uv run test/ci/getters_smoke.py
+"""
+
+import pytest
 from napalm import get_network_driver
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+HOST = "clab-napalm-ci_cd-srl"
 
 GETTERS = [
     ("is_alive", {}),
@@ -35,24 +39,22 @@ GETTERS = [
     ("get_route_to", {}),
 ]
 
-driver = get_network_driver("srlinux")
-device = driver("clab-napalm-ci_cd-srl", "admin", "NokiaSrl1!", 10, {"insecure": True})
-device.open()
 
-failures = []
-for getter, kwargs in GETTERS:
+@pytest.fixture(scope="module")
+def device():
+    dev = get_network_driver("srlinux")(HOST, "admin", "NokiaSrl1!", 10, {"insecure": True})
+    dev.open()
     try:
-        result = getattr(device, getter)(**kwargs)
-        assert result is not None, "returned None"
-        print(f"{getter}: OK")
-    except Exception as exc:  # noqa: BLE001 - report all failures at once
-        failures.append((getter, exc))
-        print(f"{getter}: FAILED: {exc}")
+        yield dev
+    finally:
+        dev.close()
 
-device.close()
 
-if failures:
-    sys.exit(f"{len(failures)} getter(s) failed: {[g for g, _ in failures]}")
+@pytest.mark.parametrize("getter,kwargs", GETTERS, ids=[g for g, _ in GETTERS])
+def test_getter_returns_non_none(device, getter, kwargs):
+    result = getattr(device, getter)(**kwargs)
+    assert result is not None
 
-print("all getters OK")
-sys.exit(0)
+
+if __name__ == "__main__":
+    raise SystemExit(pytest.main([__file__]))

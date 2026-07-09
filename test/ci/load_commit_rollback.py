@@ -1,65 +1,69 @@
 #!/usr/bin/python3
 
-# End-to-end test of the candidate config workflow: CLI merge, JSON merge,
-# compare, commit and rollback.
+"""End-to-end test of the candidate config workflow: CLI merge, JSON merge,
+compare, commit and rollback.
 
-import json
-import logging
-import sys
-from datetime import datetime
+Run via pytest (clean output) or as a plain script (used by `make run-tests`):
 
-from napalm import get_network_driver
-
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-
-driver = get_network_driver("srlinux")
-optional_args = {"insecure": True}
-device = driver("clab-napalm-ci_cd-srl", "admin", "NokiaSrl1!", 10, optional_args)
-device.open()
-
-now = datetime.now().strftime("%H:%M:%S")
-DESC = f"Time {now}"
-cfg = f"""
-set / interface ethernet-1/1 description "{DESC}"
+    uv run pytest test/ci/load_commit_rollback.py
+    uv run test/ci/load_commit_rollback.py
 """
 
-device.load_merge_candidate(config=cfg)  # CLI format
-diff = device.compare_config()
-print(f"CLI diff:\n{diff}")
-assert DESC in diff
-device.commit_config()
+import json
+from datetime import datetime
 
-# get config -> check that description is set
-config = device.get_config()
-parsed = json.loads(config["running"])
-print(json.dumps(parsed["srl_nokia-interfaces:interface"], indent=2))
-assert parsed["srl_nokia-interfaces:interface"][0]["description"] == DESC
+import pytest
+from napalm import get_network_driver
 
-cfg2 = {"interface": [{"name": "ethernet-1/1", "description": f"{DESC} using JSON"}]}
-device.load_merge_candidate(config=json.dumps(cfg2))  # JSON format
-diff2 = device.compare_config()
-print(f"JSON diff:\n{diff2}")
-device.commit_config()
+HOST = "clab-napalm-ci_cd-srl"
 
-# get config -> check that description is set
-config2 = device.get_config()
-parsed2 = json.loads(config2["running"])
-print(json.dumps(parsed2["srl_nokia-interfaces:interface"], indent=2))
-assert (
-    parsed2["srl_nokia-interfaces:interface"][0]["description"]
-    == cfg2["interface"][0]["description"]
-)
 
-# Revert changes in most recent commit_config
-device.rollback()
+@pytest.fixture(scope="module")
+def device():
+    dev = get_network_driver("srlinux")(HOST, "admin", "NokiaSrl1!", 10, {"insecure": True})
+    dev.open()
+    try:
+        yield dev
+    finally:
+        dev.close()
 
-config3 = device.get_config()
-parsed3 = json.loads(config3["running"])
-assert parsed3["srl_nokia-interfaces:interface"][0]["description"] == DESC
 
-device.close()
+def _running_description(device) -> str:
+    parsed = json.loads(device.get_config()["running"])
+    return parsed["srl_nokia-interfaces:interface"][0]["description"]
 
-# Regression: check that is_alive returns false after close
-assert not device.is_alive()["is_alive"]
 
-sys.exit(0)  # Success
+def test_merge_commit_rollback(device):
+    # a fresh value each run guarantees the candidate actually differs
+    desc = f"Time {datetime.now().strftime('%H:%M:%S')}"
+
+    # CLI format merge
+    device.load_merge_candidate(config=f'set / interface ethernet-1/1 description "{desc}"')
+    assert desc in device.compare_config()
+    device.commit_config()
+    assert _running_description(device) == desc
+
+    # JSON format merge on top
+    json_desc = f"{desc} using JSON"
+    device.load_merge_candidate(
+        config=json.dumps({"interface": [{"name": "ethernet-1/1", "description": json_desc}]})
+    )
+    device.compare_config()
+    device.commit_config()
+    assert _running_description(device) == json_desc
+
+    # rollback reverts the most recent commit, restoring the CLI description
+    device.rollback()
+    assert _running_description(device) == desc
+
+
+def test_is_alive_false_after_close():
+    dev = get_network_driver("srlinux")(HOST, "admin", "NokiaSrl1!", 10, {"insecure": True})
+    dev.open()
+    assert dev.is_alive()["is_alive"]
+    dev.close()
+    assert not dev.is_alive()["is_alive"]
+
+
+if __name__ == "__main__":
+    raise SystemExit(pytest.main([__file__]))

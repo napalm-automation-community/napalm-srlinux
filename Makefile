@@ -24,10 +24,8 @@ deploy-clab-record: ## Deploy the two-node fixture-recording topology (SRL_VERSI
 destroy-clab-record: ## Destroy the fixture-recording topology
 	cd .clab && sudo clab destroy -t record-topology.yml --cleanup
 
-run-tests: $(TESTS) ## Run all CI tests under test/ci (needs the "ci" topology)
-	for test in $(TESTS); do \
-		uv run $$test || exit 1; \
-	done
+run-tests: ## Run all CI tests under test/ci (needs the "ci" topology)
+	uv run pytest $(TESTS)
 
 record-fixtures: ## Re-record unit test fixtures (needs the recording topology)
 	uv run tools/record_fixtures.py --prepare
