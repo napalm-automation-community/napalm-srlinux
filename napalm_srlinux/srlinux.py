@@ -1427,8 +1427,9 @@ class NokiaSRLinuxDriver(NetworkDriver):
         # CLI mode: load the commands into a throwaway named candidate on the
         # device, diff it against running and discard it again. The named
         # candidate persists across JSON-RPC requests, so it is reset before and
-        # discarded after; the cli method aggregates each request's output into
-        # one blob, which for the middle request is exactly the diff text.
+        # discarded after; run_cli_commands returns one result per command
+        # string, aligned by position, so the diff text is the last result
+        # (the "diff" command is always appended last).
         enter = f"enter candidate private name {self._candidate_name}-diff"
         self._discard_named_candidate(enter)
         try:
@@ -1441,7 +1442,7 @@ class NokiaSRLinuxDriver(NetworkDriver):
         finally:
             self._discard_named_candidate(enter)
 
-        diff_result = results[0] if results else ""
+        diff_result = results[-1] if results else ""
         return (
             diff_result.get("text", "") if isinstance(diff_result, dict) else str(diff_result)
         ).strip()

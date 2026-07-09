@@ -268,7 +268,7 @@ class TestCompareConfig:
 
     def test_cli_mode_uses_named_candidate_with_cleanup(self, driver):
         driver.load_merge_candidate(config=CLI_CONFIG)
-        driver.compare_config()
+        result = driver.compare_config()
         kinds = [c[0] for c in driver.device.calls]
         assert kinds == ["cli", "cli", "cli"]  # reset, diff, cleanup
         reset, diff, cleanup = (c[1] for c in driver.device.calls)
@@ -278,6 +278,9 @@ class TestCompareConfig:
         assert diff[-1] == "diff"
         assert CLI_CONFIG.splitlines()[0] in diff
         assert cleanup == [enter, "discard now"]
+        # the returned diff is the "diff" command's own result, not the
+        # "enter candidate ..." command's (which is always first and empty)
+        assert result == "output of diff"
 
     def test_cli_replace_mode_deletes_first(self, driver):
         driver.load_replace_candidate(config=CLI_CONFIG)
