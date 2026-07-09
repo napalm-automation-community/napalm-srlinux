@@ -18,11 +18,11 @@ uv run pytest test/unit
 
 ## Testing against a real node
 
-The `test/ci` scripts exercise the driver end-to-end against a live SR Linux container in a [containerlab](https://containerlab.dev) topology:
+The `test/ci` tests exercise the driver end-to-end against a live SR Linux container in a [containerlab](https://containerlab.dev) topology. They are pytest modules, so `make run-tests` runs them in a single session with a clean, per-test summary:
 
 ```bash
 make deploy-clab-ci      # single-node containerlab topology
-make run-tests           # runs all test/ci scripts against it
+make run-tests           # runs all test/ci tests against it
 make destroy-clab-ci
 ```
 
@@ -32,7 +32,17 @@ make destroy-clab-ci
 make deploy-clab-ci SRL_VERSION=25.10
 ```
 
-CI runs the same scripts against multiple SR Linux releases on every pull request.
+With the topology up, run a single file or test directly. Logs (including the httpx/httpcore request traffic) are hidden by default and only shown on failure or when you pass `--log-cli-level`:
+
+```bash
+uv run pytest test/ci/compare_config.py                          # one file
+uv run pytest test/ci/compare_config.py::test_cli_candidate_diff # one test
+uv run pytest test/ci/compare_config.py --log-cli-level=DEBUG    # verbose JSON-RPC logs
+```
+
+Each file also runs as a plain script (`uv run test/ci/compare_config.py`).
+
+CI runs the same tests against multiple SR Linux releases on every pull request.
 
 ## Re-recording the unit-test fixtures
 

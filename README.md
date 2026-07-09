@@ -18,9 +18,19 @@ uv run ruff check napalm_srlinux test tools examples
 
 ```bash
 make deploy-clab-ci      # single-node containerlab topology
-make run-tests           # runs all test/ci scripts against it
+make run-tests           # runs all test/ci tests against it
 make destroy-clab-ci
 ```
+
+All `test/ci` tests are pytest modules, so `make run-tests` runs them in a single session with a clean, per-test summary. To run one file (or a single test) against the running topology:
+
+```bash
+uv run pytest test/ci/compare_config.py                          # one file
+uv run pytest test/ci/compare_config.py::test_cli_candidate_diff # one test
+uv run pytest test/ci/compare_config.py --log-cli-level=DEBUG    # verbose JSON-RPC logs
+```
+
+Logs (including the httpx/httpcore request traffic) are hidden by default and only shown on failure or when you pass `--log-cli-level`. Each file also runs as a plain script (`uv run test/ci/compare_config.py`).
 
 ### Re-recording the unit-test fixtures
 
